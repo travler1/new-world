@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  messages:
+    basename: messages.messages, messages.errors, messages.validation
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #show_sql: true
+  # show_sql: true
+        format_sql: true
+        user_sql_comments: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
+#쿠키 URL 전달방식 기능 off, 세션타임아웃 설정
+server:
+  port: 9090
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 1800
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/layoutMain/main :: layout(~{::title}, ~{::body}, ~{::link})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/mainpage.css}">
+    <title>Hello World</title>
+</head>
+<body>
+<div class="main-background">
+  <div class="greeting-quote">
+    Hello ,  World !
+  </div>
+
+  <div class="info">
+    코딩을 처음 시작했을 때를 기억하시나요?<br>
+    Hello, World를 치며 두려움보단 설렘으로 가득 찼던 그 때..<br>
+    이제 취업을 위해 진짜 세상과 마주칠 여러분들을 위해<br>
+    Hello World!가 함께 하겠습니다.<br>
+  </div>
+  <div th:if="${session.loginMember == null}">
+    <button class="login button" th:onclick="|location.href='@{/login}'|" >Log In</button>
+  </div>
+  <div th:if="${session.loginMember != null}">
+    <button class="main button" th:onclick="|location.href='@{/matching}'|" >취업현황 바로가기</button>
+  </div>
+</div>
+</body>
+</html>

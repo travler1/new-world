@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World - 로그인</title>
+</head>
+<body>
+<div id="notion-app">
+    <div class="notion-app-inner notion-light-theme"
+         style="color: rgb(55, 53, 47); fill: currentcolor; line-height: 1.5; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont,&amp; amp; quot; Segoe UI&amp;amp; quot; , Helvetica , &amp;amp; quot; Apple Color Emoji&amp;amp; quot; , Arial , sans-serif, &amp;amp; quot; Segoe UI Emoji&amp;amp; quot; , &amp; amp; quot; Segoe UI Symbol&amp;amp; quot;; -webkit-font-smoothing: auto; background-color: white;">
+        <div style="height: 100%;">
+
+            <div
+                    style="position: fixed; z-index: 99; font-family: inter, -apple-system, BlinkMacSystemFont,&amp; amp; quot; Segoe UI&amp;amp; quot; , Helvetica , &amp;amp; quot; Apple Color Emoji&amp;amp; quot; , Arial , sans-serif, &amp;amp; quot; Segoe UI Emoji&amp;amp; quot; , &amp; amp; quot; Segoe UI Symbol&amp;amp; quot;; width: 100%;">
+                <nav
+                        style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: 54px;">
+                    <div style="flex-shrink: 0;">
+                        <a th:href="@{/}"
+                           style="display: block; color: inherit; text-decoration: none; user-select: none; cursor: pointer;">
+                            <img id="logo"
+                                 style="height: 40px; margin-top: 15px;"
+                                 th:src="@{/images/pageMain/logo.jpg}">
+                        </a>
+                    </div>
+                </nav>
+            </div>
+
+
+            <main
+                    style="color: rgb(4, 4, 4); fill: currentcolor; line-height: 1.5; font-family: inter, -apple-system, BlinkMacSystemFont,&amp; amp; quot; Segoe UI&amp;amp; quot; , Helvetica , &amp;amp; quot; Apple Color Emoji&amp;amp; quot; , Arial , sans-serif, &amp;amp; quot; Segoe UI Emoji&amp;amp; quot; , &amp; amp; quot; Segoe UI Symbol&amp;amp; quot;; background: rgb(255, 254, 252); font-size: 17px; -webkit-font-smoothing: antialiased;">
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <section
+                            style="padding-left: 40px; padding-right: 40px; width: 100%; margin: 0px auto; overflow: visible;">
+                        <div style="width: 100%; border-radius: 4px;">
+                            <div style="width: 100%; max-width: 1260px; margin: 0px auto;">
+                                <div
+                                        style="display: flex; flex-direction: column; align-items: center;">
+                                    <div
+                                            style="font-size: 50px; margin-top: 12vh; font-weight: 700; margin-bottom: 24px; text-align: center; line-height: 1.1; max-width: 380px;">
+                                        로그인
+                                    </div>
+
+                                    <div class="notion-login"
+                                         style="width: 100%; display: flex; flex-direction: column; align-items: center; max-width: 320px; margin-bottom: 16vh;">
+                                        <div
+                                                style="display: flex; width: 100%; flex-direction: column;">
+                                            <div style="flex:1;display: flex; justify-content: space-between;">
+                                                <form action="login" id="member_login" method="post"
+                                                      th:action th:object="${loginForm}">
+                                                    <div class="login_choice"
+                                                         style="flext:1;display: flex; justify-content: space-between;">
+                                                        <div class="student"
+                                                             style="width:180px;height:180px;border-radius: 8px; border: 1px solid #ccc;">
+                                                            <div style="text-align:center"><input class="login_choice"
+                                                                                                  name="login_choice"
+                                                                                                  style="text-align:center"
+                                                                                                  type="radio"
+                                                                                                  value="student">
+                                                            </div>
+                                                            <div style="text-align:center"><img
+                                                                    th:src="@{/images/pageMain/student.png}"
+                                                                    style="width:100px;text-align:center;"></div>
+                                                            <p style="text-align:center" th:text="|수강생으로 로그인|">수강생으로
+                                                                로그인</p>
+                                                        </div>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        <div class="worker"
+                                                             style="flex:1;width:180px;height:180px;border-radius: 8px; border: 1px solid #ccc;">
+                                                            <div style="text-align:center"><input class="login_choice"
+                                                                                                  name="login_choice"
+                                                                                                  type="radio"
+                                                                                                  value="worker">
+                                                            </div>
+                                                            <div style="text-align:center"><img
+                                                                    th:src="@{/images/pageMain/worker.png}"
+                                                                    style="width:100px;"></div>
+                                                            <p style="text-align:center" th:text="|현직자로 로그인|">현직자로 로그인</p>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div th:if="${#fields.hasGlobalErrors()}">
+                                                        <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                                                           th:text="${err}">전체 오류 메시지</p>
+                                                    </div>
+                                                    <div class="form_input">
+                                                        <label for="loginEmail"
+                                                               style="display: block; margin-bottom: 4px; font-size: 12px; color: rgba(55, 53, 47, 0.65); font-weight: 500;">이메일</label>
+                                                        <div class="notion-focusable-within"
+                                                             style="display: flex; align-items: center; width: 100%; font-size: 15px; line-height: 26px; position: relative; border-radius: 4px; box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset; background: rgba(242, 241, 238, 0.6); cursor: text; padding: 4px 10px; margin-top: 4px; margin-bottom: 8px;">
+                                                            <input aria-label="이메일을 입력하세요." autocomplete="off"
+                                                                   cssClass="form-input" type="text"
+                                                                   id="loginEmail" placeholder="이메일을 입력하세요."
+                                                                   style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"
+                                                                   th:field="*{loginEmail}" th:errorclass="field-error"/>
+                                                            <div class="field-error" th:errors="*{loginEmail}"></div>
+                                                        </div>
+                                                        <label for="password"
+                                                               style="display: block; margin-bottom: 4px; font-size: 12px; color: rgba(55, 53, 47, 0.65); font-weight: 500;">비밀번호</label>
+                                                        <div class="notion-focusable-within"
+                                                             style="display: flex; align-items: center; width: 100%; font-size: 15px; line-height: 26px; position: relative; border-radius: 4px; box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset; background: rgba(242, 241, 238, 0.6); cursor: text; padding: 4px 10px; margin-top: 4px; margin-bottom: 8px;">
+                                                            <input aria-label="비밀번호를 입력하세요." cssClass="form-input"
+                                                                   id="password" placeholder="비밀번호를 입력하세요." type="password"
+                                                                   th:field="*{password}" th:errorclass="field-error"
+                                                                   style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"/>
+                                                        </div>
+                                                        <div class="error-class" th:errors="*{password}"></div>
+                                                        <input id="autologin" name="auto" type="checkbox">자동로그인
+                                                        <button aria-disabled="false" class="login-btn" type="submit"
+                                                              role="button" style="border:none; user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; height: 36px; border-radius: 4px; font-size: 14px; line-height: 1; padding-left: 12px; padding-right: 12px; font-weight: 500; background: rgb(35, 131, 226); box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px; color: white; margin-top: 6px; margin-bottom: 12px; width: 100%;"
+                                                              tabindex="0">
+                                                            로그인
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div
+                                                    style="font-size: 14px; color: rgb(235, 87, 87); text-align: center; display: none; width: 100%;"></div>
+                                            <div
+                                                    style="color: rgba(55, 53, 47, 0.65); font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 8px; text-align: center;">
+                                                <a class="notion-link"
+                                                   th:href="@{/members/register}"
+                                                   style="display: inline; color: inherit; text-decoration: underline; user-select: none; cursor: pointer;">
+                                                    회원가입하기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a class="notion-link" href="#"
+                                                   th:href="@{/members/findPassword}"
+                                                   style="display: inline; color: inherit; text-decoration: underline; user-select: none; cursor: pointer;">
+                                                    비밀번호찾기</a>
+                                            </div>
+                                            <div
+                                                    style="color: rgba(55, 53, 47, 0.65); font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 8px; text-align: center;">
+                                                소셜로그인으로 3초만에 회원가입!
+                                            </div>
+                                            <div class="snslogin" style="text-align: center;">
+                                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>
+</body>
+</html>

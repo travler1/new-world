@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"  th:fragment="layout (title, body, links)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Dongle&display=swap" rel="stylesheet">
+
+    <th:block th:if="${links}">
+        <th:block th:replace="${links}"></th:block>
+    </th:block>
+
+    <title th:replace="${title}">Title</title>
+</head>
+
+<header th:replace="~{template/layoutBase/header :: header}"></header>
+<body th:replace="${body}"></body>
+<footer th:replace="~{template/layoutBase/footer :: footer}"></footer>
+
+</html>

@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.main-background{
+	width:100%;
+	height:540px;
+	background-image:url(../images/pageMain/main-background.gif);
+	background-size:cover;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+.greeting-quote{
+	padding-top:100px;
+	color:white;
+	font-size:60px;
+	text-align:center;
+	
+}
+.info{
+	padding-top:100px;
+	color:white;
+	font-size:20px;
+	text-align:center;
+}
+.button{
+	padding:15px;
+	font-size:20px;
+	margin-top:40px;
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
