@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello-World 취업현황</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Dongle&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/matchingMain.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/matching/register.js}"></script>
+</head>
+<body>
+    <header id="main_header" th:replace="~{template/layoutBase/header :: header}"></header>
+    <!------------------------------------------내용 시작----------------------------------------->
+    <br>
+    <span th:if="${session.loginMember!=null and session.loginMember.grade.toString() == 'STUDENT'}">
+        <button id="emp_register" class="register" onclick="emp_register()">현직자 신청하기</button>
+    </span>
+    <span th:if="${session.loginMember!=null and session.loginMember.grade.toString() == 'WORKER'}">
+        <button id="my_emp_register" class="register" onclick="my_emp_register()">
+            나의 현직자 신청 정보 보기</button>
+    </span>
+    <h2>취업 현황 지도</h2>
+    <div id="map" style="width: 95%; height: 350px; margin:auto;"></div>
+    <br>
+    <!------------------------------------------내용 끝------------------------------------------->
+    <footer id="main_footer" class="page-clear" th:replace="~{template/layoutBase/footer :: footer}"></footer>
+</body>
+<script type="text/javascript" th:inline="javascript"
+        th:src="|//dapi.kakao.com/v2/maps/sdk.js?appkey=4e592360b98e7e7af7c0620352a4709c&libraries=clusterer|"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+</script>
+</html>

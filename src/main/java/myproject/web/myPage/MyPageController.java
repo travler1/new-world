@@ -36,6 +36,6 @@ public class MyPageController {
 
         model.addAttribute("member", member);
 
-        return "template/myPage/main";
+        return "template/myPage/myPage";
     }
 }

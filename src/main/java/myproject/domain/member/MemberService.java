@@ -19,11 +19,6 @@ public class MemberService {
     //회원가입
     public void join(addMemberForm addMemberForm) {
 
-        if (memberRepository == null) {
-            log.error("memberRepository가 주입되지 않았습니다.");
-            return;
-        }
-
         log.info("회원가입 서비스 호출: {}", addMemberForm);
 
         Member member = new Member();
@@ -32,15 +27,17 @@ public class MemberService {
                 addMemberForm.getPassword(),
                 addMemberForm.getPhone(),
                 addMemberForm.getEmail(),
-                addMemberForm.getZipcode(),
+                new Address(addMemberForm.getZipcode(),
                 addMemberForm.getAddress1(),
-                addMemberForm.getAddress2());
+                addMemberForm.getAddress2()));
 
         memberRepository.save(member);
     }
 
-
+    //테이블 id로 회원 찾기
     public Member findMemberById(Long id) {
         return memberRepository.findMemberById(id);
     }
+
+
 }

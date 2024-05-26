@@ -60,3 +60,9 @@ nav a:hover {
 	font-size: 60px;
 	color:#fa8eb7 !important;
 }
+
+.align-right {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}

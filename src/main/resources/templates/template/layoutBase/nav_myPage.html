@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="side-bar" th:fragment="nav">
+    <ul>
+        <li>
+
+            <img th:src="@{/member/photoView}" width="200" height="200" class="my-photo">
+
+            <div class="camera" id="photo_btn">
+                <img th:src="@{/images/pageMain/camera.png}" width="35">
+            </div>
+        </li>
+        <li>
+            <div id="photo_choice" style="display:none;">
+                <input type="file" id="upload" name="myPhoto" accept="image/gif,image/png,image/jpeg">
+                <input type="button" value="전송" id="photo_submit">
+                <input type="button" value="취소" id="photo_reset">
+            </div>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <input type="button" class="menu-btn" value="게시판활동" th:onclick="|location.href='@{/myPage/board}'|">
+        </li>
+        <li>
+            <input type="button" class="menu-btn" value="첨삭관리함" th:onclick="|location.href='@{p/myPage/myAdvice}'|">
+        </li>
+        <li>
+            <input type="button" class="menu-btn" value="비밀번호변경" th:onclick="|location.href='@{/myPage/changePassword}'|">
+        </li>
+        <li>
+            <input type="button" class="menu-btn" value="채팅" th:onclick="|location.href='@{/myPage/talkList}'|">
+        </li>
+        <li>
+            <input type="button" class="menu-btn" value="회원탈퇴" th:onclick="|location.href='@{/myPage/delete}'|">
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -45,23 +45,16 @@ public class MemberController {
             return "template/home/memberRegister";
         }
 
-        //회원가입
-        if (memberService == null) {
-            log.error("MemberService가 주입되지 않았습니다.");
-            throw new IllegalStateException("MemberService가 주입되지 않았습니다.");
-        }
-
-        log.info("MemberService 나와라... {}", memberService);
-
         //전송된 데이터 회원가입 처리
         memberService.join(addMemberForm);
 
         model.addAttribute("accessTitle", "회원가입");
         model.addAttribute("accessMsg", "회원가입이 완료되었습니다.");
-        model.addAttribute("accessUrl", request.getContextPath()+"/");
-        
+        model.addAttribute("accessUrl", request.getContextPath() + "/");
+
         log.info("회원가입 성공");
         return "redirect:/";
         //return "common/result";
     }
+
 }

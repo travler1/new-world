@@ -41,8 +41,13 @@ public class LoginController {
             return "template/home/login";
         }
 
-        //로그인 폼 정보로 멤버 조회 후 최소정보만 세션에 저장(id, username, email)
-        SessionMemberForm loginMember = loginService.login(loginForm.getLoginEmail(), loginForm.getPassword());
+        //로그인 폼 정보로 멤버 조회 후 최소정보만 세션에 저장(id, username, email, profileImage, grade)
+        Member member = loginService.login(loginForm.getLoginEmail(), loginForm.getPassword());
+        SessionMemberForm loginMember = new SessionMemberForm(member.getId(),
+                                                              member.getUsername(),
+                                                              member.getEmail(),
+                                                              member.getProfileImage(),
+                                                              member.getGrade());
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

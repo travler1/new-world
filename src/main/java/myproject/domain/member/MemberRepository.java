@@ -1,5 +1,6 @@
 package myproject.domain.member;
 
+import myproject.web.file.UploadFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,4 +38,14 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
 
     Member findMemberById(Long id);
+
+    //회원 프로필 이미지 등록
+    //@Query("update Member m set m.profileImage =:profileImage where m.id =:id")
+    //public void updateProfileById(@Param("id") Long id, @Param("profileImage") UploadFile uploadFile);
+
+    //회원 프로필 이미지 찾기
+    @Query("select m.profileImage from Member m where m.id=:id")
+    public String findProfileImageById(@Param("id") Long id);
+
+
 }

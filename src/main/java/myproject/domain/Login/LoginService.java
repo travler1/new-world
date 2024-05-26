@@ -18,12 +18,9 @@ public class LoginService {
     /**
      * @Return null이면 로그인 실패
      */
-    public SessionMemberForm login(String email, String password) {
+    public Member login(String email, String password) {
         Member member =  memberRepository.findMembersByEmailAndPassword(email,password).get();
 
-        SessionMemberForm sessionMemberForm =
-                new SessionMemberForm(member.getId(), member.getUsername(), member.getEmail());
-
-        return sessionMemberForm;
+        return member;
     }
 }

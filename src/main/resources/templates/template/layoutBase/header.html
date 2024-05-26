@@ -8,8 +8,8 @@
 <header th:fragment="header">
         <a th:href="@{/}"><img th:src="@{/images/pageMain/logo.jpg}" id="logo"></a>
         <nav>
-            <a class="header-menu" th:href="@{/matching/}">취업현황</a>
-            <a class="header-menu" th:href="@{/board/}">게시판</a>
+            <a class="header-menu" th:href="@{/matching}">취업현황</a>
+            <a class="header-menu" th:href="@{/board}">게시판</a>
         </nav>
 
     <div class="align-right">
@@ -24,7 +24,7 @@
             <a th:href="@{/logout}"><img th:src="@{/images/pageMain/logout.png}" class="image"></a>
         </div>
 
-        <div th:if="${user}">
+        <div th:if="${session.loginMember.getGrade()=='ADMIN'}">
             <a href="${pageContext.request.contextPath}/main/admin">관리자페이지</a>
         </div>
     </div>

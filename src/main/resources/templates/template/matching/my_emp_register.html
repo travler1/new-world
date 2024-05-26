@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/emp_register.css}">
+<script>
+    function closePopup(){
+        window.close();
+    }
+</script>
+<body>
+
+<h2><span th:text="${session.loginMember.username}"></span></h2>
+<div class="marquee">
+    <p>
+        <b><span th:text="${session.loginMember.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+    </p>
+</div>
+</body>
+</html>

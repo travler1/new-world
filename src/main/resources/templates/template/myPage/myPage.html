@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/myPage/main :: layout(~{::title}, ~{::body}, null)}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello-World - 마이페이지</title>
+</head>
+<body>
+<div class="page-main">
+    <div class="title">
+        <h2>회원 상세 정보 <span th:if="${member.grade == 'STUDENT'}">(수강생)</span>
+                        <span th:if="${member.grade == 'WORKDER'}">(현직자)</span>
+                        <span th:if="${member.grade == 'ADMIN'}">(관리자)</span>
+        </h2>
+        <input type="button" value="회원 정보 수정" th:onclick="|location.href='@{/members/edit}'|">
+    </div>
+
+    <h3>필수정보</h3>
+    <ul>
+        <li></li>
+        <li><span th:text="|이메일 : ${member.email}|">이메일</span></li>
+        <li><span th:text="|이름 : ${member.username}|">이름</span></li>
+    </ul><br>
+    <h3>선택정보</h3>
+    <ul>
+        <li></li>
+        <li><span th:if="${member.phone != null}"><span th:text="|전화번호 : ${member.phone} |">전화번호</span></span></li>
+        <li><span th:if="${member.address != null }"><span th:text="|우편번호 : ${member.address.zipcode.toString()}|">우편번호</span></span></li>
+        <li><span th:if="${member.address != null}"><span th:text="|주소 : ${member.address.address1.toString()} ${member.address.address2.toString()}|">주소</span></span></li>
+        <li><span th:if="${member.date!= null and member.date.reg_date != null}"><span th:text="|가입날짜 : ${member.date.reg_date.toString()}|">가입일</span></span></li>
+        <li><span th:if="${member.date!= null and member.date.modify_date != null}"><span th:text="|정보 수정일 : ${member.date.modify_date.toString()}|">정보 수정일</span></span></li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Alert</title>
+</head>
+<body>
+<script th:inline="javascript">
+    // 서버에서 전달된 데이터
+    const message = /*[[${message}]]*/ 'default message';
+    const url = /*[[${url}]]*/ 'default url';
+
+    // JavaScript로 데이터 사용
+    alert(message);
+    window.opener.location.href = url; // 부모 창의 URL 변경
+    window.close(); // 현재 창(팝업) 닫기
+</script>
+</body>
+</html>

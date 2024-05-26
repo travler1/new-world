@@ -35,6 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### 깃헙강의연습 ###
-secrets.yml

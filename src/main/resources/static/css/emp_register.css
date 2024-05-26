@@ -1,0 +1,116 @@
+@charset "UTF-8";
+
+.marquee {
+	white-space: nowrap;
+	overflow: hidden;
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	animation: marqueeAnimation 10s linear infinite; /* 애니메이션 속성 설정 */
+}
+
+@keyframes marqueeAnimation {to { right:100%;
+	/* 오른쪽에서 왼쪽으로 이동하는 효과를 위해 right 속성 사용 */
+	
+}
+
+}
+
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+select {
+	padding: 6px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.map_wrap {
+	position: relative;
+	width: 100%;
+	height: 350px;
+}
+
+.title {
+	font-weight: bold;
+	display: block;
+}
+
+.hAddr {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	border-radius: 2px;
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	z-index: 1;
+	padding: 5px;
+}
+
+#centerAddr {
+	display: block;
+	margin-top: 2px;
+	font-weight: normal;
+}
+
+.bAddr {
+	padding: 5px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.submit {
+	text-align: center;
+}
+
+.my-photo {
+	object-fit: cover;
+	object-position: top;
+	border-radius: 50%;
+}
+.button{
+	text-align:center;
+}
+.submit {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #ff99cc; /* 분홍색 테두리 */
+  background-color: #ffffff; /* 하얀색 배경 */
+  color: #333; /* 글자색 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: bold;
+  margin-left:20px;
+}
+.emp_auth{
+	width:200px;
+}
+
+.submit:hover {
+  background-color: #ff99cc; /* 마우스 오버 시 배경색 변경 */
+  color: #ffffff; /* 마우스 오버 시 글자색 변경 */
+}
+td{
+	text-align:center;
+}
