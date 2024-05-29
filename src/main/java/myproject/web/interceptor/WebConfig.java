@@ -1,10 +1,12 @@
 package myproject.web.interceptor;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Controller
+@Configuration
+@Enavle
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

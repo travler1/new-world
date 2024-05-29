@@ -35,6 +35,16 @@ public class FileStore {
         return adviceDir + adviceName;
     }
 
+    public String getFullImagePath(FileCategory fileCategory, String fileName) {
+        switch (fileCategory.name()) {
+            case "PROFILE_IMAGE" : return profileImageDir + fileName;
+            case "ADVICE" : return adviceDir + fileName;
+            case "BOARD" : return boardDir + fileName;
+            case "EMP_INFO" : return empDir + fileName;
+            default: return null;
+        }
+    }
+
     //파일 여러건 저장
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles, FileCategory fileCategory) throws IOException {
         List<UploadFile> storeFileResult = new ArrayList<>();

@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.domain.matching.EmpInfo;
+import myproject.domain.matching.MatchingService;
 import myproject.domain.member.Member;
 import myproject.domain.member.MemberRepository;
 import myproject.domain.member.MemberService;
@@ -27,6 +29,8 @@ public class ImageController {
 
     private final MemberRepository memberRepository;
     private final FileStore fileStore;
+    private final MatchingService matchingService;
+    private final MemberService memberService;
 
     //view -> 프로필 이미지 출력
     @ResponseBody
@@ -38,13 +42,43 @@ public class ImageController {
         SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
 
         String filePath;
-        if (loginMember.getProfileImage()==null) {
+        if (loginMember.getProfileImage() == null) {
             log.info("filePath진입");
             filePath = "classpath:/static/images/pageMain/face.png";
-        }else{
+        } else {
             log.info("filePath진입2");
             filePath = "file:" + fileStore.getProfileImageFullPath(loginMember.getProfileImage().getStoreFileName());
         }
+        return new UrlResource(filePath);
+    }
+
+    @ResponseBody
+    @GetMapping("/photoView")
+    public Resource photoView(@RequestParam("num") Long id, @RequestParam("category") String category) throws MalformedURLException {
+
+        String filePath = "file:";
+        log.info("num={}, category={}", id, category);
+        UploadFile uploadFile = null;
+        switch (category) {
+            case "EMP_INFO":
+                uploadFile= matchingService.findUploadFileById(id);
+                log.info("uploadFile = {}", uploadFile);
+                filePath += fileStore.getFullImagePath(FileCategory.EMP_INFO, uploadFile.getStoreFileName());
+                log.info("filePath = {}", filePath);
+                break;
+            case "BOARD":
+                log.info("BOARD 접근");
+                break;
+
+            case "PROFILE_IMAGE":
+                log.info("PROFILE_IMAGE 접근");
+                uploadFile= memberService.findUploadFileById(id);
+                log.info("uploadFile = {}", uploadFile);
+                filePath += fileStore.getFullImagePath(FileCategory.PROFILE_IMAGE, uploadFile.getStoreFileName());
+                log.info("filePath = {}", filePath);
+                break;
+        }
+        log.info("filePath={}",filePath);
         return new UrlResource(filePath);
     }
 
@@ -59,11 +93,11 @@ public class ImageController {
         Map<String, String> mapAjax = new HashMap<>();
         //로그인한 회원 조회
         SessionMemberForm sessionMemberForm = (SessionMemberForm) session.getAttribute("loginMember");
-        if(sessionMemberForm==null) {
+        if (sessionMemberForm == null) {
             mapAjax.put("result", "logout");
-        }else{
+        } else {
             //기존에 저장된 프로필사진이 있는 경우 기존 프로필사진 삭제 후 저장.
-            if(sessionMemberForm.getProfileImage()!=null) {
+            if (sessionMemberForm.getProfileImage() != null) {
                 log.info("기존 프로필 사진이 있는 경우 로직 진입");
                 fileStore.deleteFile(sessionMemberForm.getProfileImage(), FileCategory.PROFILE_IMAGE);
                 memberRepository.deleteProfileById(sessionMemberForm.getId(), sessionMemberForm.getProfileImage());
@@ -74,6 +108,7 @@ public class ImageController {
             sessionMemberForm.setProfileImage(uploadFile);
             log.info("프로필 이미지 업로드 메서드 진입");
             memberRepository.updateProfileById(sessionMemberForm.getId(), sessionMemberForm.getProfileImage());
+            memberRepository.updateUploadFileById(sessionMemberForm.getId(), uploadFile);
             mapAjax.put("result", "success");
         }
         return mapAjax;

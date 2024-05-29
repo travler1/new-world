@@ -18,7 +18,7 @@ public class TestDataInit {
     /**
      * 테스트용 데이터 추가
      */
-    @PostConstruct
+    //@PostConstruct
     public void init() {
 
         Member member = new Member();

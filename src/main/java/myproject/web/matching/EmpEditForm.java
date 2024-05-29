@@ -8,6 +8,7 @@ import myproject.domain.member.Member;
 import myproject.web.file.UploadFile;
 import org.springframework.web.multipart.MultipartFile;
 
+@Data
 public class EmpEditForm {
 
     //EmpInfo의 PK

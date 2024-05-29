@@ -14,11 +14,10 @@
 
 <h2><span th:text="|[${session.loginMember.username}]님의 취업 정보|"></span></h2>
 <div class="marquee">
-        <b><span th:text="${session.loginMember.username}"></span></b>
+    <b><span th:text="${session.loginMember.username}"></span></b>
 </div>
 <form action="emp/register" th:action method="post" th:object="${form}"
-      enctype="multipart/form-data" id="empRegisterForm">
-    <input type="hidden" class="input" id="id" th:field="*{id}">
+      enctype="multipart/form-data" id="empForm">
     <table>
         <tr>
             <td style="width:30%;">이메일</td>
@@ -140,8 +139,7 @@
 
     </table>
     <div class="button">
-        <input type="button" class="submit" value="수정">
-        <input type="button" class="submit" value="취소" onclick="closePopup()">
+        <input type="button" class="submit" value="확인" onclick="closePopup()">
     </div>
 </form>
 </body>

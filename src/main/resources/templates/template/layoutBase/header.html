@@ -24,7 +24,7 @@
             <a th:href="@{/logout}"><img th:src="@{/images/pageMain/logout.png}" class="image"></a>
         </div>
 
-        <div th:if="${session.loginMember.getGrade()=='ADMIN'}">
+        <div th:if="${session.loginMember!=null and session.loginMember.grade == 'ADMIN'}">
             <a href="${pageContext.request.contextPath}/main/admin">관리자페이지</a>
         </div>
     </div>

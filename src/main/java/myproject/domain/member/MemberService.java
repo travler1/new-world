@@ -3,6 +3,7 @@ package myproject.domain.member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.web.file.UploadFile;
 import myproject.web.member.MemberDTO.MyPageMemberForm;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import myproject.web.member.MemberDTO.addMemberForm;
@@ -40,4 +41,7 @@ public class MemberService {
     }
 
 
+    public UploadFile findUploadFileById(Long id) {
+        return memberRepository.findUploadFileById(id);
+    }
 }

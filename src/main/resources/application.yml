@@ -1,15 +1,20 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myproject?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+    username: helloproject
+    password: ww1234!!
+  #url: jdbc:h2:tcp://localhost/~/test
+    #username: sa
+    #password:
+    #driver-class-name: org.h2.Driver
   messages:
     basename: messages.messages, messages.errors, messages.validation
 
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         #show_sql: true
@@ -18,6 +23,7 @@ spring:
         user_sql_comments: true
   #지연 로딩 성능 최적화
         default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQLDialect # MySQL 방언 지정
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
@@ -41,3 +47,4 @@ file:
     dir: C://study/Hello-World/file/user/board/
   emp:
     dir: C://study/Hello-World/file/user/emp/
+

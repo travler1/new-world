@@ -45,7 +45,7 @@ function see_emp_register(user_num) {
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("see_emp_register?user_id="+user_num, "현직자 프로필 확인하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("matching/see_emp_register?memberId="+user_num, "현직자 프로필 확인하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {
@@ -58,14 +58,14 @@ function see_emp_register(user_num) {
 
 function send_advice(user_num) {
     var width = '700';
-    var height = '600';
+    var height = '430';
 
     var left = (window.innerWidth - width) / 2;
     var top = (window.innerHeight - height) / 2;
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("send_advice?user_id="+user_num, "첨삭 요청하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("matching/send_advice?memberId="+user_num, "첨삭 요청하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {
@@ -84,7 +84,7 @@ function answer_advice(user_num) {
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("answer_advice?user_id="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("matching/answer_advice?memberId="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {
@@ -104,7 +104,7 @@ function make_chat(user_num){
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("make_chat?user_num="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("matching/make_chat?memberId="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {

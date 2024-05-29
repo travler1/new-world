@@ -1,5 +1,6 @@
 package myproject.domain.matching;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,11 +20,12 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class EmpInfo {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "empInfo_id")
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "empInfo")
+    @JsonIgnore
     private Member member;
 
     //회사 규모[스타트업/중소/중견/대기업]

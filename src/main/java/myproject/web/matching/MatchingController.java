@@ -1,5 +1,6 @@
 package myproject.web.matching;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.matching.EmpInfo;
 import myproject.domain.matching.MatchingService;
+import myproject.domain.member.Member;
+import myproject.domain.member.MemberService;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
 import myproject.web.file.UploadFile;
@@ -15,12 +18,10 @@ import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -31,9 +32,21 @@ public class MatchingController {
 
     private final FileStore fileStore;
     private final MatchingService matchingService;
+    private final MemberService memberService;
 
     @GetMapping()
-    public String matching() {
+    public String matching(Model model) throws JsonProcessingException {
+
+        //지도에 프로필 출력
+        model.addAttribute("jsonMapData", matchingService.jsonEmpMapProfileDtoList());
+
+        //스와이퍼에 프로필 출력
+        model.addAttribute("empMemberIdList", matchingService.empMemberIdList());
+
+        //통계자료에 활용할 자료 출력
+        model.addAttribute("jsonEmpList", matchingService.jsonEmpInfoTop100List());
+
+
         return "template/matching/main";
     }
 
@@ -83,11 +96,23 @@ public class MatchingController {
 
         //현재 로그인된 회원 조회
         SessionMemberForm sessionMemberForm = (SessionMemberForm) session.getAttribute("loginMember");
-        EmpEditForm empRegisterForm = matchingService.findMyEmp(sessionMemberForm);
+        EmpEditForm empEditForm = matchingService.findMyEmp(sessionMemberForm);
+        log.info("로그인 취업 등록 정보 ={}", empEditForm);
 
-        model.addAttribute("form", empRegisterForm);
-        log.info("로그인 취업 등록 정보 ={}", empRegisterForm.toString());
+        model.addAttribute("form", empEditForm);
+
         return "template/matching/my_emp_register";
+    }
+
+    //다른 취업자 취업정보 확인
+    @GetMapping("/see_emp_register")
+    public String see_emp_register(Model model, @RequestParam("memberId") Long id) {
+
+        EmpEditForm empEditForm = matchingService.findEmpByMemberId(id);
+
+        model.addAttribute("form", empEditForm);
+
+        return "template/matching/see_emp_register";
     }
 
     //emp 등록 폼 전송 객체 생성 메서드

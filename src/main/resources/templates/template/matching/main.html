@@ -28,20 +28,823 @@
     <h2>취업 현황 지도</h2>
     <div id="map" style="width: 95%; height: 350px; margin:auto;"></div>
     <br>
+    <h2>현직자 프로필</h2>
+    <div th:if="${empMemberIdList!=null}">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <!--/*@thymesVar id="#json" type=""*/-->
+                <div th:each="memberId : ${empMemberIdList}">
+                    <div class="swiper-slide">
+                        <a href="#" data-id="${member}">
+                        </a>
+                        <div class="profile-dropdown">
+                            <img th:src="@{/photoView(num=${memberId},category='PROFILE_IMAGE')}" width="200" height="200" class="my-photo photo_list">
+                            <div class="profile-dropdown-content">
+                                <a class="detail" href="#" th:onclick="|see_emp_register('${memberId}')|" data-id="${memberId}">프로필 보기</a>
+                                <a class="detail" href="#" th:onclick="|make_chat('${memberId}')|" data-id="${memberId}">채팅하기</a>
+                                <a class="detail" href="#" th:onclick="|send_advice('${memberId}')|" data-id="${memberId}">첨삭 요청하기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 네비게이션 -->
+            <div class="swiper-button-next"></div><!-- 다음 버튼 (오른쪽에 있는 버튼) -->
+            <div class="swiper-button-prev"></div><!-- 이전 버튼 -->
+
+            <!-- 페이징 -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <div th:if="${empMemberIdList == null}">
+        등록된 현직자가 존재하지 않습니다.
+    </div>
+    <br>
+    <h2>취업 현황 데이터</h2>
+
+
+    <div class="echartMain">
+        <div id="container1" style="height: 300px"></div>
+        <div id="container2" style="height: 300px"></div>
+    </div>
+    <br><br><br>
+    <button id="moreChart" class="register">데이터 차트 더 보기</button>
+    <button id="hideChart" class="register" style="display: none;">데이터 차트 접어두기</button>
+
+    <div class="chart-container clearfix" id="chartBundle" style="display: none;">
+        <div class="chart" id="donutchart1"></div>
+        <div class="chart" id="donutchart2"></div>
+        <div class="chart" id="donutchart4"></div>
+        <div class="chart" id="donutchart5"></div>
+        <div class="chart" id="donutchart7"></div>
+        <div class="chart" id="donutchart8"></div>
+        <div class="chart" id="donutchart9"></div>
+        <div class="chart" id="donutchart10"></div>
+        <div class="chart" id="donutchart11"></div>
+        <div class="chart" id="barchart_values" style="width: 900px; height: 300px; overflow:visible;"></div>
+    </div>
+    <br><br><br><br><br>
     <!------------------------------------------내용 끝------------------------------------------->
     <footer id="main_footer" class="page-clear" th:replace="~{template/layoutBase/footer :: footer}"></footer>
 </body>
+<!--프로필스와이퍼 자바스크립트-->
+<script>
+    new Swiper('.swiper-container', {
+
+        slidesPerView : 4, // 동시에 보여줄 슬라이드 갯수
+        spaceBetween : 30, // 슬라이드간 간격
+        slidesPerGroup : 4, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+
+        // 그룹수가 맞지 않을 경우 빈칸으로 메우기
+        // 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+        loopFillGroupWithBlank : true,
+
+        loop : true, // 무한 반복
+
+        pagination : { // 페이징
+            el : '.swiper-pagination',
+            clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+        },
+        navigation : { // 네비게이션
+            nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+            prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+        },
+    });
+
+    var dropdowns = document.querySelectorAll('.profile-dropdown');
+    dropdowns.forEach(function(dropdown) {
+        dropdown.addEventListener('click', function() {
+            var dropdownContent = this.querySelector('.profile-dropdown-content');
+            dropdownContent.style.display = (dropdownContent.style.display === 'block') ? 'none' : 'block';
+            console.log(this.getAttribute('data-user-num'));
+        });
+    });
+</script>
+<script th:inline="javascript" type="text/javascript">
+
+    //empListJson은 JSP에서 가져온 JSON 문자열입니다.
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {};
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // 필드 값들의 개수를 저장할 객체 생성
+    var fieldCounts = {};
+
+    // empList를 순회하며 field 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        var fieldString = emp.field.toString();
+
+        if (fieldCounts.hasOwnProperty(fieldString)) {
+            fieldCounts[fieldString]++;
+        } else {
+            fieldCounts[fieldString] = 1;
+        }
+    });
+
+    // data 배열 동적 생성
+    var data = [];
+    for (var field in fieldCounts) {
+        if (fieldCounts.hasOwnProperty(field)) {
+            data.push({
+                value: fieldCounts[field],
+                name: field // 문자열로 저장된 값을 그대로 사용
+            });
+        }
+    }
+
+
+
+    var dom = document.getElementById('container1');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        title: {  // 이 부분이 추가된 부분입니다.
+            text: '지원분야',  // 제목 텍스트
+            left: 'center',  // 가로 위치 (센터 정렬)
+            top: '90%',  // 세로 위치 (5% 위치)
+            textStyle: {
+                fontSize: 25,  // 원하는 폰트 사이즈로 조절
+                fontWeight: 'bold'
+            }
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: '5%',
+            left: 'center'
+        },
+        series: [
+            {
+                name: '지원직무',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: data
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+<script type="text/javascript" th:inline="javascript">
+
+    //empListJson은 JSP에서 가져온 JSON 문자열입니다.
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {};
+    var empList = JSON.parse(jsonEmpList);
+
+    // 필드 값들의 개수를 저장할 객체 생성
+    var salaryCounts = {};
+
+    // empList를 순회하며 field 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        var salaryString = emp.salary.toString();
+
+        if (salaryCounts.hasOwnProperty(salaryString)) {
+            salaryCounts[salaryString]++;
+        } else {
+            salaryCounts[salaryString] = 1;
+        }
+    });
+
+    // data 배열 동적 생성
+    var data = [];
+    for (var salary in salaryCounts) {
+        if (salaryCounts.hasOwnProperty(salary)) {
+            data.push({
+                value: salaryCounts[salary],
+                name: salary // 문자열로 저장된 값을 그대로 사용
+            });
+        }
+    }
+
+    var dom = document.getElementById('container2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        title: {  // 이 부분이 추가된 부분입니다.
+            text: '연봉(초봉)',  // 제목 텍스트
+            left: 'center',  // 가로 위치 (센터 정렬)
+            top: '90%',  // 세로 위치 (5% 위치)
+            textStyle: {
+                fontSize: 25,  // 원하는 폰트 사이즈로 조절
+                fontWeight: 'bold'
+            }
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: '5%',
+            left: 'center'
+        },
+        series: [
+            {
+                name: '연봉(초봉)',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: data
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
 <script type="text/javascript" th:inline="javascript"
         th:src="|//dapi.kakao.com/v2/maps/sdk.js?appkey=4e592360b98e7e7af7c0620352a4709c&libraries=clusterer|"></script>
-<script>
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
+<script th:inline="javascript">
+    var map = new kakao.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
+        center : new kakao.maps.LatLng(37.48682304664591, 126.97286325902509), // 지도의 중심좌표
+        level : 9 // 지도의 확대 레벨
+    });
+
+    // 마커 클러스터러를 생성합니다
+    var clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: false, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 10 // 클러스터 할 최소 지도 레벨
+    });
+
+    // 데이터를 가져오기 위해 jQuery를 사용합니다
+    // 데이터를 가져와 마커를 생성하고 클러스터러 객체에 넘겨줍니다
+    /* 모델에서 전달한 JSON 데이터 가져오기 */
+    var jsonMapData = /*[[${jsonMapData}]]*/ {};
+
+    var jsonParsedMapdata = JSON.parse(jsonMapData);
+
+    /* JSON 문자열을 JavaScript 객체로 파싱 */
+    var jsonData = jsonParsedMapdata.positions;
+    console.log("jsonData=" + JSON.stringify(jsonData));
+    var category = 'PROFILE_IMAGE'
+
+    // 데이터에서 좌표 값을 가지고 마커를 표시합니다
+    // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
+
+
+    var markers = jsonData.map(function(position) {
+        var userNum = position.user_num;
+
+        var content =' <img src="/photoView?num='+userNum+'&category='+category+'" width="40" height="40" class="my-photo">'
+            +' <div class="mapProfile" data-num="'+userNum+'">'
+            +' <div class="profileDetail" style="display:none;">'
+            +' <p>'+userNum+'</p>'
+            +' </div></div>';
+
+        return new kakao.maps.CustomOverlay({
+            position: new kakao.maps.LatLng(position.lat, position.lng),
+            content:content
+        });
+
+    });
+    // 클러스터러에 마커들을 추가합니다
+    clusterer.addMarkers(markers);
+
+
+
+
+    // 이미지 컨테이너 요소를 jQuery로 가져옵니다.
+    const imageContainer = $('.my-photo');
+
+    // 텍스트를 오버레이하는 요소를 jQuery로 가져옵니다.
+    const overlayText = $('.overlay-text');
+
+    const profileDetail = $('.profileDetail')
+
+    // 마우스가 이미지에 진입했을 때 텍스트를 보여주는 이벤트를 추가합니다.
+    imageContainer.on('mouseenter', function () {
+        overlayText.show();
+    });
+
+    // 마우스가 이미지에서 빠져나갈 때 텍스트를 숨기는 이벤트를 추가합니다.
+    imageContainer.on('mouseleave', function () {
+        overlayText.hide();
+    });
+
+    // 이미지에 마우스를 가져다 댔을 때의 동작
+    $(document).on('mouseenter', '.my-photo', function () {
+        // 여기서는 해당 이미지를 감싸는 부모 요소의 클래스를 찾아 data-user-num 속성의 값을 설정합니다.
+        const userNum = $(this).closest('.mapProfile').data('num');
+        $('.mapProfile[data-num="'+userNum+'"] .profileDetail').show();
+    });
+
+    // 이미지에서 마우스가 빠져나갈 때의 동작
+    $(document).on('mouseleave', '.my-photo', function () {
+        // 여기서는 텍스트를 원래대로 설정하거나 숨기는 등의 동작을 추가할 수 있습니다.
+        $('.mapProfile[data-num="userNum"] .profileDetail').hide();
+    });
+
+</script>
+<script type="text/javascript"
+        src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // comsize 값들의 개수를 저장할 객체 생성
+    var comsizeCounts = {};
+    var comsizeCount=0;
+    // empList를 순회하며 comsize 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        comsizeCount++;
+        if (comsizeCounts.hasOwnProperty(emp.comSize)) {
+            comsizeCounts[emp.comSize]++;
+        } else {
+            comsizeCounts[emp.comSize] = 1;
+        }
+    });
+
+    // comsizeCounts 객체를 사용하여 값들을 변수에 연결
+    var 중소 = comsizeCounts['중소'];
+    var 중견 = comsizeCounts['중견'];
+    var 스타트업 = comsizeCounts['스타트업'];
+    var 대기업 = comsizeCounts['대기업'];
+
+
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 comsizeCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(comsizeCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Comsize', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '회사 규모 (표본 :'+comsizeCount+'명)',
+            pieHole: 0.4,
         };
 
-    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart1'));
+        chart.draw(data, options);
+    }
+</script>
+<script th:inline="javascript">
 
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // compeople 값들의 개수를 저장할 객체 생성
+    var comPeopleCounts = {};
+    var comPeopleCount=0;
+    // empList를 순회하며 compeople 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        comPeopleCount++;
+        if (comPeopleCounts.hasOwnProperty(emp.comPeople)) {
+            comPeopleCounts[emp.comPeople]++;
+        } else {
+            comPeopleCounts[emp.comPeople] = 1;
+        }
+    });
+
+    // compeopleCounts 객체를 사용하여 값들을 변수에 연결
+    var _5_10인 = comPeopleCounts['5~10인'];
+    var _10_30인 = comPeopleCounts['10~30인'];
+    var _30_50인 = comPeopleCounts['30~50인'];
+    var _50_100인 = comPeopleCounts['50~100인'];
+    var _100인_이상 = comPeopleCounts['100인 이상'];
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 compeopleCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(comPeopleCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Compeople', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '기업 규모 (표본 :'+comPeopleCount+'명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart2'));
+        chart.draw(data, options);
+    }
+
+</script>
+
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // role 값들의 개수를 저장할 객체 생성
+    var roleCounts = {};
+    var roleCount = 0;
+
+    // empList를 순회하며 role 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        roleCount++;
+        if (roleCounts.hasOwnProperty(emp.role)) {
+            roleCounts[emp.role]++;
+        } else {
+            roleCounts[emp.role] = 1;
+        }
+    });
+
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 roleCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(roleCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Role', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '지원 직무 (표본 :' + roleCount + '명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart4'));
+        chart.draw(data, options);
+    }
+
+</script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // career 값들의 개수를 저장할 객체 생성
+    var careerCounts = {};
+    var careerCount=0;
+    // empList를 순회하며 career 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        careerCount++;
+        if (careerCounts.hasOwnProperty(emp.career)) {
+            careerCounts[emp.career]++;
+        } else {
+            careerCounts[emp.career] = 1;
+        }
+    });
+
+    // careerCounts 객체를 사용하여 값들을 변수에 연결
+    var 신입 = careerCounts['신입'];
+    var 중고신입 = careerCounts['중고신입'];
+    var 기타 = careerCounts['기타'];
+
+
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 comsizeCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(careerCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Career', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '경력 (표본 :'+careerCount+'명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart5'));
+        chart.draw(data, options);
+    }
+</script>
+
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // role 값들의 개수를 저장할 객체 생성
+    var periodTimeCounts = {};
+    var periodTimeCount = 0;
+
+    // empList를 순회하며 periodtime 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        periodTimeCount++;
+
+        if (periodTimeCounts.hasOwnProperty(emp.periodTime)) {
+            periodTimeCounts[emp.periodTime]++;
+        } else {
+            periodTimeCounts[emp.periodTime] = 1;
+        }
+    });
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 roleCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(periodTimeCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Periodtime', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '수료 후 준비기간 (표본 :' + periodTimeCount + '명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart7'));
+        chart.draw(data, options);
+    }
+
+</script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // education 값들의 개수를 저장할 객체 생성
+    var educationCounts = {};
+    var educationCount = 0;
+
+    // empList를 순회하며 education 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        educationCount++;
+
+        if (educationCounts.hasOwnProperty(emp.education)) {
+            educationCounts[emp.education]++;
+        } else {
+            educationCounts[emp.education] = 1;
+        }
+    });
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 roleCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(educationCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['education', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '학력 (표본 :' + educationCount + '명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart8'));
+        chart.draw(data, options);
+    }
+
+</script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // major 값들의 개수를 저장할 객체 생성
+    var majorCounts = {};
+    var majorCount=0;
+    // empList를 순회하며 major 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        majorCount++;
+        if (majorCounts.hasOwnProperty(emp.major)) {
+            majorCounts[emp.major]++;
+        } else {
+            majorCounts[emp.major] = 1;
+        }
+    });
+
+    // careerCounts 객체를 사용하여 값들을 변수에 연결
+    var 전공 = majorCounts['전공'];
+    var 비전공 = majorCounts['비전공'];
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 comsizeCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(careerCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Major', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '전공 유무 (표본 :'+majorCount+'명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart9'));
+        chart.draw(data, options);
+    }
+</script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    // location 값들의 개수를 저장할 객체 생성
+    var locationCounts = {};
+    var locationCount = 0;
+
+    // empList를 순회하며 education 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        locationCount++;
+
+        if (locationCounts.hasOwnProperty(emp.location)) {
+            locationCounts[emp.location]++;
+        } else {
+            locationCounts[emp.location] = 1;
+        }
+    });
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // 새로운 배열을 만들어 roleCounts 객체의 값을 배열로 변환
+        var dataArray = Object.entries(locationCounts);
+
+        // 배열의 첫 번째 열을 추가하여 2차원 배열 형태로 만듦
+        dataArray.unshift(['Location', 'Count']);
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: '지역 (표본 :' + locationCount + '명)',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart10'));
+        chart.draw(data, options);
+    }
+</script>
+<script th:inline="javascript">
+
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
+
+    var empList = JSON.parse(jsonEmpList);
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    // certification 값들의 개수를 저장할 객체 생성
+    var certificationCounts = {};
+
+    // empList를 순회하며 certification 값들의 개수를 증가
+    empList.forEach(function (emp) {
+        // emp.certification에서 값을 읽어와서 배열로 만들기
+        var certificationArray = emp.certification.split(',');
+
+        // 각 값의 개수를 세기
+        certificationArray.forEach(function (value) {
+            if (certificationCounts.hasOwnProperty(value)) {
+                certificationCounts[value]++;
+            } else {
+                certificationCounts[value] = 1;
+            }
+        });
+    });
+
+    var 없음 = certificationCounts['없음'] || 0;
+    var 정필기 = certificationCounts['정보처리기사(필기)'] || 0;
+    var 정실기 = certificationCounts['정보처리기사(실기)'] || 0;
+    var SQLD = certificationCounts['SQLD'] || 0;
+    var AWS = certificationCounts['AWS'] || 0;
+    var 기타 = certificationCounts['기타'] || 0;
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ["Element", "인원 수", { role: "style" } ],
+            ["없음", 없음, "#b87333"],
+            ["정보처리기사(필기)", 정필기, "silver"],
+            ["정보처리기사(실기)", 정실기, "gold"],
+            ["SQLD", SQLD, "color: #e5e4e2"],
+            ["AWS", AWS, "color: #e5e4e2"],
+            ["기타", 기타, "color: #e5e4e2"]
+        ]);
+
+//주석: 자격증 이름을 표시할 열 추가
+        data.addColumn({type: 'string', role: 'annotation'});
+
+        // 주석: 각 막대마다 자격증 이름을 설정
+        data.setValue(0, 3, "없음");
+        data.setValue(1, 3, "정보처리기사(필기)");
+        data.setValue(2, 3, "정보처리기사(실기)");
+        data.setValue(3, 3, "SQLD");
+        data.setValue(4, 3, "AWS");
+        data.setValue(5, 3, "기타");
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            { calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation" },
+            2, 3]);
+
+
+
+        var options = {
+            title: "취업 당시 보유 자격증",
+            width: 500,
+            height: 300,
+            bar: {groupWidth: "100%"},
+            legend: { position: "top" },
+            annotations: {
+                alwaysOutside: true,
+                textStyle: {
+                    fontSize: 9.5,
+                    auraColor: 'none',
+                    color: '#000',
+                    bold: true,
+                    italic: false,
+                    slantedText: false,
+                }
+            },
+            hAxis: {
+                format: '0', // 소수점 없이 정수 형태로 표시
+                maxTextLines: 3, // 표시할 최대 줄 수 설정
+            },
+        };
+        var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+        chart.draw(view, options);
+    }
 </script>
 </html>
