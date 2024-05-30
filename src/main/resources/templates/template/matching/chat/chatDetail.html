@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello-World 채팅</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/chat.css}">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:src="@{/js/matching/hwChat.js}"></script>
+<body>
+<div id="talkDetail" class="page-main">
+    <div id="chatting_message" class="hide"></div>
+    <form method="post" th:id="detail_form" th:object="${chatDto}">
+        <input type="hidden" th:name="chatRoom_num"   th:id="chatRoom_num" th:value="${chatRoom_num}">
+        <div id="textareaBox" class="hide">
+            <textarea rows="20" cols="40" th:name="chat_message" th:id="chat_message" th:field="${chatDto.chatMessage}"></textarea>
+            <div id="message_btn">
+                <input type="submit" value="전송" >
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

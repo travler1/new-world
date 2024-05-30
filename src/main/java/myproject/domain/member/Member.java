@@ -5,9 +5,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import myproject.domain.matching.EmpInfo;
+import myproject.domain.matching.chat.Chat;
+import myproject.domain.matching.chat.ChatRoom;
 import myproject.web.file.UploadFile;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +42,16 @@ public class Member {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "empInfo_id")
     private EmpInfo empInfo;
+    
+    //채팅방 관련 연관관계
+    @OneToMany(mappedBy = "member")
+    private List<Chat> chats;
+
+    @OneToMany(mappedBy = "sender")
+    private List<ChatRoom> sentChatRooms;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<ChatRoom> receivedChatRooms;
 
     //회원가입 시 addMemberForm -> Member Entity로 변환하기 위한 생성자
     public Member createMember(String username, String password, String phone, String email,

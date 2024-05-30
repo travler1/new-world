@@ -46,6 +46,9 @@ dependencies {
 
 	//Hibernate5JakartaModule 등록
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5-jakarta'
+
+	//WebSocket 추가
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

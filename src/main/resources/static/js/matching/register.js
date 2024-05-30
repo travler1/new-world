@@ -97,14 +97,14 @@ function answer_advice(user_num) {
 
 function make_chat(user_num){
 	var width = '700';
-    var height = '700';
+    var height = '600';
 
     var left = (window.innerWidth - width) / 2;
     var top = (window.innerHeight - height) / 2;
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("matching/make_chat?memberId="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("matching/chat?receiverId="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {
