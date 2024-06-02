@@ -200,8 +200,8 @@
 	background-color:#f2efef;
 }
 .from-position{
-	width:200px;
-	margin:10px 0 10px 330px;
+	width:240px;
+	margin:10px 0 10px auto;
 }
 .from-position .item{
 	background-color:yellow;
@@ -244,4 +244,28 @@
 }
 .align-right{
 	text-align:right;
+}
+#delete_btn {
+	margin-top: 20px;
+	text-align: center;
+}
+
+#delete_btn .chat_delete {
+	width: 100px;
+	height: 40px;
+	cursor: pointer;
+	background-color: #dc3545; /* 레드 색상 */
+	color: #fff; /* 텍스트 색상을 흰색으로 설정 */
+	padding: 5px 20px; /* 버튼 내부 여백 설정 */
+	margin-right: 100px;
+	font-size: 16px; /* 텍스트 크기 설정 */
+	border: none; /* 테두리 없음 */
+	border-radius: 5px; /* 모서리를 둥글게 설정 */
+	cursor: pointer; /* 포인터 모양으로 변경하여 클릭 가능함을 나타냄 */
+	text-decoration: none; /* 기본 텍스트 밑줄 제거 */
+	line-height: 1;
+}
+
+#leave_btn .chat_delete:hover {
+	background-color: #c82333; /* 다크 레드 색상 */
 }

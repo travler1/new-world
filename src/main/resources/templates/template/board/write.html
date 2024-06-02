@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/layoutMain/main ::layout (~{::title}, ~{::body}, ~{::link})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World - 게시판글쓰기</title>
+</head>
+<body>
+<!--외부 라이브러리 script start -->
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script th:src="@{/js/board/ckeditor.js}"></script>
+<script th:src="@{/js/board/uploadAdapter.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/mainpage.css}">
+
+<!--외부 라이브러리 script  end-->
+<div class="page-main">
+    <h2>글쓰기</h2>
+    <form action="write" th:object="${saveBoardForm}" method="post" th:id="register_form" enctype="multipart/form-data">
+        <ul>
+            <li>
+                <label for="title"><b>제목</b></label>
+                <input type="text" id="title" th:name="title" th:field="*{title}" th:errorClass="field-error"/>
+                <div class="field-error" th:errors="*{title}"></div>
+            </li>
+            <li><b><label for="content">내용</label></b></li>
+            <li>
+                <textarea id="content" th:name="content" th:field="*{content}" th:errorClass="field-error"></textarea>
+                <div class="field-error" th:errors="*{content}"></div>
+                <script>
+                    function MyCustomUploadAdapterPlugin(editor){
+                        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                            return new UploadAdapter(loader);
+                        }
+                    }
+
+                    ClassicEditor
+                        .create(document.querySelector('#content'),{
+                            extraPlugins:[MyCustomUploadAdapterPlugin]
+                        })
+                        .then(editor => {
+                            window.editor = editor;
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                </script>
+            </li>
+            <li>
+                <label for="upload">파일업로드</label>
+                <input type="file" th:name="upload" id="upload">
+            </li>
+        </ul>
+        <div class="align-center">
+            <button>전송</button>
+            <input type="button" value="목록" th:onclick="|location.href='board'|">
+        </div>
+    </form>
+</div>
+</body>
+</html>

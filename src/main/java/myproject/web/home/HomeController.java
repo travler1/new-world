@@ -32,9 +32,9 @@ public class HomeController {
         return "template/home/home";
     }
 
+    @GetMapping("/common/resultAlert")
+    public String resultAlert(HttpServletRequest request) {
+        return "template/common/resultAlert";
+    }
 
-
-
-
-    //회원가입 처리
 }

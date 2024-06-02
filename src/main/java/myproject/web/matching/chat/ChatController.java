@@ -29,7 +29,7 @@ public class ChatController {
      * 		 채팅방 조회 및 생성
      *=================================*/
 
-    //채팅창 생성 (채팅방 번호 (생성/조회) , 채팅방 번호 넘겨주기)
+    //채팅창 생성 (채팅방 번호 (생성/조회) , 채팅방 번호 넘겨주기, 채팅방이 존재하면 메세지 읽음처리)
     @GetMapping("matching/chat")
     public String chat(Model model, HttpSession session, HttpServletRequest request,
                        @RequestParam("receiverId") Long receiverId,
@@ -62,9 +62,6 @@ public class ChatController {
         Map<String, Object> ajaxMap = chatService.chatDetailResult(id, sessionMemberForm.getId());
         log.info("ajaxMap={}", ajaxMap);
 
-        Map<String, Object> test = new HashMap<>();
-        test.put("result", "success");
-        //return test;
         ajaxMap.put("result", "success");
         return ajaxMap;
     }

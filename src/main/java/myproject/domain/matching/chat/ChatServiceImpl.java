@@ -20,6 +20,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberService memberService;
 
+    //채팅방 조회, 없을 시 채팅방 생성
     @Override
     public Long findChatRoomByMember(Long senderId, Long receiverId) {
 
@@ -28,18 +29,21 @@ public class ChatServiceImpl implements ChatService {
 
         Long chatRoomId = null;
 
-        Optional<Long> optionalChatRoomId = chatRoomRepository.findChatRoomByMember(senderId, receiverId);
+        Long optionalChatRoomId = chatRoomRepository.findChatRoomByMember(senderId, receiverId);
 
-        if (optionalChatRoomId.isPresent()) {
-            return optionalChatRoomId.get();
+        //채팅방이 존재하지 않을 경우 채팅방 생성
+        if(optionalChatRoomId == null){
+            ChatRoom saveChatRoom = new ChatRoom(memberService.findMemberById(senderId), memberService.findMemberById(receiverId));
+            ChatRoom savedChatRoom = chatRoomRepository.save(saveChatRoom);
+            return savedChatRoom.getId();
         }
-
-        ChatRoom saveChatRoom = new ChatRoom(memberService.findMemberById(senderId), memberService.findMemberById(receiverId));
-
-        ChatRoom savedChatRoom = chatRoomRepository.save(saveChatRoom);
-
-        return savedChatRoom.getId();
+        //채팅방이 존재할 경우 메세지 읽음처리 후 채팅방 아이디 반환
+        //senderId = sessionForm.getId() , 로그인한 회원Id
+        //receiverId = 채팅방의 상대방Id, 채팅방 상대방Id가 보낸 chat 엔티티의 chat_readcheck 값 1->0
+        chatRepository.updateReadMessage(optionalChatRoomId, receiverId);
+        return optionalChatRoomId;
     }
+
 
     @Override
     public Map<String, Object> chatDetailResult(Long chatRoomId, Long loginMemberId) {

@@ -58,9 +58,9 @@ public class EmpInfo {
     //취업일시
 
     private String workStart;
-
+    @Embedded
     private EmbeddedDate date;
-
+    @Embedded
     private UploadFile uploadFile;
     @Lob
     private String advice;

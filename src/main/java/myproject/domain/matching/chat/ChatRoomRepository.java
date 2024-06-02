@@ -6,10 +6,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long>, ChatRoomRepositoryCustom {
 
-    @Query("select cr.id from ChatRoom cr where cr.sender.id =:senderId and cr.receiver.id =:receiverId")
-    Optional<Long> findChatRoomByMember(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
+    //@Query("select cr.id from ChatRoom cr where cr.sender.id =:senderId and cr.receiver.id =:receiverId")
+    //Optional<Long> findChatRoomByMember(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
 
     ChatRoom findChatRoomById(Long id);
+
+
 }

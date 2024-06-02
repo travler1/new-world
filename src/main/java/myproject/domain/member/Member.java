@@ -39,7 +39,7 @@ public class Member {
     @Embedded
     private EmbeddedDate date;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "empInfo_id")
     private EmpInfo empInfo;
     

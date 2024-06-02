@@ -15,6 +15,7 @@ import static myproject.domain.matching.chat.QChatRoom.chatRoom;
 public class ChatRepositoryCustomImpl implements ChatRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+
     public ChatRepositoryCustomImpl(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
@@ -35,5 +36,16 @@ public class ChatRepositoryCustomImpl implements ChatRepositoryCustom {
                 .fetch();
 
         return chatDtoList;
+    }
+
+    //채팅 메세지 읽음처리
+    @Override
+    public void updateReadMessage(Long optionalChatRoomId, Long receiverId) {
+
+        long execute = jpaQueryFactory.update(chat)
+                .set(chat.chatReadCheck, 0)
+                .where(chat.chatRoom.id.eq(optionalChatRoomId)
+                        .and(chat.member.id.eq(receiverId)))
+                .execute();
     }
 }

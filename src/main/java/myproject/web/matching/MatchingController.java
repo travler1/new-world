@@ -7,13 +7,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.matching.EmpInfo;
 import myproject.domain.matching.MatchingService;
-import myproject.domain.member.Member;
 import myproject.domain.member.MemberService;
-import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
-import myproject.web.file.UploadFile;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @Slf4j

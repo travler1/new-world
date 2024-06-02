@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/layoutMain/main :: layout(~{::title}, ~{::body}, ~{::link})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/mainpage.css}">
+    <title>Hello World - 게시판</title>
+</head>
+<body>
+<div class="page-main" th:if="true">
+    <h2>게시판 목록</h2>
+    <form action="list" th:action th:id="search_form" method="get">
+        <ul class="search">
+            <li>
+                <select th:name="keyfield" th:id="keyfield">
+                    <option value="1" th:selected="${param.keyfield == 1}">제목</option>
+                    <option value="2" th:selected="${param.keyfield == 2}">닉네임(이름)</option>
+                    <option value="3" th:selected="${param.keyfield == 3}">내용</option>
+                    <option value="4" th:selected="${param.keyfield == 4}">제목+내용</option>
+                </select>
+            </li>
+            <li>
+                <input type="search" th:name="keyword" th:id="keyword" th:value="${param.keyword}">`
+            </li>
+            <li>
+                <input type="submit" value="찾기">
+                <input type="button" value="목록" th:onclick="|location.href='board'|">
+            </li>
+        </ul>
+
+        <div class="align-right">
+            <select id="order" name="order">
+                <option value="1" th:selected="${param.order == 1}">최신순</option>
+                <option value="2" th:selected="${param.order == 2}">조회순</option>
+                <option value="3" th:selected="${param.order == 3}">좋아요순</option>
+                <option value="4" th:selected="${param.order == 4}">댓글순</option>
+            </select>
+        </div>
+        <div th:if="${session.loginMember != null}">
+            <input type="button" value="글쓰기" th:onclick="|location.href='board/write'|">
+        </div>
+    </form>
+    <div th:if="${list == null}">
+        <div class="result-display">표시할 게시물이 없습니다.</div>
+    </div>
+    <div th:if="${list != null}">
+        <table class="striped-table">
+            <tr>
+                <td class="align-center">번호</td>
+                <td class="align-center" width="400">제목</td>
+                <td class="align-center">작성자</td>
+                <td class="align-center">작성일</td>
+                <td class="align-center">조회수</td>
+                <td class="align-center">좋아요</td>
+            </tr>
+            <tr th:each="board : ${list}">
+                <td class="align-center" th:text="${board.id}"></td>
+                <td class="align-center">
+                    <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title} + ' (' + ${board.boardReply} + ')'"></a>
+                </td>
+                <td class="align-center" th:text="${board.username}"></td>
+                <td class="align-center" th:text="${#dates.format(board.regDate, 'yyyy-MM-dd')}"></td>
+                <td class="align-center" th:text="${board.boardHit}"></td>
+                <td class="align-center" th:text="${board.boardFav}"></td>
+            </tr>
+        </table>
+        <div class="align-center" ></div>
+    </div>
+</div>
+</body>
+</html>

@@ -7,4 +7,6 @@ import java.util.List;
 public interface ChatRepositoryCustom {
 
     List<ChatDto> findChatListByChatRoomId(Long chatRoomId);
+
+    void updateReadMessage(Long optionalChatRoomId, Long receiverId);
 }

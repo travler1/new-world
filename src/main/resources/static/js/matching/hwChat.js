@@ -56,6 +56,7 @@ $(function(){
 					//메시지 표시 UI 초기화
 					$('#chatting_message').empty();
 
+					let login_user = param.login_user;
 					let chat_date = '';
 					const days = ['일', '월', '화', '수', '목', '금', '토'];
 					$(param.list).each(function(index,item){
@@ -71,25 +72,36 @@ $(function(){
 						if(chat_date != formattedDate){
 							chat_date = formattedDate;
 							output += '<div class="date-position"><span>' + chat_date + '</span></div>';
+
 						}
 
+						//멤버 등록 메시지
+						if(item.memberId == param.login_user){
+							output += '<div class="from-position">';
+							output += '<div class="space-photo"><div class="align-right">';
+							output += item.username+'<img src="/photoView?num='+login_user+'&category='+category+'" width="40" height="40" class="my-photo">';
+							output += '</div></div>';
+							output += '<div>';
 							//멤버등록 메시지가 아닌 일반 메시지
-							if(item.memberId == param.login_user){
-								output += '<div class="from-position">'+item.username;
-								output += '<div>';
-							}else{
-								output += '<div class="to-position">';
-								output += '<div class="space-photo">';
-								output += '<img src="/photoView?num='+item.memberId+'&category='+category+'" width="40" height="40" class="my-photo">';
-								output += '</div><div class="space-message">';
-								output += item.username;
+						}else{
+							output += '<div class="to-position">';
+							output += '<div class="space-photo">';
+							output += '<img src="/photoView?num='+item.memberId+'&category='+category+'" width="40" height="40" class="my-photo">';
+							output += '</div><div class="space-message">';
+							output += item.username;
+						}
+						output += '<div class="item">';
+						output += '<span>' + item.chatMessage.replace(/\r\n/g,'<br>').replace(/\r/g,'<br>').replace(/\n/g,'<br>') + '</span>';
+						output += '</div>';
+
+						//채팅방 메세지 읽음처리, 로그인회원 메세지에만 표시, 읽음처리(0)가 아닌 경우만 출력.
+						if(item.memberId == param.login_user){
+							if(item.chatReadCheck != 0){
+								output += '<div class="chat_Readcount">'+item.chatReadCheck+'</div>';
 							}
-							output += '<div class="item">';
-							output += '<span>' + item.chatMessage.replace(/\r\n/g,'<br>').replace(/\r/g,'<br>').replace(/\n/g,'<br>') + '</span>';
-							output += '</div><div class="chat_Readcount">'+item.chatReadCheck + '</div>';
+						}
 
-							//시간 추출
-
+						//시간 추출
 						// 주어진 ISO 8601 형식의 문자열
 						let dateString = item.chatRegDate;
 						// 주어진 문자열을 Date 객체로 변환
@@ -106,10 +118,10 @@ $(function(){
 						minutes = minutes < 10 ? '0' + minutes : minutes;
 						// 현재 시간을 문자열로 출력
 						let currentTimeString = ampm + ' ' + hours + ':' + minutes;
-							output += '<div class="align-right">'+currentTimeString+'</div>';
+						output += '<div class="align-right">'+currentTimeString+'</div>';
 
-							output += '</div><div class="space-clear"></div>';
-							output += '</div>';
+						output += '</div><div class="space-clear"></div>';
+						output += '</div>';
 
 
 						//문서 객체에 추가
