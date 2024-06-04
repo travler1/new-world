@@ -1,10 +1,12 @@
 package myproject.domain.board;
 
 import myproject.web.board.BoardListDto;
+import myproject.web.board.ReadBoardForm;
 import myproject.web.board.SaveBoardForm;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface BoardService {
 
@@ -12,5 +14,15 @@ public interface BoardService {
 
     List<BoardListDto> boardListDto();
 
-    Board readBoardDetail(Long id);
+    ReadBoardForm readBoardDetail(Long id);
+
+    Optional<BoardFav> getFav(Long boardId, Long memberId);
+
+    Long getFavCount(Long boardId);
+
+    void deleteBoardFav(Long boardFavId);
+
+    void registerFav(Long boardId, Long memberId);
+
+    Board getBoard(Long boardId);
 }

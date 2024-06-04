@@ -82,12 +82,14 @@ public class BoardController {
     /*==================================
      * 			게시판 글 상세
      *=================================*/
-    @GetMapping("/board/{id}")
+    @GetMapping("/{id}")
     public String boardDetail(@PathVariable("id") Long id, Model model) {
 
-        boardService.readBoardDetail(id);
+        ReadBoardForm readBoardForm = boardService.readBoardDetail(id);
+        model.addAttribute("board", readBoardForm);
+        log.info("게시판 글 상세 ={}", readBoardForm);
 
-        return null;
+        return "template/board/boardDetail";
     }
 
 

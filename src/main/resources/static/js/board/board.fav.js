@@ -7,7 +7,7 @@ $(function(){
 		$.ajax({
 			url:'getFav',
 			type:'post',
-			data:{board_num:board_num},
+			data:{boardId:board_num},
 			dataType:'json', //반환받는 타입
 			success:function(param){
 				displayFav(param);
@@ -24,7 +24,7 @@ $(function(){
 		$.ajax({
 			url:'writeFav',
 			type:'post',
-			data:{board_num:$('#output_fav').attr('data-num')},
+			data:{boardId:$('#output_fav').attr('data-num')},
 			dataType:'json',
 			success:function(param){
 				if(param.result=='logout'){
@@ -47,9 +47,9 @@ $(function(){
 	function displayFav(param){
 		let output;
 		if(param.status == 'yesFav'){
-			output = '../images/fav02.gif';
+			output = '../images/board/fav02.gif';
 		}else if(param.status == 'noFav'){
-			output = '../images/fav01.gif';
+			output = '../images/board/fav01.gif';
 		}else{
 			alert('좋아요 표시 오류 발생');
 		}

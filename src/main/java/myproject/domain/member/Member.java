@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import myproject.domain.board.Board;
 import myproject.domain.matching.EmpInfo;
 import myproject.domain.matching.chat.Chat;
 import myproject.domain.matching.chat.ChatRoom;
 import myproject.web.file.UploadFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +44,10 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "empInfo_id")
     private EmpInfo empInfo;
+
+    //내가 쓴 글
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Board> board = new ArrayList<>();
     
     //채팅방 관련 연관관계
     @OneToMany(mappedBy = "member")

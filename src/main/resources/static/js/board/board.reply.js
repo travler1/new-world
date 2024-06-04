@@ -2,6 +2,22 @@ $(function(){
 	let rowCount = 10; //한 페이지에 보여질 댓글의 갯수
 	let currentPage;
 	let count;
+
+	/*---------------------------------------
+	*				시간 설정
+	*---------------------------------------*/
+	function formatDate(dateString) {
+		var date = new Date(dateString);
+
+		var year = date.getFullYear();
+		var month = ('0' + (date.getMonth() + 1)).slice(-2);
+		var day = ('0' + date.getDate()).slice(-2);
+		var hours = ('0' + date.getHours()).slice(-2);
+		var minutes = ('0' + date.getMinutes()).slice(-2);
+		var seconds = ('0' + date.getSeconds()).slice(-2);
+
+		return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+	}
 	
 	/*---------------------------------------
 	*				댓글 목록
@@ -12,73 +28,75 @@ $(function(){
 		//로딩 이미지 노출
 		$('#loading').show();
 		
+
 		$.ajax({
 			url:'listReply',
 			type:'post',
-			data:{pageNum:pageNum, rowCount:rowCount, board_num:$('#board_num').val()},
+			data:{boardId:$('#board_id').val()},
 			dataType:'json',
 			success:function(param){
 				//로딩 이미지 감추기
 				$('#loading').hide();
 				count = param.count;
-				
-				if(pageNum==1){
+
+				/*if(pageNum==1){
 					//처음 호출시는 해당 id의 div의 내부 내용물을 제거
 					$('#output').empty();
-				}
-				
+				}*/
+
 				//댓글수 읽어오기
 				displayReplyCount(param);
-				
+
 				//댓글 목록 작업
 				$(param.list).each(function(index,item){
 					let output = ' <div class="item">';
+					let category = "PROFILE_IMAGE";
 					output += ' <ul class="detail-info">';
 					output += ' <li>';
-					output += ' <img src="../member/viewProfile?mem_num='+item.mem_num+'" width="40" height="40" class="my-photo">';
+					output += ' <img src="/photoView?num='+item.memberId+'&category='+category+'" width="40" height="40" class="my-photo">';
 					output += ' </li>';
 					output += ' <li>';
-					output+=item.name+'<br>';
+					output+=item.username+'<br>';
 
-					if(item.re_mdate){
-						output+=' <span class="modify-date">최근 수정일 : ' + item.re_mdate + '</span>';
+					if(item.modify_date!=null){
+						output+=' <span class="modify-date">최근 수정일 : ' +formatDate(item.modify_date)+ '</span>';
 					}else{
-						output+=' <span class="modify-date">최근 등록일 : ' + item.re_date + '</span>';
+						output+=' <span class="modify-date">최근 등록일 : ' + formatDate(item.reg_date) + '</span>';
 					}
-					
+
 					output += ' </li>';
 					output += ' </ul>';
 					output += ' <div class="sub-item">';
-					output += ' <p>' + item.re_content.replace(/\r\n/g, '<br>') + '</p>'; //\r,]n을 발견하면 줄바꿈으로 변경하겠다는 의미
-					
-					if(param.user_num==item.mem_num){
+					output += ' <p>' + item.content.replace(/\r\n/g, '<br>') + '</p>'; //\r,]n을 발견하면 줄바꿈으로 변경하겠다는 의미
+
+					if(param.memberId==item.memberId){
 						//로그인한 회원번호와 댓글작성자 회원번호가 일치
-						output += ' <input type="button" data-num="'+item.re_num+'" value="수정" class="modify-btn">';
-						output += ' <input type="button" data-num="'+item.re_num+'" value="삭제" class="delete-btn">';
+						output += ' <input type="button" data-num="'+item.id+'" value="수정" class="modify-btn">';
+						output += ' <input type="button" data-num="'+item.id+'" value="삭제" class="delete-btn">';
 					}
-					
+
 					output += ' <hr size="1" noshade>';
 					output += ' </div>';
 					output += ' </div>';
-					
+
 					//문서 객체에 추가
 					$('#output').append(output);
 				});
-				
+
 				//paging button 처리
-				if(currentPage>=Math.ceil(count/rowCount)){
+				/*if(currentPage>=Math.ceil(count/rowCount)){
 					//다음 페이지가 없음
 					$('.paging-button').hide();
 				}else{
 					//다음 페이지가 존재
 					$('.paging-button').show();
-				}
-			
+				}*/
+
 			},
 			error:function(){
 				//로딩 이미지 감추기
 				$('#loading').hide();
-				alert('네트워크 오류 발생');
+				alert('댓글 리스트 출력 네트워크 오류 발생');
 			}
 		});
 	}
@@ -91,9 +109,9 @@ $(function(){
 	*---------------------------------------*/
 	//댓글 등록
 	$('#re_form').submit(function(event){
-		if($('#re_content').val().trim()==''){
+		if($('#boardReply_content').val().trim()==''){
 			alert('내용을 입력하세요');
-			$('#re_content').val('').focus();
+			$('#boardReply_content').val('').focus();
 			return false;
 		}
 		
@@ -115,7 +133,7 @@ $(function(){
 				}
 			},
 			error:function(){
-				alert('네트워크 오류 발생');
+				alert('댓글 작성 네트워크 오류 발생');
 			}
 		});
 		//기본 이벤트 제거
@@ -134,13 +152,13 @@ $(function(){
 	//댓글 수정 버튼 클릭시 수정폼 노출
 	$(document).on('click', '.modify-btn',function(){
 		//댓글 번호
-		let re_num = $(this).attr('data-num');
+		let boardReplyId = $(this).attr('data-num');
 		//댓글 내용												//모든 <br>을 \r\r으로 바꿔줌.
-		let re_content = $(this).parent().find('p').html().replace(/<br>/gi,'\r\n');		
+		let boardReplyContent = $(this).parent().find('p').html().replace(/<br>/gi,'\r\n');
 		//댓글 수정폼 UI
 		let modifyUI = ' <form id="mre_form">';
-			modifyUI += ' <input type="hidden" name="re_num" id="mre_num" value='+re_num+'>'
-			modifyUI += ' <textarea rows="3" cols="50" name="re_content" id="mre_content" class="rep-content">'+re_content+'</textarea>';
+			modifyUI += ' <input type="hidden" name="boardReplyId" id="mre_num" value='+boardReplyId+'>'
+			modifyUI += ' <textarea rows="3" cols="50" name="boardReplyContent" id="mre_content" class="rep-content">'+boardReplyContent+'</textarea>';
 			modifyUI += ' <div id="mre_fist" class="letter-count"><span>300/300</span></div>';
 			modifyUI += ' <div id="mre_second" class="align-right">';
 			modifyUI += ' <input type="submit" value="수정">';
@@ -253,7 +271,7 @@ $(function(){
 		$.ajax({
 			url:'deleteReply',
 			type:'post',
-			data:{re_num:re_num},
+			data:{boardReplyId:re_num},
 			dataType:'json',
 			success:function(param){
 				if(param.result=='logout'){

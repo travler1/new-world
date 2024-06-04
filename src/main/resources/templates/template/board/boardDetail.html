@@ -1,64 +1,72 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:replace="~{template/layoutMain/main :: layout(~{::title}, ~{::body}, ~{::link})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <style>
+        .ck-editor__editable_inline{
+            min-height:250px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/mainpage.css}">
     <title>Hello World - 게시판</title>
 </head>
 <body>
 <!-- 내용 시작 -->
 <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<script th:src="@{/js/videoAdapter.js}"></script>
-<script th:src="@{/js/board.fav.js}"></script>
-<script th:src="@{/js/board.reply.js}"></script>
+<script th:src="@{/js/board/videoAdapter.js}"></script>
+<script th:src="@{/js/board/board.fav.js}"></script>
+<script th:src="@{/js/board/board.reply.js}"></script>
 <div class="page-main">
-    <h2>${board.title}</h2>
+    <h2><span th:text="${board.title}"></span></h2>
     <ul class="detail-info">
         <li>
-            <img th:src="@{photoView?num=${board.id}}"
+            <img th:src="@{/photoView(num=${board.memberId}, category=PROFILE_IMAGE)}"
                  width="40" height="40" class="my-photo">
         </li>
         <li>
-            ${board.username}
+            <span th:text="${board.username}"></span>
             <br>
-            <div th:if="${board.date!=null and board.date.modify_date != null}"
-                 th:text="|최근 수정일 : ${board.date.modify_date}|"></div>
-            <div th:if="${board.date!=null and board.date.reg_date != null}"
-                 th:text="|작성일 : ${board.date.reg_date}|"></div>
-            조회 : ${board.hit}
+            <div th:if="${board.date!=null and board.date.modify_date != null}">
+                <div th:if="${board.date.modify_date != null}" >
+                    <span th:text="|최근 수정일 : ${board.date.modify_date}|"></span>
+                </div>
+            </div>
+            <div th:if="${board.date!=null and board.date.reg_date != null}">
+                <span th:text="|작성일 : ${board.date.reg_date}|"></span>
+            </div>
+            <span th:text="|조회 : ${board.hit}|"></span>
         </li>
     </ul>
-    <div th:if="${board.upload != null}">
+    <div th:if="${board.uploadFile != null}">
         <ul>
-            <li>첨부파일 : <a href="file?board_num=${board.board_num}">${board.filename}</a></li>
+            <li>첨부파일 : <a href="file?boarId=${board.board_num}"><span th:text="${board.uploadFile.uploadFileName}"></span></a></li>
         </ul>
-    </div>
     <hr size="1" width="100%">
-    <th:block th:if="${#strings.endsWith(board.filename, '.jpg') ||
-                     #strings.endsWith(board.filename, '.JPG') ||
-                     #strings.endsWith(board.filename, '.jpeg') ||
-                     #strings.endsWith(board.filename, '.JPEG') ||
-                     #strings.endsWith(board.filename, '.gif') ||
-                     #strings.endsWith(board.filename, '.GIF') ||
-                     #strings.endsWith(board.filename, '.png') ||
-                     #strings.endsWith(board.filename, '.PNG')}">
+    <th:block th:if="${#strings.endsWith(board.uploadFile.uploadFileName, '.jpg') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.JPG') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.jpeg') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.JPEG') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.gif') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.GIF') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.png') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.PNG')}">
         <div class="align-center">
-            <img th:src="@{/upload/{filename}(filename=${board.upload.filename})}" class="detail-img">
+            <img th:src="@{/upload/{filename}(filename=${board.uploadFile.uploadFileName})}" class="detail-img">
         </div>
     </th:block>
+    </div>
     <div class="detail-content">
-        ${board.content}
+        <span th:utext="${board.content}"></span>
     </div>
     <div>
-        <%-- 좋아요 --%>
-        <img th:id="output_fav" data-num="${board.id}"
+        <img th:id="output_fav" th:data-num="${board.id}"
              th:src="@{/images/board/fav01.gif}" width="40">
         <span id="output_fcount"></span>
-        <%-- 댓글수 --%>
         <span id="output_rcount"></span>
     </div>
     <hr size="1" width="100%">
     <div class="align-right">
-        <div th:if="${session.loginMember != null and session.loginMember.id == board.member.id}">
+        <div th:if="${session.loginMember != null and session.loginMember.id == board.memberId}">
             <input type="button" value="수정" onclick="location.href='update?board_num=${board.board_num}'">
             <input type="button" value="삭제" id="delete_btn">
             <script type="text/javascript">
@@ -78,8 +86,8 @@
     <div id="reply_div">
         <span class="re-title">댓글 달기</span>
         <form id="re_form">
-            <input type="hidden" th:name="board_id" th:value="${board.id}" th:id="board_id">
-            <textarea rows="3" cols="50" th:name="boardReply_content" th:id="boardReply_content" class="rep-content"
+            <input type="hidden" th:name="boardId" th:value="${board.id}" th:id="board_id">
+            <textarea rows="3" cols="50" th:name="content" th:id="boardReply_content" class="rep-content"
                       th:disabled="${#strings.isEmpty(session.loginMember)}"
                       th:text="${#strings.isEmpty(session.loginMember) ? '로그인해야 작성할 수 있습니다.' : ''}"></textarea>
             <div th:if="${session.loginMember != null}">

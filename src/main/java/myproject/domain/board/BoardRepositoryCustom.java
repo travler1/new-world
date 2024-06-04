@@ -1,6 +1,7 @@
 package myproject.domain.board;
 
 import myproject.web.board.BoardListDto;
+import myproject.web.board.ReadBoardForm;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface BoardRepositoryCustom {
     void updateboardHit(Long id);
 
     //Board Id로 board 찾기
-    Board findBoardById(Long id);
+    ReadBoardForm findReadBoardFormById(Long id);
 }

@@ -19,20 +19,22 @@ public class ReadBoardForm {
     private UploadFile uploadFile;
     private String ip;
     private Long memberId;
+    private String username;
     private Long boardFavCount;
     private List<BoardReply> boardReplyList;
 
     @QueryProjection
-    public ReadBoardForm(Long id, String title, String content, Long hit, Long memberId, EmbeddedDate date, UploadFile uploadFile, String ip, Long boardFavCount, List<BoardReply> boardReplyList) {
+    public ReadBoardForm(Long id, String title, String content, Long hit, Long memberId,String username, EmbeddedDate date, UploadFile uploadFile, String ip, Long boardFavCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.hit = hit;
         this.memberId=memberId;
+        this.username=username;
         this.date = date;
         this.uploadFile = uploadFile;
         this.ip = ip;
         this.boardFavCount = boardFavCount;
-        this.boardReplyList = boardReplyList;
     }
+
 }

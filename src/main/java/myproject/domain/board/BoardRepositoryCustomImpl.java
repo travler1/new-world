@@ -6,6 +6,7 @@ import myproject.domain.member.QMember;
 import myproject.web.board.BoardListDto;
 import myproject.web.board.QBoardListDto;
 import myproject.web.board.QReadBoardForm;
+import myproject.web.board.ReadBoardForm;
 
 import java.util.List;
 
@@ -51,26 +52,34 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public Board findBoardById(Long id) {
+    public ReadBoardForm findReadBoardFormById(Long id) {
 
-        jpaQueryFactory.select(new QReadBoardForm(
-                board.id,
-                board.title,
-                board.content,
-                board.hit,
-                member.id,
-                board.date,
-                board.uploadFile,
-                board.ip,
-                boardFav.countDistinct(),
-                boardReply
-        )).from(board)
-                .leftJoin(board.boardFavList, boardFav)
-                .leftJoin(board.boardReplyList, boardReply).fetch()
+        ReadBoardForm readBoardForm = jpaQueryFactory.select(new QReadBoardForm(
+                        board.id,
+                        board.title,
+                        board.content,
+                        board.hit,
+                        member.id,
+                        member.username,
+                        board.date,
+                        board.uploadFile,
+                        board.ip,
+                        boardFav.countDistinct()
+                )).from(board)
                 .leftJoin(board.member, member)
+                .leftJoin(board.boardFavList, boardFav)
                 .where(board.id.eq(id))
+                .groupBy(board.id, member.id)
                 .fetchOne();
 
-        return null;
+        //댓글 리스트는 따로 조회 후 병합
+        List<BoardReply> boardReplyList = jpaQueryFactory.selectFrom(boardReply)
+                .join(boardReply.board, board).fetchJoin()
+                .where(board.id.eq(id))
+                .fetch();
+
+        readBoardForm.setBoardReplyList(boardReplyList);
+
+        return readBoardForm;
     }
 }

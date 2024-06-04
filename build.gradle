@@ -2,6 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
+	//Q클래스 자동 업데이트
+	//id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //인텔리제이 탭에서 그래들 관련 명령어를 쉽게 볼 수 있게 해준다(선택)
+
 }
 
 group = 'myproject'
@@ -58,3 +61,5 @@ tasks.named('test') {
 clean {
 	delete file('src/main/generated')
 }
+
+
