@@ -2,14 +2,16 @@ package myproject.domain.board.boardReply;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import myproject.domain.board.QBoard;
 import myproject.domain.board.QBoardReply;
-import myproject.web.board.QReadBoardReplyForm;
-import myproject.web.board.ReadBoardForm;
-import myproject.web.board.ReadBoardReplyForm;
+import myproject.web.board.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
 
+import static myproject.domain.board.QBoard.board;
 import static myproject.domain.board.QBoardReply.boardReply;
 
 public class BoardReplyCustomImpl implements BoardReplyCustom{
@@ -18,6 +20,8 @@ public class BoardReplyCustomImpl implements BoardReplyCustom{
     public BoardReplyCustomImpl(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
+
+
 
     //게시판 댓글 리스트 조회
     public List<ReadBoardReplyForm> findReadBoardReplyFormList(Long boardId){

@@ -1,12 +1,16 @@
 package myproject.domain.board;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import myproject.domain.member.QMember;
-import myproject.web.board.BoardListDto;
-import myproject.web.board.QBoardListDto;
-import myproject.web.board.QReadBoardForm;
-import myproject.web.board.ReadBoardForm;
+import myproject.web.board.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -21,6 +25,80 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     public BoardRepositoryCustomImpl(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
+    }
+
+    //게시판 글 조회
+    @Override
+    public Page<BoardListDto> search(BoardSearchCondition condition, Pageable pageable) {
+
+        List<BoardListDto> boardListDtos = jpaQueryFactory.select(new QBoardListDto(
+                        board.id,
+                        board.title,
+                        member.username,
+                        board.date.reg_date,
+                        board.hit,
+                        board.boardFavList.size().longValue(),
+                        board.boardReplyList.size().longValue()
+                )).from(board)
+                .leftJoin(board.member, member)
+                .leftJoin(board.boardFavList, boardFav)
+                .leftJoin(board.boardReplyList, boardReply)
+                .where(titleEq(condition.getKeyword(), condition.getKeyfield()),
+                        usernameEq(condition.getKeyword(), condition.getKeyfield()),
+                        contentEq(condition.getKeyword(), condition.getKeyfield()),
+                        titleContentEq(condition.getKeyword(), condition.getKeyfield()))
+                .orderBy(getOrderSpecifier(condition.getOrder()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = jpaQueryFactory
+                .select(board.count())
+                .from(board)
+                .leftJoin(board.member, member)
+                .where(titleEq(condition.getKeyword(), condition.getKeyfield()),
+                        usernameEq(condition.getKeyword(), condition.getKeyfield()),
+                        contentEq(condition.getKeyword(), condition.getKeyfield()),
+                        titleContentEq(condition.getKeyword(), condition.getKeyfield()))
+                .fetchOne();
+
+        return new PageImpl<>(boardListDtos, pageable, total);
+    }
+
+    private Predicate titleEq(String keyword, Integer keyfield) {
+        return keyword != null && keyfield == 1 ? board.title.like("%"+keyword+"%") : null;
+    }
+
+    private Predicate usernameEq(String keyword, Integer keyfield) {
+        return keyword != null && keyfield == 2 ? member.username.like("%"+keyword+"%") : null;
+    }
+
+    private Predicate contentEq(String keyword, Integer keyfield) {
+        return keyword != null && keyfield == 3 ? board.content.like("%"+keyword+"%") : null;
+    }
+
+    private Predicate titleContentEq(String keyword, Integer keyfield) {
+        return keyword != null && keyfield == 4 ? board.title.like("%"+keyword+"%").or(
+                board.content.like("%"+keyword+"%")
+        ) : null;
+    }
+
+    private OrderSpecifier<?> getOrderSpecifier(Integer order) {
+        if (order == null) {
+            return board.date.reg_date.desc();
+        }
+        switch (order) {
+            case 1:
+                return board.date.reg_date.desc();
+            case 2:
+                return board.hit.desc();
+            case 3:
+                return board.boardFavList.size().desc();
+            case 4:
+                return board.boardReplyList.size().desc();
+            default:
+                return board.date.reg_date.desc();
+        }
     }
 
     public List<BoardListDto> boardListDtos() {

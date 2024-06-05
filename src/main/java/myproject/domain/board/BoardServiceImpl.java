@@ -8,11 +8,15 @@ import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 import myproject.domain.member.MemberService;
 import myproject.web.board.BoardListDto;
+import myproject.web.board.BoardSearchCondition;
 import myproject.web.board.ReadBoardForm;
 import myproject.web.board.SaveBoardForm;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
 import myproject.web.file.UploadFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -104,5 +108,17 @@ public class BoardServiceImpl implements BoardService {
         Board boardById = boardRepository.findBoardById(boardId);
 
         return boardById;
+    }
+
+    //게시판 페이징
+
+    @Override
+    public Page<BoardListDto> searchBoards(BoardSearchCondition condition, Pageable pageable) {
+
+        int page = pageable.getPageNumber()-1; //page 위치에 있는 값은 0부터 시작한다.
+        int pageLimit = 10; //한 페이지에 보여줄 글 개수
+
+        //한 페이지당 10개 씩 글을 보여줌
+        return boardRepository.search(condition, PageRequest.of(page, pageLimit));
     }
 }
