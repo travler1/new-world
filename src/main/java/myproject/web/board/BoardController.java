@@ -6,8 +6,11 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.domain.board.Board;
 import myproject.domain.board.BoardService;
 import myproject.domain.member.MemberService;
+import myproject.web.file.FileCategory;
+import myproject.web.file.FileStore;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,38 +33,25 @@ public class BoardController {
 
     private final BoardService boardService;
     private final MemberService memberService;
+    private final FileStore fileStore;
 
-    @GetMapping("")
-    public String Board(Model model) {
-
-
-
-
-
-        model.addAttribute("keyword", null);
-        model.addAttribute("keyfield", null);
-        model.addAttribute("count", null);
-        model.addAttribute("order", null);
-        model.addAttribute("start", null);
-        model.addAttribute("end", null);
-
-        model.addAttribute("page", null);
-
-        List<BoardListDto> boardListDtos = boardService.boardListDto();
-        model.addAttribute("list", boardListDtos);
-
-        log.info("게시판 글 목록 출력 ={}", boardListDtos);
-
-        return "template/board/main";
+    //세션에 로그인된 회원의 아이디 조회 메서드
+    private Long getLoginMemberId(HttpSession session) {
+        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            throw new IllegalStateException("로그인 정보가 없습니다.");
+        }
+        return loginMember.getId();
     }
 
-    @GetMapping("/test")
+    /*==================================
+     * 		  게시판 메인 페이지
+     *=================================*/
+    @GetMapping("")
     public String test(@RequestParam(required = false) Integer keyfield,
                        @RequestParam(required = false) String keyword,
                        @RequestParam(required = false) Integer order,
-                       @PageableDefault(page=1) Pageable pageable, Model model) {
-
-
+                       @PageableDefault(page = 1) Pageable pageable, Model model) {
 
 
         BoardSearchCondition condition = new BoardSearchCondition(keyfield, keyword, order);
@@ -79,9 +69,14 @@ public class BoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "template/board/searchTest";
+        log.info("게시판 글 조회 ={}", boardListDtos11.getTotalElements());
+
+        return "template/board/main";
     }
 
+    /*==================================
+     * 		   게시판 글 등록 폼 호출
+     *=================================*/
     @GetMapping("/write")
     public String boardWrite(@ModelAttribute("saveBoardForm") SaveBoardForm saveBoardForm,
                              Model model) {
@@ -90,15 +85,18 @@ public class BoardController {
         return "template/board/write";
     }
 
+    /*==================================
+     * 			게시판 글 등록
+     *=================================*/
     @PostMapping("/write")
-    public String boardSave(@Valid  @ModelAttribute("saveBoardForm")SaveBoardForm saveBoardForm, BindingResult bindingResult,
+    public String boardSave(@Valid @ModelAttribute("saveBoardForm") SaveBoardForm saveBoardForm, BindingResult bindingResult,
                             HttpSession session, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "template/board/write";
         }
 
-        SessionMemberForm sessionMemberForm = (SessionMemberForm)session.getAttribute("loginMember");
+        SessionMemberForm sessionMemberForm = (SessionMemberForm) session.getAttribute("loginMember");
         String ip = request.getRemoteAddr();
 
         boardService.register(saveBoardForm, ip, sessionMemberForm.getId());
@@ -106,7 +104,7 @@ public class BoardController {
         //View에 표시할 메시지
 
         redirectAttributes.addFlashAttribute("message", "글쓰기가 완료되었습니다.");
-        redirectAttributes.addFlashAttribute("url", request.getContextPath()+ "/board");
+        redirectAttributes.addFlashAttribute("url", request.getContextPath() + "/board");
 
         return "redirect:/common/resultAlert";
     }
@@ -124,7 +122,55 @@ public class BoardController {
         return "template/board/boardDetail";
     }
 
+    /*==================================
+     * 		  게시판 글 수정 폼 호출
+     *=================================*/
+    @GetMapping("/{id}/edit")
+    public String boardEdit(@PathVariable("id") Long id, Model model) {
+
+        EditBoardForm editBoardForm = boardService.getEditBoardFormById(id);
+        model.addAttribute("editBoardForm", editBoardForm);
+
+        return "template/board/edit";
+    }
+
+    /*==================================
+     * 		   게시판 글 수정
+     *=================================*/
+    @PostMapping("/{id}/edit")
+    public String boardEditSave(@PathVariable("id") Long id, Model model, HttpSession session,
+                                @Valid @ModelAttribute("editBoardForm") EditBoardForm editBoardForm,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes,
+                                HttpServletRequest request) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            log.info("글수정 에러 발생, editBoardForm={}", editBoardForm);
+            return "template/board/edit";
+        }
 
 
+        String ip = request.getRemoteAddr();
+
+        boardService.edit(editBoardForm, ip, getLoginMemberId(session));
+
+        redirectAttributes.addFlashAttribute("message", "글수정이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("url", request.getContextPath() + "/board");
+
+        log.info("글 수정 메서드 마지막 진입");
+        return "redirect:/common/resultAlert";
+    }
+
+    /*==================================
+     * 		   게시판 글 삭제
+     *=================================*/
+    @GetMapping("/{id}/delete")
+    public String deleteBoard(@PathVariable("id") Long id, Model model) {
+
+        //board의 파일 삭제 후 해당 board 삭제
+        boardService.deleteBoard(id);
+
+        return "redirect:/board";
+    }
 
 }

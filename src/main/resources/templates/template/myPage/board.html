@@ -1,45 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{template/layoutMain/main :: layout(~{::title}, ~{::body}, ~{::link})}"
+<html lang="en" th:replace="~{template/myPage/main :: layout(~{::title}, ~{::body}, ~{::link})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/mainpage.css}">
-    <title>Hello World - 게시판</title>
+    <title>Hello World - 내가 쓴 글</title>
 </head>
 <body>
-<div class="page-main" th:if="true">
-    <h2>게시판 목록</h2>
-    <form action="list" th:action th:id="search_form" method="get">
-        <ul class="search">
-            <li>
-                <select th:name="keyfield" th:id="keyfield">
-                    <option value="1" th:selected="${param.keyfield == 1}">제목</option>
-                    <option value="2" th:selected="${param.keyfield == 2}">닉네임(이름)</option>
-                    <option value="3" th:selected="${param.keyfield == 3}">내용</option>
-                    <option value="4" th:selected="${param.keyfield == 4}">제목+내용</option>
-                </select>
-            </li>
-            <li>
-                <input type="search" th:name="keyword" th:id="keyword" th:value="${param.keyword}">`
-            </li>
-            <li>
-                <input type="submit" value="찾기">
-                <input type="button" value="목록" th:onclick="|location.href='board'|">
-            </li>
-        </ul>
-
-        <div class="align-right">
-            <select id="order" name="order">
-                <option value="1" th:selected="${param.order == 1}">최신순</option>
-                <option value="2" th:selected="${param.order == 2}">조회순</option>
-                <option value="3" th:selected="${param.order == 3}">좋아요순</option>
-                <option value="4" th:selected="${param.order == 4}">댓글순</option>
-            </select>
-        </div>
-        <div th:if="${session.loginMember != null}">
-            <input type="button" value="글쓰기" th:onclick="|location.href='/write'|">
-        </div>
-    </form>
+<!-- 내용 시작 -->
+<div class="page-main">
+    <br><br><br><br><br>
     <div th:if="${list == null}">
         <div class="result-display">표시할 게시물이 없습니다.</div>
     </div>
@@ -65,7 +34,9 @@
                 <td class="align-center" th:text="${board.boardFav}"></td>
             </tr>
         </table>
+    <div class="align-center">
         <div class="align-center">
+
 
             <!-- 첫번째 페이지로 이동 -->
             <a th:href="@{/board/test(page=1, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">첫
@@ -97,5 +68,19 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        //검색 유효성 체크
+        $('#asearch_form').submit(function () {
+            if ($('#keyword').val().trim() == '') {
+                alert('검색어를 입력하세요!');
+                $('#keyword').val('').focus();
+                return false;
+            }
+        });//end of submit
+    });
+</script>
+<!-- 내용 끝 -->
 </body>
 </html>

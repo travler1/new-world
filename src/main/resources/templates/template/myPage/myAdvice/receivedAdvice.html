@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/myPage/main :: layout(~{::title}, ~{::body}, ~{::link})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<!-- 내용 시작 -->
+<div class="page-main">
+    <br>
+    <div class="align-center">
+        <button class="listButton" id="myAdviceButton" onclick="myAdvice()">받은 첨삭요청함</button>
+        <button class="listButton" id="myAdviceButtonSent" onclick="myAdviceSent()">보낸 첨삭요청함</button>
+    </div>
+    <br><br>
+    <form action="/myPage/myAdvice" id="asearch_form" method="get">
+        <ul class="search">
+            <li>
+                <select th:name="keyfield" id="keyfield" style="height:44px;">
+                    <option value="1" th:selected="${param.keyfield == 1}">보낸사람</option>
+                    <option value="2" th:selected="${param.keyfield == 2}">내용</option>
+                    <option value="3" th:selected="${param.keyfield == 3}">보낸사람+내용</option>
+                </select>
+            </li>
+            <li>
+                <input type="search" th:name="keyword" id="keyword" th:value="${param.keyword}">`
+                <input type="submit" value="찾기">
+            </li>
+            <li>
+            </li>
+        </ul>
+    </form>
+    <br><br>
+    <div th:if="${list.size == 0}" th:text="받은 첨삭이 없습니다."></div>
+
+    <table class="striped-table">
+        <tr>
+            <td class="align-center">보낸 사람</td>
+            <td class="align-center">전송일</td>
+            <td class="align-center">읽은 날짜</td>
+            <td class="align-center">첨삭 진행상태</td>
+        </tr>
+        <tr th:each="advice : ${list}">
+                <td class="align-center">
+                    <a th:href="@{/myPage/myAdvice/{id}(id=${advice.id})}" th:text="${advice.username}"></a>
+                </td>
+                <td class="align-center">
+                    <a th:href="@{/myPage/myAdvice/{id}(id=${advice.id})}" th:text="${#dates.format(advice.date_sent, 'yyyy-MM-dd')}"></a>
+                </td>
+                <td class="align-center" th:if="${advice.date_read != null}" th:text="${#dates.format(advice.date_read, 'yyyy-MM-dd')}"></td>
+                <td class="align-center" th:if="${advice.date_read == null}">읽지 않음</td>
+                <td class="align-center">
+                    <span th:if="${advice.advice_complete == null}">첨삭 완료전</span>
+                    <span th:if="${advice.advice_complete == true}">첨삭완료</span>
+                </td>
+        </tr>
+    </table>
+    <div class="align-center">
+        <div class="align-center">
+
+
+            <!-- 첫번째 페이지로 이동 -->
+            <a th:href="@{/board/test(page=1, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">첫
+                페이지 </a>
+
+            <!-- 이전 링크 활성화 비활성화 -->
+            <a th:href="${list.first} ? '#' : @{/board/test(page=${list.number}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+                이전 </a>
+
+            <!-- 페이지 번호 링크(현재 페이지는 숫자만)
+                    for(int page=startPage; page<=endPage; page++)-->
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+
+		<!-- 현재페이지는 링크 없이 숫자만 -->
+            <span th:if="${page == list.number + 1}" th:text="${page}"></span>
+                <!-- 현재페이지 링크 X, 다른 페이지번호에는 링크를 보여준다 -->
+            <span th:unless="${page == list.number + 1}">
+        <a th:href="@{/board/test(page=${page}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}"
+           th:text="${page}"></a>
+            </span>
+        </span>
+
+            <!-- 다음 링크 활성화 비활성화 -->
+            <a th:href="${list.last} ? '#' : @{/board/test(page=${list.number+2}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+                다음 </a>
+            <!-- 마지막 페이지로 이동 -->
+            <a th:href="@{/board/test(page=${list.totalPages}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+                마지막 페이지</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        //검색 유효성 체크
+        $('#asearch_form').submit(function () {
+            if ($('#keyword').val().trim() == '') {
+                alert('검색어를 입력하세요!');
+                $('#keyword').val('').focus();
+                return false;
+            }
+        });//end of submit
+    });
+
+    function myAdvice() {
+        window.location.href = /*[[@{/myPage/myAdvice}]]*/ '/myPage/myAdvice';
+    }
+
+    function myAdviceSent() {
+        window.location.href = /*[[@{/myPage/myAdviceSent}]]*/ '/myPage/myAdviceSent';
+    }
+</script>
+<!-- 내용 끝 -->
+</body>
+</html>

@@ -1,9 +1,6 @@
 package myproject.domain.board;
 
-import myproject.web.board.BoardListDto;
-import myproject.web.board.BoardSearchCondition;
-import myproject.web.board.ReadBoardForm;
-import myproject.web.board.SaveBoardForm;
+import myproject.web.board.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +27,12 @@ public interface BoardService {
     Board getBoard(Long boardId);
 
     public Page<BoardListDto> searchBoards(BoardSearchCondition condition, Pageable pageable);
+
+    EditBoardForm getEditBoardFormById(Long boardId);
+
+    void edit(EditBoardForm editBoardForm, String ip, Long loginMemberId) throws IOException;
+
+    void deleteBoard(Long id);
+
+    Page<ListBoardForm> getBoardListByLoginMember(Long loginMemberId, Pageable pageable);
 }

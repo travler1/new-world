@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{template/myPage/main :: layout(~{::title}, ~{::body}, ~{::link})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>첨삭보관함</title>
+</head>
+<body>
+<script th:src="@{/js/matching/register.js}"></script>
+<div class="page-main">
+    <ul class="content">
+        <li class="main-text">보낸 사람
+            <div th:if="${session.loginMember.id == advice.sender.id}">
+                <span th:text="나"></span>
+            </div>
+            <div th:if="${session.loginMember.id != advice.sender.id}">
+                <span th:text="|${advice.sender.username}님|"></span>
+            </div>
+        </li>
+        <li class="main-text">받은 사람
+            <div th:if="${session.loginMember.id == advice.receiver.id}">
+                <span th:text="나"></span>
+            </div>
+            <div th:if="${session.loginMember.id != advice.receiver.id}">
+                <span th:text="|${advice.receiver.username}님|"></span>
+            </div>
+        </li>
+        <li class="main-text">
+            <span th:text="|보낸 날짜 ${#dates.format(advice.date_sent, 'yyyy-MM-dd')}|"></span></li>
+        <li class="main-text">첨삭 진행상태 :
+            <div th:if="${advice.advice_complete == null}">
+                <span th:text="|첨삭 완료 전|"></span>
+            </div>
+            <div th:if="${advice.advice_complete == true}">
+                <span th:text="|첨삭 완료|"></span>
+            </div>
+        </li>
+        <li class="advice_content">
+            <span th:utext="${advice.advice_content}"></span>
+        </li>
+        <li class="main-text">
+            <a href="download.do?advice_num=${advice.advice_num}">첨부파일</a>
+        </li>
+    </ul>
+    <div class="align-center">
+        <input type="button" class="adviceButton" value="첨삭 답장하기" th:onclick="'send_advice(' + ${advice.id} + ')'">
+        <input type="button" class="adviceButton" value="삭제" th:onclick="send_advice(' + ${advice.id} + ')">
+        <input type="button" class="adviceButton" value="목록" th:onclick="|location.href='myPage'|">
+    </div>
+</div>
+</body>
+</html>

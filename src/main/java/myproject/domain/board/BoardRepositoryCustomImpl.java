@@ -27,7 +27,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
 
-    //게시판 글 조회
+    //게시판 글 조회 (페이징+검색)
     @Override
     public Page<BoardListDto> search(BoardSearchCondition condition, Pageable pageable) {
 
@@ -101,6 +101,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         }
     }
 
+    //게시판 조회
     public List<BoardListDto> boardListDtos() {
         List<BoardListDto> boardListDtos = jpaQueryFactory.select(new QBoardListDto(
                         board.id,
@@ -159,5 +160,50 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         readBoardForm.setBoardReplyList(boardReplyList);
 
         return readBoardForm;
+    }
+
+    //게시글 수정
+    @Override
+    public void update(Long id, Board editBoard) {
+        jpaQueryFactory.update(board)
+                .set(board.title, editBoard.getTitle())
+                .set(board.content, editBoard.getContent())
+                .set(board.uploadFile, editBoard.getUploadFile())
+                .set(board.ip, editBoard.getIp())
+                .set(board.date, editBoard.getDate())
+                .where(board.id.eq(id))
+                .execute();
+    }
+
+    //마이페이지 내가 쓴 글 조회
+    @Override
+    public Page<ListBoardForm> findBoardListByMemberId(Long loginMemberId, Pageable pageable) {
+
+        List<ListBoardForm> listBoardForms = jpaQueryFactory.select(new QListBoardForm(
+                        board.id,
+                        board.title,
+                        member.username,
+                        board.date.reg_date,
+                        board.hit,
+                        board.boardFavList.size().longValue(),
+                        board.boardReplyList.size().longValue()
+                )).from(board)
+                .leftJoin(board.member, member)
+                .where(board.member.id.eq(loginMemberId))
+                .orderBy(board.date.reg_date.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = jpaQueryFactory.select(board.count())
+                .from(board)
+                .leftJoin(board.member, member)
+                .where(board.member.id.eq(loginMemberId))
+                .orderBy(board.date.reg_date.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchOne();
+
+        return new PageImpl<>(listBoardForms, pageable, total);
     }
 }

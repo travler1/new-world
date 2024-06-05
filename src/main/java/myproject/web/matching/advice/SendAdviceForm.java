@@ -3,11 +3,13 @@ package myproject.web.matching.advice;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import myproject.domain.member.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class SendAdviceForm {
 
     private Long sender;
@@ -16,4 +18,8 @@ public class SendAdviceForm {
     private String advice_content;
     private MultipartFile upload;
 
+    public SendAdviceForm(Long sender, Long receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 }

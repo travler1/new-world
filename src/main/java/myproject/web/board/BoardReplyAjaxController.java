@@ -32,6 +32,7 @@ public class BoardReplyAjaxController {
     private final BoardReplyService boardReplyService;
     private final MemberService memberService;
 
+    //세션에 로그인된 회원의 아이디 조회 메서드
     private Long getLoginMemberId(HttpSession session) {
         SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
         if (loginMember == null) {

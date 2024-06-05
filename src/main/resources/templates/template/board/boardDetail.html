@@ -18,6 +18,7 @@
 <script th:src="@{/js/board/board.reply.js}"></script>
 <div class="page-main">
     <h2><span th:text="${board.title}"></span></h2>
+    <input type="hidden" th:id="boardId" th:value="${board.id}">
     <ul class="detail-info">
         <li>
             <img th:src="@{/photoView(num=${board.memberId}, category=PROFILE_IMAGE)}"
@@ -67,19 +68,20 @@
     <hr size="1" width="100%">
     <div class="align-right">
         <div th:if="${session.loginMember != null and session.loginMember.id == board.memberId}">
-            <input type="button" value="수정" onclick="location.href='update?board_num=${board.board_num}'">
+            <input type="button" value="수정" th:onclick="|location.href='${board.id}/edit'|">
             <input type="button" value="삭제" id="delete_btn">
             <script type="text/javascript">
                 let delete_btn = document.getElementById('delete_btn');
+                let boardId = $('#boardId').val();
                 delete_btn.onclick=function(){
                     let choice = confirm('삭제하시겠습니까?');
                     if(choice){
-                        location.href='delete?board_num=${board.board_num}';
+                        location.href=boardId+`/delete`;
                     }
                 }
             </script>
         </div>
-        <input type="button" value="목록" th:onclick="|location.href='board'|">
+        <input type="button" value="목록" th:onclick="|location.href='/board'|">
     </div>
     <hr size="1" width="100%">
     <!-- 댓글 시작 -->

@@ -3,6 +3,7 @@ package myproject.domain.matching.advice;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Advice {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,8 +65,11 @@ public class Advice {
         return this.receive_del && this.sent_del;
     }
 
-    @Builder
+    public Date getDate_read() {
+        return date_read;
+    }
 
+    @Builder
     public Advice(Member receiver, Member sender, String advice_content, Date date_sent, Date date_read, Boolean receive_read, Boolean receive_del, Boolean sent_del, Boolean advice_complete, String advice_ip, UploadFile uploadFile) {
         this.receiver = receiver;
         this.sender = sender;
