@@ -51,4 +51,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Modifying
     @Query("update Member m set m.profileImage =:profileImage where m.id =:id")
     void updateUploadFileById(@Param("id") Long id, @Param("profileImage") UploadFile uploadFile);
+
+    @Query("select m from Member m where m.email=:email")
+    Optional<Member> findMemberByEmail(@Param("email") String email);
 }

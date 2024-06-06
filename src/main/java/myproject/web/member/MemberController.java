@@ -6,13 +6,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.MemberService;
-import myproject.web.member.MemberDTO.addMemberForm;
+import myproject.web.member.MemberDTO.SaveMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,21 +23,22 @@ public class MemberController {
     private final MemberService memberService;
 
     /*=========================
-     *회원가입
+            회원가입 폼 호출
      *=========================*/
-
-    //회원가입 폼 호출
     @GetMapping("/members/register")
-    public String register(@ModelAttribute addMemberForm addMemberForm) {
+    public String register(@ModelAttribute SaveMemberForm saveMemberForm) {
         return "template/home/memberRegister";
     }
 
-    //회원가입 메서드
+    /*=========================
+             회원가입 로직
+     *=========================*/
     @PostMapping("/members/register")
-    public String submit(@Valid addMemberForm addMemberForm, BindingResult bindingResult,
+    public String submit(@Valid SaveMemberForm saveMemberForm,
+                         BindingResult bindingResult,
                          Model model, HttpServletRequest request) {
 
-        log.info("회원가입 폼 {}", addMemberForm);
+        log.info("회원가입 폼 {}", saveMemberForm);
 
         //유효성 체크 결과 오류가 있으면 폼 호출
         if (bindingResult.hasErrors()) {
@@ -46,15 +47,32 @@ public class MemberController {
         }
 
         //전송된 데이터 회원가입 처리
-        memberService.join(addMemberForm);
-
-        model.addAttribute("accessTitle", "회원가입");
-        model.addAttribute("accessMsg", "회원가입이 완료되었습니다.");
-        model.addAttribute("accessUrl", request.getContextPath() + "/");
+        memberService.join(saveMemberForm);
+        //회원가입 성공처리
+        modelResult(model, request);
 
         log.info("회원가입 성공");
         return "redirect:/";
-        //return "common/result";
     }
 
+    /*=========================
+       이메일 중복처리 (Ajax통신)
+     *=========================*/
+    @PostMapping("/members/register/confirmEmail")
+    @ResponseBody
+    public Map<String,Object> memberRegisterConfirmEmail(@RequestParam String email) {
+        
+        log.info("이메일 중복체크 메서드 진입, email: {}", email);
+
+        //이메일 중복체크 메서드 실행
+        Map<String, Object> result = memberService.checkEmailDuplicated(email);
+
+        return result;
+    }
+
+    private static void modelResult(Model model, HttpServletRequest request) {
+        model.addAttribute("accessTitle", "회원가입");
+        model.addAttribute("accessMsg", "회원가입이 완료되었습니다.");
+        model.addAttribute("accessUrl", request.getContextPath() + "/");
+    }
 }

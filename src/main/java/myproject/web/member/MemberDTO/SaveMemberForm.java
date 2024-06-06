@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class addMemberForm {
+public class SaveMemberForm {
 
     @NotBlank
     private String username;

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello World - 로그인</title>
+    <link rel="stylesheet" th:href="@{/css/error-field.css}">
 </head>
 <body>
 <div id="notion-app">
@@ -91,9 +92,9 @@
                                                                    cssClass="form-input" type="text"
                                                                    id="loginEmail" placeholder="이메일을 입력하세요."
                                                                    style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"
-                                                                   th:field="*{loginEmail}" th:errorclass="field-error"/>
-                                                            <div class="field-error" th:errors="*{loginEmail}"></div>
+                                                                   th:field="*{loginEmail}" />
                                                         </div>
+                                                        <div class="field-error" th:errorclass="field-error" th:errors="*{loginEmail}"></div>
                                                         <label for="password"
                                                                style="display: block; margin-bottom: 4px; font-size: 12px; color: rgba(55, 53, 47, 0.65); font-weight: 500;">비밀번호</label>
                                                         <div class="notion-focusable-within"
@@ -103,7 +104,7 @@
                                                                    th:field="*{password}" th:errorclass="field-error"
                                                                    style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"/>
                                                         </div>
-                                                        <div class="error-class" th:errors="*{password}"></div>
+                                                        <div class="error-class field-error" th:errors="*{password}"></div>
                                                         <input id="autologin" name="auto" type="checkbox">자동로그인
                                                         <button aria-disabled="false" class="login-btn" type="submit"
                                                               role="button" style="border:none; user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; height: 36px; border-radius: 4px; font-size: 14px; line-height: 1; padding-left: 12px; padding-right: 12px; font-weight: 500; background: rgb(35, 131, 226); box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px; color: white; margin-top: 6px; margin-bottom: 12px; width: 100%;"

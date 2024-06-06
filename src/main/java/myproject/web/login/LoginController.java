@@ -58,7 +58,6 @@ public class LoginController {
         HttpSession session = request.getSession();
         //세션에 로그인 회원정보 저장
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
-
         log.info("세션 로그인 회원 정보 {} " , loginMember);
 
         return "redirect:" + redirectURL;
@@ -66,6 +65,7 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
+        //세션 조회 후 세션이 있을 시 세션삭제
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
