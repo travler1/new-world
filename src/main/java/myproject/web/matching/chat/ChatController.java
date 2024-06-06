@@ -6,10 +6,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.matching.chat.ChatService;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 

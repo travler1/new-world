@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.boardFav.BoardFavRepository;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.board.*;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;

@@ -1,9 +1,7 @@
 package myproject.domain.member;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import myproject.domain.board.Board;
 import myproject.domain.matching.EmpInfo;
 import myproject.domain.matching.chat.Chat;
@@ -16,7 +14,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +48,7 @@ public class Member {
     //내가 쓴 글
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Board> board = new ArrayList<>();
-    
+
     //채팅방 관련 연관관계
     @OneToMany(mappedBy = "member")
     private List<Chat> chats;
@@ -59,7 +59,7 @@ public class Member {
     @OneToMany(mappedBy = "receiver")
     private List<ChatRoom> receivedChatRooms;
 
-    //회원가입 시 addMemberForm -> Member Entity로 변환하기 위한 생성자
+    //회원가입 시 saveMemberForm -> Member Entity로 변환하기 위한 생성자
     public Member createMember(String username, String password, String phone, String email,
                                Address address){
 
@@ -76,4 +76,7 @@ public class Member {
     public void setEmpInfo(EmpInfo empInfo) {
         this.empInfo = empInfo;
     }
+
+
 }
+

@@ -1,12 +1,10 @@
 package myproject.domain.matching.advice;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberRepository;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
 import myproject.web.file.UploadFile;
@@ -16,14 +14,11 @@ import myproject.web.matching.advice.SendAdviceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.locks.Condition;
 
 @Service
 @Transactional

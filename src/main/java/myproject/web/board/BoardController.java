@@ -6,10 +6,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.board.Board;
 import myproject.domain.board.BoardService;
-import myproject.domain.member.MemberService;
-import myproject.web.file.FileCategory;
+import myproject.service.member.MemberService;
 import myproject.web.file.FileStore;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.data.domain.Page;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

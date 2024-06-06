@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.BoardFav;
 import myproject.domain.board.BoardService;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.web.bind.annotation.*;
 

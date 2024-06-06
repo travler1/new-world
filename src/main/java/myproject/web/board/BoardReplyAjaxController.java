@@ -11,7 +11,7 @@ import myproject.domain.board.boardReply.BoardReplyService;
 import myproject.domain.board.BoardService;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

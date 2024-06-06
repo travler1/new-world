@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.matching.chat.ChatDto;
 import org.springframework.stereotype.Service;
 

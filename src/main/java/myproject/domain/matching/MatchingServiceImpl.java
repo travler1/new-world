@@ -7,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
 import myproject.web.file.UploadFile;
 import myproject.web.matching.EmpEditForm;
 import myproject.web.matching.EmpRegisterForm;
-import myproject.web.matching.advice.SendAdviceForm;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Service;
 

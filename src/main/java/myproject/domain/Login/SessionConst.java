@@ -1,4 +1,4 @@
-package myproject.domain.Login;
+package myproject.domain.login;
 
 public class SessionConst {
 

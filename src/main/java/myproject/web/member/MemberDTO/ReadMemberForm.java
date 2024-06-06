@@ -1,5 +1,6 @@
 package myproject.web.member.MemberDTO;
 
+import lombok.Builder;
 import lombok.Data;
 import myproject.domain.member.Address;
 import myproject.domain.member.EmbeddedDate;
@@ -8,10 +9,8 @@ import myproject.domain.member.Member;
 import myproject.web.file.UploadFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-
 @Data
-public class MyPageMemberForm {
+public class ReadMemberForm {
 
     private Long id;
 
@@ -31,14 +30,14 @@ public class MyPageMemberForm {
     private String now_password;
     private MultipartFile upload;
 
-    public MyPageMemberForm(Member member) {
+    @Builder
+    public ReadMemberForm(Member member) {
 
         this.id = member.getId();
         this.username = member.getUsername();
         this.password = member.getPassword();
         this.email = member.getEmail();
         this.phone = member.getPhone();
-
         this.grade = member.getGrade();
         this.address = member.getAddress();
         this.profileImage = member.getProfileImage();

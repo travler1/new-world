@@ -1,4 +1,4 @@
-package myproject.domain.Image;
+package myproject.domain.image;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -5,7 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.member.MemberService;
+import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SaveMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +38,6 @@ public class MemberController {
                          BindingResult bindingResult,
                          Model model, HttpServletRequest request) {
 
-        log.info("회원가입 폼 {}", saveMemberForm);
-
         //유효성 체크 결과 오류가 있으면 폼 호출
         if (bindingResult.hasErrors()) {
             log.info("검증오류 발생 errors : {}", bindingResult);
@@ -50,22 +48,22 @@ public class MemberController {
         memberService.join(saveMemberForm);
         //회원가입 성공처리
         modelResult(model, request);
+        log.info("회원가입 성공 처리, saveMemberForm : {}", saveMemberForm);
 
-        log.info("회원가입 성공");
         return "redirect:/";
     }
 
     /*=========================
-       이메일 중복처리 (Ajax통신)
+       이메일 중복체크 (Ajax통신)
      *=========================*/
     @PostMapping("/members/register/confirmEmail")
     @ResponseBody
     public Map<String,Object> memberRegisterConfirmEmail(@RequestParam String email) {
-        
-        log.info("이메일 중복체크 메서드 진입, email: {}", email);
+
 
         //이메일 중복체크 메서드 실행
         Map<String, Object> result = memberService.checkEmailDuplicated(email);
+        log.info("이메일 중복체크 메서드 실행, email: {}", email);
 
         return result;
     }

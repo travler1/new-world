@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.BoardService;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberService;
-import myproject.web.board.BoardListDto;
-import myproject.web.board.BoardSearchCondition;
+import myproject.service.member.MemberService;
 import myproject.web.board.ListBoardForm;
-import myproject.web.member.MemberDTO.MyPageMemberForm;
+import myproject.web.member.MemberDTO.ReadMemberForm;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @Slf4j
@@ -26,15 +23,6 @@ public class MyPageController {
 
     private final MemberService memberService;
     private final BoardService boardService;
-
-    //세션에 로그인된 회원의 아이디 조회 메서드
-    private Long getLoginMemberId(HttpSession session) {
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            throw new IllegalStateException("로그인 정보가 없습니다.");
-        }
-        return loginMember.getId();
-    }
 
     /*=========================
      *		    MY페이지
@@ -47,7 +35,7 @@ public class MyPageController {
         Member memberEntity = memberService.findMemberById(loginMember.getId());
 
         //마이페이지 관리용 회원 상세 정보 조회
-        MyPageMemberForm member = new MyPageMemberForm(memberEntity);
+        ReadMemberForm member = new ReadMemberForm(memberEntity);
 
         log.info("회원 상세 정보 {}", member);
 
@@ -79,5 +67,14 @@ public class MyPageController {
         model.addAttribute("endPage", endPage);
 
         return "template/myPage/board";
+    }
+
+    //세션에 로그인된 회원의 아이디 조회 메서드
+    private Long getLoginMemberId(HttpSession session) {
+        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            throw new IllegalStateException("로그인 정보가 없습니다.");
+        }
+        return loginMember.getId();
     }
 }
