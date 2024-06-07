@@ -1,16 +1,15 @@
 package myproject.domain.board;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class BoardReply {
 
     @Id @GeneratedValue

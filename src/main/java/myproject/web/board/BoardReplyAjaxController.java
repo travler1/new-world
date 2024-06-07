@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.LoginAccount;
 import myproject.domain.board.Board;
 import myproject.domain.board.BoardReply;
 import myproject.service.board.boardReply.BoardReplyService;
@@ -35,40 +36,20 @@ public class BoardReplyAjaxController {
     private final BoardReplyService boardReplyService;
     private final MemberService memberService;
 
-    //세션에 로그인된 회원의 아이디 조회 메서드
-    private Long getLoginMemberId(HttpSession session) {
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            throw new IllegalStateException("로그인 정보가 없습니다.");
-        }
-        return loginMember.getId();
-    }
-
     /*================================
      *      	   댓글 등록
      *===============================*/
     @PostMapping("writeReply")
-    public Map<String, Object> writeReply(HttpSession session, HttpServletRequest request,
-                             @ModelAttribute SaveBoardReplyForm saveBoardReplyForm) {
+    public Map<String, Object> writeReply(@LoginAccount Member member, HttpServletRequest request,
+                                          @ModelAttribute SaveBoardReplyForm saveBoardReplyForm) {
 
         log.info("댓글 등록 ={}", saveBoardReplyForm);
 
-        Board board = boardService.getBoard(saveBoardReplyForm.getBoardId());
-        Member member = memberService.findMemberById(getLoginMemberId(session));
-
-        BoardReply boardReply = new BoardReply().builder()
-                .content(saveBoardReplyForm.getContent())
-                .board(board)
-                .date(new EmbeddedDate(new Date(), null))
-                .ip(request.getRemoteAddr())
-                .member(member)
-                .build();
-
-        log.info("댓글 등록={}", boardReply);
-        boardReplyService.register(boardReply);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", "success");
+        String ip = request.getRemoteAddr();
+        //댓글 저장
+        BoardReply savedBoardReply = boardReplyService.save(saveBoardReplyForm, ip, member.getId());
+        //댓글 저장 결과 ajaxMap으로 변환
+        Map<String, Object> result = boardReplyService.register(savedBoardReply);
 
         return result;
     }
@@ -77,7 +58,7 @@ public class BoardReplyAjaxController {
      *      	   댓글 목록
      *===============================*/
     @PostMapping("/listReply")
-    public Map<String, Object> listReply(HttpSession session,
+    public Map<String, Object> listReply(@LoginAccount Member member,
                                          @RequestParam("boardId") Long boardId,
                                          Model model) {
 
@@ -92,7 +73,7 @@ public class BoardReplyAjaxController {
         result.put("list", readBoardReplyFormList);
         result.put("start", null);
         result.put("end", null);
-        result.put("memberId", getLoginMemberId(session));
+        result.put("memberId", member.getId());
         model.addAttribute("pageNum", 1);
 
         return result;
@@ -106,7 +87,8 @@ public class BoardReplyAjaxController {
                                            HttpServletRequest request,
                                            @ModelAttribute UpdateReplyForm updateReplyForm) {
 
-        boardReplyService.updateBoardReply(updateReplyForm, request.getRemoteAddr(), new Date());
+        String ip = request.getRemoteAddr();
+        boardReplyService.updateBoardReply(updateReplyForm, ip, new Date());
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
 
@@ -117,13 +99,13 @@ public class BoardReplyAjaxController {
      *      	   댓글 삭제
      *===============================*/
     @PostMapping("deleteReply")
-    public Map<String, Object> deleteReply(HttpSession session,
+    public Map<String, Object> deleteReply(@LoginAccount Member member,
                                            @RequestParam("boardReplyId") Long boardReplyId) {
 
         Map<String, Object> result = new HashMap<>();
         BoardReply boardReply = boardReplyService.getBoardReply(boardReplyId);
 
-        if (boardReply.getMember().getId() != getLoginMemberId(session)) {
+        if (boardReply.getMember().getId() != member.getId()) {
             result.put("result", "wrongAccess");
         }
         boardReplyService.deleteBoardReply(boardReplyId);

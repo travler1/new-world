@@ -3,14 +3,22 @@ package myproject.service.board.boardReply;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.domain.board.Board;
 import myproject.domain.board.BoardReply;
 import myproject.domain.board.boardReply.BoardReplyRepository;
+import myproject.domain.member.EmbeddedDate;
+import myproject.domain.member.Member;
+import myproject.service.board.BoardService;
+import myproject.service.member.MemberService;
 import myproject.web.board.dto.boardReplyDto.ReadBoardReplyForm;
+import myproject.web.board.dto.boardReplyDto.SaveBoardReplyForm;
 import myproject.web.board.dto.boardReplyDto.UpdateReplyForm;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -18,7 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardReplyServiceImpl implements BoardReplyService {
 
+    private final MemberService memberService;
     private final BoardReplyRepository boardReplyRepository;
+    private final BoardService boardService;
 
     //게시글의 댓글 갯수
     @Override
@@ -34,10 +44,35 @@ public class BoardReplyServiceImpl implements BoardReplyService {
         return readBoardReplyFormList;
     }
 
-    //댓글 등록
+    //댓글 저장(SavedBoardReplyForm -> BoardReply)
     @Override
-    public void register(BoardReply boardReply) {
+    public BoardReply save(SaveBoardReplyForm saveBoardReplyForm, String ip, Long memberId) {
+
+        Member member = memberService.findMemberById(memberId);
+        Board board = boardService.getBoard(saveBoardReplyForm.getBoardId());
+
+        BoardReply boardReply = new BoardReply().builder()
+                .content(saveBoardReplyForm.getContent())
+                .date(new EmbeddedDate(new Date(), null))
+                .ip(ip)
+                .board(board)
+                .member(member)
+                .build();
+
+        BoardReply savedBoardReply = boardReplyRepository.save(boardReply);
+        return savedBoardReply;
+    }
+
+    //댓글 저장 후 ajax 결과 처리
+    @Override
+    public Map<String, Object> register(BoardReply boardReply) {
+
+        Map<String, Object> result = new HashMap<>();
+
         boardReplyRepository.save(boardReply);
+        result.put("result", "success");
+
+        return result;
     }
 
     //댓글 수정
