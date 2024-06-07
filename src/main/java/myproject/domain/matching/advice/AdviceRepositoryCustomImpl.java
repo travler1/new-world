@@ -4,16 +4,14 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
-import myproject.web.board.QReadBoardForm;
 import myproject.web.matching.advice.ListAdviceForm;
 import myproject.web.matching.advice.QListAdviceForm;
 import myproject.web.matching.advice.QReadAdviceForm;
 import myproject.web.matching.advice.ReadAdviceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
+
 
 import java.util.Date;
 import java.util.List;
@@ -78,7 +76,7 @@ public class AdviceRepositoryCustomImpl implements AdviceRepositoryCustom {
                 .where(receiverEq(condition.getKeyword(), condition.getKeyfield()),
                         contentEq(condition.getKeyword(), condition.getKeyfield()),
                         receiverOrContentEq(condition.getKeyword(), condition.getKeyfield()))
-                .where(advice.receiver.id.eq(memberId))
+                .where(advice.sender.id.eq(memberId))
                 .orderBy(advice.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

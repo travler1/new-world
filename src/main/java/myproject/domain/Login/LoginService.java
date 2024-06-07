@@ -3,7 +3,7 @@ package myproject.domain.login;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import myproject.domain.member.Member;
-import myproject.domain.member.MemberRepository;
+import myproject.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

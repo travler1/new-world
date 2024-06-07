@@ -25,13 +25,18 @@ public class HomeController {
         Member memberById = memberService.findMemberById(1L);
         SessionMemberForm sessionMemberForm = new SessionMemberForm(memberById.getId(), memberById.getUsername(), memberById.getEmail(), memberById.getProfileImage(), memberById.getGrade());
         HttpSession session = request.getSession();
-        //session.setAttribute("loginMember", sessionMemberForm);
+        session.setAttribute("loginMember", sessionMemberForm);
         return "template/home/home";
     }
 
-    @GetMapping("/common/resultAlert")
+    //공통 페이지 호출 (PRG)
+    @GetMapping(value = {"/common/resultAlert", "/noNeedLogin/resultAlert"})
     public String resultAlert(HttpServletRequest request) {
         return "template/common/resultAlert";
     }
 
+    @GetMapping("/common/resultView")
+    public String resultView(HttpServletRequest request) {
+        return "template/common/resultView";
+    }
 }

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import myproject.domain.member.Address;
 import myproject.domain.member.EmbeddedDate;
+import myproject.domain.member.Grade;
 import myproject.domain.member.Member;
 
 import java.util.Date;
@@ -42,6 +43,7 @@ public class SaveMemberForm {
                 .email(email)
                 .address(new Address(zipcode, address1, address2))
                 .date(new EmbeddedDate(new Date(), null))
+                .grade(Grade.STUDENT)
                 .build();
     }
 }

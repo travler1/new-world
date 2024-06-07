@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.LoginAccount;
 import myproject.domain.board.BoardFav;
-import myproject.domain.board.BoardService;
-import myproject.service.member.MemberService;
+import myproject.domain.member.Member;
+import myproject.service.board.BoardService;
+import myproject.service.board.boardFav.BoardFavService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +24,7 @@ import java.util.Optional;
 public class BoardFavAjaxController {
 
     private final BoardService boardService;
-    private final MemberService memberService;
-
-    private Long getLoginMemberId(HttpSession session) {
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            throw new IllegalStateException("로그인 정보가 없습니다.");
-        }
-        return loginMember.getId();
-    }
+    private final BoardFavService boardFavService;
 
     /*================================
      *  	  부모글 좋아요 읽기
@@ -38,47 +32,27 @@ public class BoardFavAjaxController {
      *===============================*/
     @PostMapping("/getFav")
     public Map<String, Object> getFav(@RequestParam("boardId") Long boardId,
-                                      HttpSession session) {
+                                      @LoginAccount Member member) {
 
-        Map<String, Object> result = new HashMap<>();
-
-        Optional<BoardFav> findFav = boardService.getFav(boardId, ((SessionMemberForm) session.getAttribute("loginMember")).getId());
+        //부모글 좋아요 조회
+        Optional<BoardFav> findFav = boardFavService.getFav(boardId, member.getId());
+        //부모글 좋아요에 따른 결과 출력
+        Map<String, Object> boardFav = boardFavService.getBoardFavAjaxResult(findFav, boardId);
         log.info("findFav: {}", findFav);
-        if(findFav.isPresent()) {
-            result.put("status", "yesFav");
-        }else{
-            result.put("status", "noFav");
-        }
 
-        Long count = boardService.getFavCount(boardId);
-        result.put("count", count);
-        result.put("result", "success");
-        return result;
+        return boardFav;
     }
 
     /*================================
      *      부모글 좋아요 등록/삭제
      *===============================*/
     @PostMapping("/writeFav")
-    public Map<String, Object> writeFav(HttpSession session,
+    public Map<String, Object> writeFav(@LoginAccount Member member,
                                         @RequestParam("boardId") Long boardId){
-        Map<String, Object> result = new HashMap<>();
-
-        Long memberId =((SessionMemberForm)session.getAttribute("loginMember")).getId();
-
-        //이전에 등록했는지 확인
-        Optional<BoardFav> getFav = boardService.getFav(boardId, getLoginMemberId(session));
-        if(getFav.isPresent()) {
-            boardService.deleteBoardFav(getFav.get().getId());
-            result.put("status", "noFav");
-        }else{
-            boardService.registerFav(boardId, getLoginMemberId(session));
-            result.put("status", "yesFav");
-        }
-
-        Long count = boardService.getFavCount(boardId);
-        result.put("count", count);
-        result.put("result", "success");
+        //부모글 좋아요 조회
+        Optional<BoardFav> getFav = boardFavService.getFav(boardId, member.getId());
+        //부모글 좋아요 조회에 따른 결과 출력. 좋아요존재->좋아요삭제, 좋아요존재X->좋아요등록
+        Map<String, Object> result = boardFavService.doFavAjaxResult(getFav, boardId, member.getId());
 
         return result;
     }

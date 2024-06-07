@@ -4,8 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.matching.MatchingService;
-import myproject.domain.member.MemberRepository;
+import myproject.service.matching.EmpService;
+import myproject.domain.member.repository.MemberRepository;
 import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.core.io.Resource;
@@ -27,7 +27,7 @@ public class ImageController {
 
     private final MemberRepository memberRepository;
     private final FileStore fileStore;
-    private final MatchingService matchingService;
+    private final EmpService empService;
     private final MemberService memberService;
 
     //view -> 프로필 이미지 출력
@@ -55,11 +55,12 @@ public class ImageController {
     public Resource photoView(@RequestParam("num") Long id, @RequestParam("category") String category) throws MalformedURLException {
 
         String filePath = "file:";
+        String defaultImagePath = "classpath:/static/images/pageMain/face.png";
         log.info("num={}, category={}", id, category);
         UploadFile uploadFile = null;
         switch (category) {
             case "EMP_INFO":
-                uploadFile= matchingService.findUploadFileById(id);
+                uploadFile= empService.findUploadFileById(id);
                 log.info("uploadFile = {}", uploadFile);
                 filePath += fileStore.getFullImagePath(FileCategory.EMP_INFO, uploadFile.getStoreFileName());
                 log.info("filePath = {}", filePath);
@@ -69,11 +70,12 @@ public class ImageController {
                 break;
 
             case "PROFILE_IMAGE":
-                log.info("PROFILE_IMAGE 접근");
                 uploadFile= memberService.findUploadFileById(id);
-                log.info("uploadFile = {}", uploadFile);
-                filePath += fileStore.getFullImagePath(FileCategory.PROFILE_IMAGE, uploadFile.getStoreFileName());
-                log.info("filePath = {}", filePath);
+                if (uploadFile != null) {
+                     filePath += fileStore.getFullImagePath(FileCategory.PROFILE_IMAGE, uploadFile.getStoreFileName());
+                }else{
+                    filePath = defaultImagePath;
+                }
                 break;
         }
         log.info("filePath={}",filePath);

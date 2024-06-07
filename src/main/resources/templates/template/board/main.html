@@ -37,7 +37,7 @@
             </select>
         </div>
         <div th:if="${session.loginMember != null}">
-            <input type="button" value="글쓰기" th:onclick="|location.href='/write'|">
+            <input type="button" value="글쓰기" th:onclick="|location.href='/board/write'|">
         </div>
     </form>
     <div th:if="${list == null}">

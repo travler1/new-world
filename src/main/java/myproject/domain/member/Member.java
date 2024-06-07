@@ -1,15 +1,15 @@
 package myproject.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import myproject.domain.board.Board;
-import myproject.domain.matching.EmpInfo;
+import myproject.domain.matching.emp.EmpInfo;
 import myproject.domain.matching.chat.Chat;
 import myproject.domain.matching.chat.ChatRoom;
 import myproject.web.file.UploadFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -41,8 +41,9 @@ public class Member {
     @Embedded
     private EmbeddedDate date;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "empInfo_id")
+    @JsonIgnore
     private EmpInfo empInfo;
 
     //내가 쓴 글

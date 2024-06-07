@@ -49,12 +49,13 @@ public class AdviceServiceImpl implements AdviceService{
 
         adviceRepository.save(advice);
 
+        //첨삭 답장 시 첨삭요청,첨삭답장 메세지에 대하여 첨삭완료처리.
         if (adviceId != null) {
             Advice adviceById = adviceRepository.findAdviceById(adviceId);
             if (adviceById.getAdvice_complete()==null) {
                 adviceRepository.updateAdviceComplete(adviceId);
-                adviceRepository.updateAdviceComplete(advice.getId());
             }
+            adviceRepository.updateAdviceComplete(advice.getId());
         }
     }
 

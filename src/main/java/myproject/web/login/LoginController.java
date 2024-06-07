@@ -36,23 +36,19 @@ public class LoginController {
                              BindingResult bindingResult, Model model,
                              HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL) {
 
-        //로그인 폼 오류 시 로그인 폼 재호출
+        //로그인 폼 입력오류 시 로그인 폼 재호출
         if (bindingResult.hasErrors()) {
             return "template/home/login";
         }
-
         //로그인 폼 정보로 멤버 조회 후 최소정보만 세션에 저장(id, username, email, profileImage, grade)
         Member member = loginService.login(loginForm.getLoginEmail(), loginForm.getPassword());
-        SessionMemberForm loginMember = new SessionMemberForm(member.getId(),
-                                                              member.getUsername(),
-                                                              member.getEmail(),
-                                                              member.getProfileImage(),
-                                                              member.getGrade());
 
-        if (loginMember == null) {
+        if (member == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "template/home/login";
         }
+
+        SessionMemberForm loginMember = new SessionMemberForm(member);
 
         //세션이 있으면 세션 반환, 없으면 신규 생성
         HttpSession session = request.getSession();
@@ -72,4 +68,5 @@ public class LoginController {
         }
         return "redirect:/";
     }
+
 }

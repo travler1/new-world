@@ -25,4 +25,12 @@ public class SessionMemberForm {
     public void updateProfileImage(UploadFile profileImage) {
         this.profileImage = profileImage;
     }
+
+    public SessionMemberForm(Member member) {
+        this.id = member.getId();
+        this.username = member.getUsername();
+        this.email = member.getEmail();
+        this.profileImage = member.getProfileImage();
+        this.grade = member.getGrade();
+    }
 }

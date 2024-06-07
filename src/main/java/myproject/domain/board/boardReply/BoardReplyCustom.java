@@ -1,6 +1,6 @@
 package myproject.domain.board.boardReply;
 
-import myproject.web.board.ReadBoardReplyForm;
+import myproject.web.board.dto.boardReplyDto.ReadBoardReplyForm;
 
 import java.util.Date;
 import java.util.List;

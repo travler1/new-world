@@ -2,15 +2,13 @@ package myproject.domain.board;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import myproject.domain.member.QMember;
 import myproject.web.board.*;
+import myproject.web.board.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -29,9 +27,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     //게시판 글 조회 (페이징+검색)
     @Override
-    public Page<BoardListDto> search(BoardSearchCondition condition, Pageable pageable) {
+    public Page<ListBoardForm> search(BoardSearchCondition condition, Pageable pageable) {
 
-        List<BoardListDto> boardListDtos = jpaQueryFactory.select(new QBoardListDto(
+        List<ListBoardForm> listBoardForms = jpaQueryFactory.select(new QListBoardForm(
                         board.id,
                         board.title,
                         member.username,
@@ -62,7 +60,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         titleContentEq(condition.getKeyword(), condition.getKeyfield()))
                 .fetchOne();
 
-        return new PageImpl<>(boardListDtos, pageable, total);
+        return new PageImpl<>(listBoardForms, pageable, total);
     }
 
     private Predicate titleEq(String keyword, Integer keyfield) {
@@ -99,26 +97,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             default:
                 return board.date.reg_date.desc();
         }
-    }
-
-    //게시판 조회
-    public List<BoardListDto> boardListDtos() {
-        List<BoardListDto> boardListDtos = jpaQueryFactory.select(new QBoardListDto(
-                        board.id,
-                        board.title,
-                        member.username,
-                        board.date.reg_date,
-                        board.hit,
-                        boardFav.countDistinct(),
-                        boardReply.countDistinct()
-                )).from(board)
-                .leftJoin(board.member, member)
-                .leftJoin(board.boardFavList, boardFav)
-                .leftJoin(board.boardReplyList, boardReply)
-                .groupBy(board.id, board.title, member.username, board.date.reg_date, board.hit)
-                .fetch();
-
-        return boardListDtos;
     }
 
     //글 조회 시 조회수 증가
@@ -164,8 +142,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     //게시글 수정
     @Override
-    public void update(Long id, Board editBoard) {
-        jpaQueryFactory.update(board)
+    public Long update(Long id, Board editBoard) {
+        long updateBoardId = jpaQueryFactory.update(board)
                 .set(board.title, editBoard.getTitle())
                 .set(board.content, editBoard.getContent())
                 .set(board.uploadFile, editBoard.getUploadFile())
@@ -173,6 +151,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .set(board.date, editBoard.getDate())
                 .where(board.id.eq(id))
                 .execute();
+
+        return updateBoardId;
     }
 
     //마이페이지 내가 쓴 글 조회

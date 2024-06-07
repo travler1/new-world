@@ -2,16 +2,13 @@ package myproject.domain.board.boardReply;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import myproject.domain.board.QBoard;
-import myproject.domain.board.QBoardReply;
 import myproject.web.board.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import myproject.web.board.dto.boardReplyDto.QReadBoardReplyForm;
+import myproject.web.board.dto.boardReplyDto.ReadBoardReplyForm;
 
 import java.util.Date;
 import java.util.List;
 
-import static myproject.domain.board.QBoard.board;
 import static myproject.domain.board.QBoardReply.boardReply;
 
 public class BoardReplyCustomImpl implements BoardReplyCustom{

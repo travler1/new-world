@@ -12,21 +12,21 @@
 </script>
 <body>
 
-<h2><span th:text="|[${session.loginMember.username}]님의 취업 정보|"></span></h2>
+<h2><span th:text="|[${form.member.username}]님의 취업 정보|"></span></h2>
 <div class="marquee">
-        <b><span th:text="${session.loginMember.username}"></span></b>
+        <b><span th:text="${form.member.username}"></span></b>
 </div>
 <form action="emp/register" th:action method="post" th:object="${form}"
-      enctype="multipart/form-data" id="empRegisterForm">
+      enctype="multipart/form-data" id="saveEmpForm">
     <input type="hidden" class="input" id="id" th:field="*{id}">
     <table>
         <tr>
             <td style="width:30%;">이메일</td>
-            <td style="width:70%;"><span th:text="${session.loginMember.getEmail()}">사용자 이메일</span></td>
+            <td style="width:70%;"><span th:text="${form.member.email}">사용자 이메일</span></td>
         </tr>
         <tr>
             <td>이름</td>
-            <td colspan="7"><span th:text="${session.loginMember.getUsername()}">사용자 이름</span>
+            <td colspan="7"><span th:text="${form.member.username}">사용자 이름</span>
             </td>
         </tr>
         <tr>
@@ -50,7 +50,7 @@
             <td>직무
             </td>
             <td colspan="7">
-                <span th:text="*{field}"></span>
+                <span th:text="*{role}"></span>
             </td>
         </tr>
         <tr>

@@ -9,7 +9,7 @@ import myproject.domain.member.Member;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class BoardFav {
 
     @Id @GeneratedValue

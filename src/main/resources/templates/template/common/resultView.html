@@ -6,16 +6,29 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
+<script th:inline="javascript">
+    var title = [[${accessTitle}]];
+    var message = [[${accessMsg}]];
+    var url = [[${accessUrl}]];
+</script>
 <div class="page-one">
-    <h2>${accessTitle}</h2>
+    <h2 id="accessTitle"></h2>
     <div class="result-display">
         <div class="align-center">
-            ${accessMsg}
+            <span id="accessMsg"></span>
             <p>
-                <input type="button" value="이동" th:onclick="|location.href='${accessUrl}'|">
+                <input type="button" value="이동" th:onclick="navigateToUrl()">
             </p>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('accessTitle').innerText = title;
+    document.getElementById('accessMsg').innerText = message;
+
+    function navigateToUrl() {
+        location.href = url;
+    }
+</script>
 </body>
 </html>

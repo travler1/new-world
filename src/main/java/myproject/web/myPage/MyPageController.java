@@ -3,18 +3,20 @@ package myproject.web.myPage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.board.BoardService;
+import myproject.service.board.BoardService;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
-import myproject.web.board.ListBoardForm;
+import myproject.web.board.dto.ListBoardForm;
 import myproject.web.member.MemberDTO.ReadMemberForm;
-import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import static myproject.Util.getLoginMemberId;
+import static myproject.Util.templatePagingInfo;
 
 @Controller
 @Slf4j
@@ -25,18 +27,14 @@ public class MyPageController {
     private final BoardService boardService;
 
     /*=========================
-     *		    MY페이지
+     *		MY페이지 조회
      *=========================*/
     @GetMapping("/members/myPage")
     public String myPage(HttpSession session, Model model) {
 
-        //세션에서 로그인 회원 정보 조회
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
-        Member memberEntity = memberService.findMemberById(loginMember.getId());
-
-        //마이페이지 관리용 회원 상세 정보 조회
+        //로그인 회원 멤버 Dto 조회
+        Member memberEntity = memberService.findMemberById(getLoginMemberId(session));
         ReadMemberForm member = new ReadMemberForm(memberEntity);
-
         log.info("회원 상세 정보 {}", member);
 
         model.addAttribute("member", member);
@@ -50,31 +48,14 @@ public class MyPageController {
     @GetMapping(path={"/myPage/board"})
     public String myBoard(Model model, HttpSession session, @PageableDefault(page=1) Pageable pageable) {
 
-
+        //내가 쓴 글 조회
         Page<ListBoardForm> boardListByLoginMember = boardService.getBoardListByLoginMember(getLoginMemberId(session), pageable);
 
+        //템플릿에 보낼 페이징 정보
+        templatePagingInfo(model, pageable, boardListByLoginMember, 10);
 
-        /**
-         * blockLimit : page 개수 설정
-         * 현재 사용자가 선택한 페이지 앞 뒤로 3페이지씩만 보여준다.
-         * ex : 현재 사용자가 4페이지라면 2, 3, (4), 5, 6
-         */
-        int blockLimit = 10;
-        int startPage = (((int) Math.ceil(((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
-        int endPage = Math.min((startPage + blockLimit - 1), boardListByLoginMember.getTotalPages());
-        model.addAttribute("list", boardListByLoginMember);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
 
         return "template/myPage/board";
     }
 
-    //세션에 로그인된 회원의 아이디 조회 메서드
-    private Long getLoginMemberId(HttpSession session) {
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            throw new IllegalStateException("로그인 정보가 없습니다.");
-        }
-        return loginMember.getId();
-    }
 }

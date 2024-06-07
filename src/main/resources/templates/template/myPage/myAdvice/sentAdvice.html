@@ -19,9 +19,9 @@
         <ul class="search">
             <li>
                 <select th:name="keyfield" id="keyfield" style="height:44px;">
-                    <option value="1" th:selected="${param.keyfield == 1}">보낸사람</option>
+                    <option value="1" th:selected="${param.keyfield == 1}">받은사람</option>
                     <option value="2" th:selected="${param.keyfield == 2}">내용</option>
-                    <option value="3" th:selected="${param.keyfield == 3}">보낸사람+내용</option>
+                    <option value="3" th:selected="${param.keyfield == 3}">받은사람+내용</option>
                 </select>
             </li>
             <li>

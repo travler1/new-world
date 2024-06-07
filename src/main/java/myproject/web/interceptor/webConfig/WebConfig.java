@@ -1,17 +1,26 @@
 package myproject.web.interceptor.webConfig;
 
+import lombok.RequiredArgsConstructor;
+import myproject.LoginAccount;
+import myproject.LoginAccountArgumentResolver;
 import myproject.web.interceptor.LogInterceptor;
 import myproject.web.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSocket
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
+
+    private final LoginAccountArgumentResolver loginAccountArgumentResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -24,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns( "/", "/members/register/**", "members/findPassword",
+                .excludePathPatterns( "/", "/members/register/**", "/noNeedLogin/resultAlert","members/findPassword",
                         "/login", "/logout",
                         "/css/**", "/*.ico", "/error", "/resources/**","/images/**", "/js/**");
     }
@@ -33,5 +42,12 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
         registry.addHandler(new SocketHandler(), "message-ws").setAllowedOrigins("*");
+    }
+
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+        resolvers.add(loginAccountArgumentResolver);
     }
 }

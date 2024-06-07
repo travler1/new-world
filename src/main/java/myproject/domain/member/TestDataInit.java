@@ -1,13 +1,8 @@
 package myproject.domain.member;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import myproject.web.member.MemberDTO.SessionMemberForm;
+import myproject.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @RequiredArgsConstructor
