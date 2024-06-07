@@ -1,6 +1,6 @@
 package myproject.domain.board.boardFav;
 
-import myproject.domain.board.BoardFav;
+import myproject.domain.board.entity.BoardFav;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

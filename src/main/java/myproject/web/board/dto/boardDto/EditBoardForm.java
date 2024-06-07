@@ -1,4 +1,4 @@
-package myproject.web.board.dto;
+package myproject.web.board.dto.boardDto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

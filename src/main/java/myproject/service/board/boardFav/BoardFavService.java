@@ -1,6 +1,6 @@
 package myproject.service.board.boardFav;
 
-import myproject.domain.board.BoardFav;
+import myproject.domain.board.entity.BoardFav;
 
 import java.util.Map;
 import java.util.Optional;

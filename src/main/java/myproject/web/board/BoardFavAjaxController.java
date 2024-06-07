@@ -1,18 +1,15 @@
 package myproject.web.board;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.LoginAccount;
-import myproject.domain.board.BoardFav;
+import myproject.domain.board.entity.BoardFav;
 import myproject.domain.member.Member;
 import myproject.service.board.BoardService;
 import myproject.service.board.boardFav.BoardFavService;
-import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 

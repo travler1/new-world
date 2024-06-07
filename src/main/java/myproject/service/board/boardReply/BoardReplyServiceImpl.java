@@ -3,8 +3,8 @@ package myproject.service.board.boardReply;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.board.Board;
-import myproject.domain.board.BoardReply;
+import myproject.domain.board.entity.Board;
+import myproject.domain.board.entity.BoardReply;
 import myproject.domain.board.boardReply.BoardReplyRepository;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
@@ -44,6 +44,25 @@ public class BoardReplyServiceImpl implements BoardReplyService {
         return readBoardReplyFormList;
     }
 
+    //게시글의 댓글 리스트 처리
+    @Override
+    public Map<String, Object> listBoardReplyForm(Long boardId, Long memberId) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        Long count = getBoardReplyCount(boardId);
+        List<ReadBoardReplyForm> readBoardReplyFormList = getReadBoardReplyFormList(boardId);
+
+        result.put("result", "success");
+        result.put("count", count);
+        result.put("list", readBoardReplyFormList);
+        result.put("start", null);
+        result.put("end", null);
+        result.put("memberId", memberId);
+
+        return result;
+    }
+
     //댓글 저장(SavedBoardReplyForm -> BoardReply)
     @Override
     public BoardReply save(SaveBoardReplyForm saveBoardReplyForm, String ip, Long memberId) {
@@ -69,20 +88,47 @@ public class BoardReplyServiceImpl implements BoardReplyService {
 
         Map<String, Object> result = new HashMap<>();
 
-        boardReplyRepository.save(boardReply);
-        result.put("result", "success");
+        BoardReply boardReplyById = boardReplyRepository.findBoardReplyById(boardReply.getId());
 
+        if (boardReplyById != null) {
+            result.put("result", "success");
+        }else{
+            result.put("result", "error");
+        }
         return result;
     }
 
     //댓글 수정
     @Override
-    public void updateBoardReply(UpdateReplyForm updateReplyForm, String ip, Date modify_date) {
-        boardReplyRepository.updateBoardReply(
+    public Long update(UpdateReplyForm updateReplyForm, String ip) {
+
+        BoardReply boardReplyById = boardReplyRepository.findBoardReplyById(updateReplyForm.getBoardReplyId());
+        EmbeddedDate updateEmbeddedDate = new EmbeddedDate(boardReplyById.getDate().getReg_date(), new Date());
+
+        Long updateBoardReplyId = boardReplyRepository.updateBoardReply(
                 updateReplyForm.getBoardReplyId(),
                 updateReplyForm.getBoardReplyContent(),
-                ip, new Date()
+                ip,
+                updateEmbeddedDate
         );
+
+        return updateBoardReplyId;
+    }
+
+    //댓글 수정 후  ajax 결과 처리
+    @Override
+    public Map<String, Object> updateAjaxResult(Long updateBoardReplyId) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        BoardReply boardReplyById = boardReplyRepository.findBoardReplyById(updateBoardReplyId);
+        if (boardReplyById.getDate().getModify_date() != null) {
+            result.put("result", "error");
+        }else{
+            result.put("result", "success");
+        }
+
+        return result;
     }
 
     //댓글 조회
@@ -96,5 +142,22 @@ public class BoardReplyServiceImpl implements BoardReplyService {
     @Override
     public void deleteBoardReply(Long boardReplyId) {
         boardReplyRepository.deleteById(boardReplyId);
+    }
+
+    //댓글 삭제 ajax 결과 반환
+    @Override
+    public Map<String, Object> deleteAjaxResult(Long boardReplyId, Long memberId) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        BoardReply boardReply = getBoardReply(boardReplyId);
+        if (boardReply.getMember().getId() != memberId) {
+            result.put("result", "wrongAccess");
+        }else{
+            deleteBoardReply(boardReplyId);
+            result.put("result", "success");
+        }
+
+        return result;
     }
 }

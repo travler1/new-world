@@ -2,19 +2,18 @@ package myproject.domain.board.boardReply;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import myproject.web.board.*;
+import myproject.domain.member.EmbeddedDate;
 import myproject.web.board.dto.boardReplyDto.QReadBoardReplyForm;
 import myproject.web.board.dto.boardReplyDto.ReadBoardReplyForm;
 
-import java.util.Date;
 import java.util.List;
 
-import static myproject.domain.board.QBoardReply.boardReply;
+import static myproject.domain.board.entity.QBoardReply.boardReply;
 
-public class BoardReplyCustomImpl implements BoardReplyCustom{
+public class BoardReplyRepositoryCustomImpl implements BoardReplyRepositoryCustom {
 
     private JPAQueryFactory jpaQueryFactory;
-    public BoardReplyCustomImpl(EntityManager em) {
+    public BoardReplyRepositoryCustomImpl(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
 
@@ -40,14 +39,15 @@ public class BoardReplyCustomImpl implements BoardReplyCustom{
     }
 
     //게시판 댓글 수정
-
     @Override
-    public void updateBoardReply(Long boardReplyId, String boardReplyContent, String ip, Date modify_date) {
-        jpaQueryFactory.update(boardReply)
+    public Long updateBoardReply(Long boardReplyId, String boardReplyContent, String ip, EmbeddedDate date) {
+        long updateBoardId = jpaQueryFactory.update(boardReply)
                 .set(boardReply.content, boardReplyContent)
                 .set(boardReply.ip, ip)
-                .set(boardReply.date.modify_date, modify_date)
+                .set(boardReply.date, date)
                 .where(boardReply.id.eq(boardReplyId))
                 .execute();
+
+        return updateBoardId;
     }
 }

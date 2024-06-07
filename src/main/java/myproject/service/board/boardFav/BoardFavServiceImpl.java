@@ -3,12 +3,11 @@ package myproject.service.board.boardFav;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.domain.board.Board;
-import myproject.domain.board.BoardFav;
+import myproject.domain.board.entity.Board;
+import myproject.domain.board.entity.BoardFav;
 import myproject.domain.board.BoardRepository;
 import myproject.domain.board.boardFav.BoardFavRepository;
 import myproject.domain.member.Member;
-import myproject.domain.member.repository.MemberRepository;
 import myproject.service.member.MemberService;
 import org.springframework.stereotype.Service;
 

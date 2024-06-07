@@ -4,8 +4,12 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import myproject.web.board.*;
+import myproject.domain.board.entity.Board;
+import myproject.domain.board.entity.BoardReply;
 import myproject.web.board.dto.*;
+import myproject.web.board.dto.boardDto.BoardSearchCondition;
+import myproject.web.board.dto.boardDto.ListBoardForm;
+import myproject.web.board.dto.boardDto.ReadBoardForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +41,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         board.hit,
                         board.boardFavList.size().longValue(),
                         board.boardReplyList.size().longValue()
-                )).from(board)
+                )).distinct()
+                .from(board)
                 .leftJoin(board.member, member)
                 .leftJoin(board.boardFavList, boardFav)
                 .leftJoin(board.boardReplyList, boardReply)

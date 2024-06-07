@@ -6,23 +6,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.LoginAccount;
-import myproject.domain.board.Board;
-import myproject.domain.board.BoardReply;
+import myproject.domain.board.entity.BoardReply;
 import myproject.service.board.boardReply.BoardReplyService;
 import myproject.service.board.BoardService;
-import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
-import myproject.web.board.dto.boardReplyDto.ReadBoardReplyForm;
 import myproject.web.board.dto.boardReplyDto.SaveBoardReplyForm;
 import myproject.web.board.dto.boardReplyDto.UpdateReplyForm;
-import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -63,18 +56,8 @@ public class BoardReplyAjaxController {
                                          Model model) {
 
         log.info("댓글 목록 진입, boardId={}", boardId);
-        Map<String, Object> result = new HashMap<>();
-        Long count = boardReplyService.getBoardReplyCount(boardId);
-        List<ReadBoardReplyForm> readBoardReplyFormList = boardReplyService.getReadBoardReplyFormList(boardId);
 
-
-        result.put("result", "success");
-        result.put("count", count);
-        result.put("list", readBoardReplyFormList);
-        result.put("start", null);
-        result.put("end", null);
-        result.put("memberId", member.getId());
-        model.addAttribute("pageNum", 1);
+        Map<String, Object> result = boardReplyService.listBoardReplyForm(boardId, member.getId());
 
         return result;
     }
@@ -88,9 +71,10 @@ public class BoardReplyAjaxController {
                                            @ModelAttribute UpdateReplyForm updateReplyForm) {
 
         String ip = request.getRemoteAddr();
-        boardReplyService.updateBoardReply(updateReplyForm, ip, new Date());
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", "success");
+        //댓글 업데이트
+        Long updateBoardReplyId = boardReplyService.update(updateReplyForm, ip);
+        //댓글 업데이트 결과 ajax 처리
+        Map<String, Object> result = boardReplyService.updateAjaxResult(updateBoardReplyId);
 
         return result;
     }
@@ -102,14 +86,9 @@ public class BoardReplyAjaxController {
     public Map<String, Object> deleteReply(@LoginAccount Member member,
                                            @RequestParam("boardReplyId") Long boardReplyId) {
 
-        Map<String, Object> result = new HashMap<>();
-        BoardReply boardReply = boardReplyService.getBoardReply(boardReplyId);
+        //댓글 등록 memberId와 로그인memberId 비교 후 삭제처리
+        Map<String, Object> result = boardReplyService.deleteAjaxResult(boardReplyId, member.getId());
 
-        if (boardReply.getMember().getId() != member.getId()) {
-            result.put("result", "wrongAccess");
-        }
-        boardReplyService.deleteBoardReply(boardReplyId);
-        result.put("result", "success");
         return result;
     }
 

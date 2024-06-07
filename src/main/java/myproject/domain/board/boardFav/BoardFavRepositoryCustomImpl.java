@@ -3,7 +3,8 @@ package myproject.domain.board.boardFav;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
-import static myproject.domain.board.QBoardFav.*;
+import static myproject.domain.board.entity.QBoardFav.boardFav;
+
 
 public class BoardFavRepositoryCustomImpl implements BoardFavRepositoryCusom {
 

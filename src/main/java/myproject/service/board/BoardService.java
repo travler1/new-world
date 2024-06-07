@@ -1,7 +1,7 @@
 package myproject.service.board;
 
-import myproject.domain.board.Board;
-import myproject.web.board.dto.*;
+import myproject.domain.board.entity.Board;
+import myproject.web.board.dto.boardDto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

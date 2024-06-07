@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import myproject.service.board.BoardService;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
-import myproject.web.board.dto.ListBoardForm;
+import myproject.web.board.dto.boardDto.ListBoardForm;
 import myproject.web.member.MemberDTO.ReadMemberForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

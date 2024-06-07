@@ -2,7 +2,7 @@ package myproject.web.board.dto.boardReplyDto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import myproject.domain.board.BoardReply;
+import myproject.domain.board.entity.BoardReply;
 
 @Data
 public class SaveBoardReplyForm {

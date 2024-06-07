@@ -1,4 +1,4 @@
-package myproject.web.board.dto;
+package myproject.web.board.dto.boardDto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;

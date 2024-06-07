@@ -39,10 +39,10 @@ $(function(){
 				$('#loading').hide();
 				count = param.count;
 
-				/*if(pageNum==1){
+				if(pageNum==1){
 					//처음 호출시는 해당 id의 div의 내부 내용물을 제거
 					$('#output').empty();
-				}*/
+				}
 
 				//댓글수 읽어오기
 				displayReplyCount(param);

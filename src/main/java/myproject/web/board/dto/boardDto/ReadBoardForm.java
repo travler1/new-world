@@ -1,8 +1,8 @@
-package myproject.web.board.dto;
+package myproject.web.board.dto.boardDto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import myproject.domain.board.BoardReply;
+import myproject.domain.board.entity.BoardReply;
 import myproject.domain.member.EmbeddedDate;
 import myproject.web.file.UploadFile;
 

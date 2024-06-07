@@ -1,12 +1,11 @@
 package myproject.domain.board;
 
-import myproject.web.board.dto.BoardSearchCondition;
-import myproject.web.board.dto.ListBoardForm;
-import myproject.web.board.dto.ReadBoardForm;
+import myproject.domain.board.entity.Board;
+import myproject.web.board.dto.boardDto.BoardSearchCondition;
+import myproject.web.board.dto.boardDto.ListBoardForm;
+import myproject.web.board.dto.boardDto.ReadBoardForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface BoardRepositoryCustom {
 

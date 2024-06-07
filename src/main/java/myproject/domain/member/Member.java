@@ -3,7 +3,7 @@ package myproject.domain.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import myproject.domain.board.Board;
+import myproject.domain.board.entity.Board;
 import myproject.domain.matching.emp.EmpInfo;
 import myproject.domain.matching.chat.Chat;
 import myproject.domain.matching.chat.ChatRoom;

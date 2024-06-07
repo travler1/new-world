@@ -10,7 +10,7 @@ import myproject.LoginAccount;
 import myproject.service.board.BoardService;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
-import myproject.web.board.dto.*;
+import myproject.web.board.dto.boardDto.*;
 import myproject.web.file.FileStore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
