@@ -18,9 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
+import static myproject.Util.commonResultAlert;
 import static myproject.Util.getLoginMember;
 
 @Controller
@@ -56,7 +58,7 @@ public class EmpController {
     @GetMapping("/emp/register")
     public String empRegisterForm(@ModelAttribute("form") SaveEmpForm saveEmpForm,
                                   HttpSession session, Model model, HttpServletRequest request) {
-        //회원 접근이 아닐 시 로그인 화면으로 이동
+        //수강생이 아닐 시 로그인 화면으로 이동
         loginCheck(session, model, request);
 
         return "template/matching/emp_register";
@@ -65,8 +67,9 @@ public class EmpController {
     //수강생 취업 정보 등록
     @PostMapping("/emp/register")
     public String empRegister(@Valid @ModelAttribute("form") SaveEmpForm saveEmpForm,
-                              BindingResult bindingResult, Model model, HttpSession session,
-                              HttpServletRequest request) throws IOException {
+                              BindingResult bindingResult, Model model, @LoginAccount Member member,
+                              HttpServletRequest request,
+                              RedirectAttributes redirectAttributes) throws IOException {
 
         log.info("EmpRegisterForm={}", saveEmpForm);
 
@@ -76,15 +79,15 @@ public class EmpController {
             return "template/matching/emp_register";
         }
         //전송된 데이터 저장 처리
-        empService.registerEmp(saveEmpForm, getLoginMember(session, memberService));
+        empService.registerEmp(saveEmpForm, member);
 
         log.info("emp 등록 성공");
 
         //View에 표시할 메시지
-        model.addAttribute("message", "취업정보 등록이 완료되었습니다.");
-        model.addAttribute("url", request.getContextPath() + "/matching");
 
-        return "template/matching/resultAlert";
+        commonResultAlert("취업정보 등록이 완료되었습니다.", request.getContextPath() + "/matching", redirectAttributes, request);
+
+        return "redirect:/common/resultAlert";
     }
 
     //내 취업정보 확인
@@ -104,8 +107,9 @@ public class EmpController {
     public String see_emp_register(Model model, @RequestParam("memberId") Long id) {
 
         ReadEmpForm empByMemberId = empService.findEmpByMemberId(id);
-
         model.addAttribute("form", empByMemberId);
+        //다른 취업자 취업 정보 확인
+        log.info("조회하고자 하는 취업자 취업 등록 정보 ={}", empByMemberId);
 
         return "template/matching/see_emp_register";
     }
@@ -117,7 +121,7 @@ public class EmpController {
             model.addAttribute("message", "수강생 회원만 이용가능합니다.");
             model.addAttribute("url", request.getContextPath() + "/main/login");
 
-            return "matching/resultAlert";
+            return "redirect:/common/resultAlert";
         }
         return null;
     }

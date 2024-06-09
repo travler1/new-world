@@ -1,7 +1,6 @@
-package myproject.web.matching.advice;
+package myproject.web.matching.advice.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import myproject.domain.member.Member;
 import myproject.web.file.UploadFile;

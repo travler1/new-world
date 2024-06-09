@@ -7,11 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.LoginAccount;
-import myproject.domain.matching.advice.AdviceSearchCondition;
-import myproject.domain.matching.advice.AdviceService;
+import myproject.web.matching.advice.dto.AdviceSearchCondition;
+import myproject.service.matching.advice.AdviceService;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
-import myproject.web.member.MemberDTO.SessionMemberForm;
+import myproject.web.matching.advice.dto.ListAdviceForm;
+import myproject.web.matching.advice.dto.ReadAdviceForm;
+import myproject.web.matching.advice.dto.SendAdviceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -118,14 +120,14 @@ public class AdviceController {
     //첨삭 답장 폼 호출
     @GetMapping("/myPage/myAdvice/send_advice")
     public String adviceSend_advice(@LoginAccount Member member, Model model,
-                                    @RequestParam("adviceId") Long adviceId) {
+                                    @RequestParam("adviceId") Long adviceId,
+                                    @ModelAttribute("form") SendAdviceForm form) {
 
         //답장 폼 셋팅 후 출력(받는사람, 보내는사람)
         SendAdviceForm sendAdviceForm = adviceService.respondAdvice(adviceId, member.getId());
 
         model.addAttribute("login_user", member);
         model.addAttribute("receive_user", memberService.findMemberById(sendAdviceForm.getReceiver()));
-        model.addAttribute("form", sendAdviceForm);
 
         log.info("login_user ={}, receiver_user={}, form={}", member, memberService.findMemberById(sendAdviceForm.getReceiver()), sendAdviceForm);
 

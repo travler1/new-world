@@ -1,13 +1,14 @@
-package myproject.domain.matching.advice;
+package myproject.domain.matching.advice.repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
-import myproject.web.matching.advice.ListAdviceForm;
-import myproject.web.matching.advice.QListAdviceForm;
-import myproject.web.matching.advice.QReadAdviceForm;
-import myproject.web.matching.advice.ReadAdviceForm;
+import myproject.web.matching.advice.dto.AdviceSearchCondition;
+import myproject.web.matching.advice.dto.ListAdviceForm;
+import myproject.web.matching.advice.dto.QListAdviceForm;
+import myproject.web.matching.advice.dto.QReadAdviceForm;
+import myproject.web.matching.advice.dto.ReadAdviceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 
-import static myproject.domain.matching.advice.QAdvice.advice;
+import static myproject.domain.matching.advice.entity.QAdvice.advice;
 
 @Slf4j
 public class AdviceRepositoryCustomImpl implements AdviceRepositoryCustom {

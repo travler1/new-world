@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.LoginAccount;
 import myproject.domain.matching.chat.ChatService;
+import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
@@ -51,14 +53,13 @@ public class ChatController {
     //채팅 메시지 페이지 호출
     @ResponseBody
     @PostMapping("/chat/chatDetailAjax")
-    public Map<String, Object> talkDetail(@RequestParam("chatRoom_num") Long id, HttpSession session) {
+    public Map<String, Object> talkDetail(@RequestParam("chatRoom_num") Long id,
+                                          @LoginAccount Member member) {
         
         log.info("chatDetailAjax 진입, chatRoom_num={}", id);
 
-        SessionMemberForm sessionMemberForm = (SessionMemberForm)session.getAttribute("loginMember");
-
         //ajax로 반환결과를 담을 Map
-        Map<String, Object> ajaxMap = chatService.chatDetailResult(id, sessionMemberForm.getId());
+        Map<String, Object> ajaxMap = chatService.chatDetailResult(id, member.getId());
         log.info("ajaxMap={}", ajaxMap);
 
         ajaxMap.put("result", "success");
@@ -70,14 +71,11 @@ public class ChatController {
     @PostMapping("/chat/writeChatAjax")
     public Map<String, Object> writeChatAjax(@ModelAttribute ChatDto chatDto,
                                              @RequestParam("chatRoom_num") Long chatRoom_num,
-                                             HttpSession session) {
+                                             @LoginAccount Member member) {
+
+        chatService.insertChat(chatDto, chatRoom_num, member.getId());
 
         Map<String, Object> ajaxMap = new HashMap<>();
-
-        SessionMemberForm sessionMemberForm = (SessionMemberForm)session.getAttribute("loginMember");
-
-        chatService.insertChat(chatDto, chatRoom_num, sessionMemberForm.getId());
-
         ajaxMap.put("result", "success");
 
         return ajaxMap;

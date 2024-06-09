@@ -8,7 +8,6 @@ import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,9 +46,6 @@ public class Util {
 
     //common resultView
     public static void commonResultView(String accessTitle, String accessMsg, String accessUrl, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-       /* model.addAttribute("accessTitle", accessTitle);
-        model.addAttribute("accessMsg", accessMsg);
-        model.addAttribute("accessUrl", request.getContextPath() + accessUrl);*/
         redirectAttributes.addFlashAttribute("accessTitle", accessTitle);
         redirectAttributes.addFlashAttribute("accessMsg", accessMsg);
         redirectAttributes.addFlashAttribute("accessUrl", accessUrl);

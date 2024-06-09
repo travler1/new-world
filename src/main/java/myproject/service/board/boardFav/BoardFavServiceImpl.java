@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.entity.Board;
 import myproject.domain.board.entity.BoardFav;
-import myproject.domain.board.BoardRepository;
+import myproject.domain.board.repository.BoardRepository;
 import myproject.domain.board.boardFav.BoardFavRepository;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;

@@ -1,4 +1,4 @@
-package myproject.web.interceptor.webConfig;
+package myproject.web.webConfig;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

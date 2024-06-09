@@ -1,4 +1,4 @@
-package myproject.domain.board;
+package myproject.domain.board.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -6,19 +6,17 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import myproject.domain.board.entity.Board;
 import myproject.domain.board.entity.BoardReply;
-import myproject.web.board.dto.*;
-import myproject.web.board.dto.boardDto.BoardSearchCondition;
-import myproject.web.board.dto.boardDto.ListBoardForm;
-import myproject.web.board.dto.boardDto.ReadBoardForm;
+
+import myproject.web.board.dto.boardDto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static myproject.domain.board.QBoard.board;
-import static myproject.domain.board.QBoardFav.boardFav;
-import static myproject.domain.board.QBoardReply.boardReply;
+import static myproject.domain.board.entity.QBoard.board;
+import static myproject.domain.board.entity.QBoardFav.boardFav;
+import static myproject.domain.board.entity.QBoardReply.boardReply;
 import static myproject.domain.member.QMember.member;
 
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {

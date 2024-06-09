@@ -39,7 +39,7 @@
             <span th:utext="${advice.advice_content}"></span>
         </li>
         <li class="main-text">
-            <a href="download.do?advice_num=${advice.advice_num}">첨부파일</a>
+            <a th:href="@{/attach/advice/{id}(id=${advice.id})}" th:text="${advice.uploadFile.uploadFileName}">첨부파일</a>
         </li>
     </ul>
     <div class="align-center">

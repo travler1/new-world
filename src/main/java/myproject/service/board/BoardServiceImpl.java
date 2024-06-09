@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.entity.Board;
-import myproject.domain.board.BoardRepository;
+import myproject.domain.board.repository.BoardRepository;
 import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
@@ -64,7 +64,7 @@ public class BoardServiceImpl implements BoardService {
 
     //게시판 단건 조회
     @Override
-    public Board getBoard(Long boardId) {
+    public Board getBoardById(Long boardId) {
 
         Board boardById = boardRepository.findBoardById(boardId);
 
@@ -126,7 +126,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void deleteBoard(Long id) {
 
-        Board board = getBoard(id);
+        Board board = getBoardById(id);
         if (board.getUploadFile() != null) {
             fileStore.deleteFile(board.getUploadFile(), FileCategory.BOARD);
         }

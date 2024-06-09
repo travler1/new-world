@@ -1,9 +1,9 @@
-package myproject.domain.matching.advice;
+package myproject.domain.matching.advice.repository;
 
-import myproject.web.matching.advice.ListAdviceForm;
-import myproject.web.matching.advice.ReadAdviceForm;
+import myproject.web.matching.advice.dto.AdviceSearchCondition;
+import myproject.web.matching.advice.dto.ListAdviceForm;
+import myproject.web.matching.advice.dto.ReadAdviceForm;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;

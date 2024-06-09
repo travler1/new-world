@@ -1,4 +1,4 @@
-package myproject.domain.board;
+package myproject.domain.board.repository;
 
 import myproject.domain.board.entity.Board;
 import myproject.web.board.dto.boardDto.BoardSearchCondition;

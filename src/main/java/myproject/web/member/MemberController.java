@@ -64,7 +64,6 @@ public class MemberController {
     @ResponseBody
     public Map<String,Object> memberRegisterConfirmEmail(@RequestParam String email) {
 
-
         //이메일 중복체크 메서드 실행
         Map<String, Object> result = memberService.checkEmailDuplicated(email);
         log.info("이메일 중복체크 메서드 실행, email: {}", email);

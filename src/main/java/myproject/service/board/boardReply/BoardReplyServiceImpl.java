@@ -68,7 +68,7 @@ public class BoardReplyServiceImpl implements BoardReplyService {
     public BoardReply save(SaveBoardReplyForm saveBoardReplyForm, String ip, Long memberId) {
 
         Member member = memberService.findMemberById(memberId);
-        Board board = boardService.getBoard(saveBoardReplyForm.getBoardId());
+        Board board = boardService.getBoardById(saveBoardReplyForm.getBoardId());
 
         BoardReply boardReply = new BoardReply().builder()
                 .content(saveBoardReplyForm.getContent())

@@ -1,4 +1,4 @@
-package myproject.domain.matching.advice;
+package myproject.domain.matching.advice.entity;
 
 import lombok.Getter;
 

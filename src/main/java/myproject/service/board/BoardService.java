@@ -13,7 +13,7 @@ public interface BoardService {
 
     ReadBoardForm readBoardDetail(Long id);
 
-    Board getBoard(Long boardId);
+    Board getBoardById(Long boardId);
 
     public Page<ListBoardForm> searchBoardList(BoardSearchCondition condition, Pageable pageable);
 

@@ -17,8 +17,6 @@ public class BoardReplyRepositoryCustomImpl implements BoardReplyRepositoryCusto
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
 
-
-
     //게시판 댓글 리스트 조회
     public List<ReadBoardReplyForm> findReadBoardReplyFormList(Long boardId){
         List<ReadBoardReplyForm> readBoardReplyFormList = jpaQueryFactory.select(new QReadBoardReplyForm(

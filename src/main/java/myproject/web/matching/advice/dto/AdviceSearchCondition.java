@@ -1,4 +1,4 @@
-package myproject.domain.matching.advice;
+package myproject.web.matching.advice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

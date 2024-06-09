@@ -1,21 +1,19 @@
-package myproject.domain.matching.advice;
+package myproject.domain.matching.advice.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 import myproject.web.file.UploadFile;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 public class Advice {
 

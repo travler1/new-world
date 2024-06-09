@@ -41,9 +41,9 @@ public class BoardController {
      * 		  게시판 메인 페이지
      *=================================*/
     @GetMapping("")
-    public String test(@RequestParam(required = false) Integer keyfield,
+    public String test(@RequestParam(required = false, defaultValue = "1") Integer keyfield,
                        @RequestParam(required = false) String keyword,
-                       @RequestParam(required = false) Integer order,
+                       @RequestParam(required = false, defaultValue = "1") Integer order,
                        @PageableDefault(page = 1) Pageable pageable, Model model,
                        @LoginAccount Member member) {
 

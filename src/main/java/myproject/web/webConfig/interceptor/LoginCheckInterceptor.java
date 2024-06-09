@@ -1,4 +1,4 @@
-package myproject.web.interceptor;
+package myproject.web.webConfig.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

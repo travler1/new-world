@@ -4,18 +4,28 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.LoginAccount;
+import myproject.domain.board.entity.Board;
+import myproject.domain.matching.advice.entity.Advice;
+import myproject.service.matching.advice.AdviceService;
+import myproject.domain.member.Member;
+import myproject.service.board.BoardService;
 import myproject.service.matching.EmpService;
 import myproject.domain.member.repository.MemberRepository;
 import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +39,8 @@ public class ImageController {
     private final FileStore fileStore;
     private final EmpService empService;
     private final MemberService memberService;
+    private final BoardService boardService;
+    private final AdviceService adviceService;
 
     //view -> 프로필 이미지 출력
     @ResponseBody
@@ -50,19 +62,24 @@ public class ImageController {
         return new UrlResource(filePath);
     }
 
+    /*=========================
+     *	      이미지 출력
+     *=========================*/
     @ResponseBody
     @GetMapping("/photoView")
-    public Resource photoView(@RequestParam("num") Long id, @RequestParam("category") String category) throws MalformedURLException {
+    public Resource photoView(@RequestParam("num") Long id, @RequestParam("category") String category,
+                              @PathVariable(value = "id", required = false) Long boardId) throws MalformedURLException {
 
         String filePath = "file:";
         String defaultImagePath = "classpath:/static/images/pageMain/face.png";
         log.info("num={}, category={}", id, category);
         UploadFile uploadFile = null;
+
         switch (category) {
             case "EMP_INFO":
-                uploadFile= empService.findUploadFileById(id);
+                uploadFile = empService.findUploadFileById(id);
                 log.info("uploadFile = {}", uploadFile);
-                filePath += fileStore.getFullImagePath(FileCategory.EMP_INFO, uploadFile.getStoreFileName());
+                filePath += fileStore.getFullPath(FileCategory.EMP_INFO, uploadFile.getStoreFileName());
                 log.info("filePath = {}", filePath);
                 break;
             case "BOARD":
@@ -70,15 +87,36 @@ public class ImageController {
                 break;
 
             case "PROFILE_IMAGE":
-                uploadFile= memberService.findUploadFileById(id);
+                uploadFile = memberService.findUploadFileById(id);
                 if (uploadFile != null) {
-                     filePath += fileStore.getFullImagePath(FileCategory.PROFILE_IMAGE, uploadFile.getStoreFileName());
-                }else{
+                    filePath += fileStore.getFullPath(FileCategory.PROFILE_IMAGE, uploadFile.getStoreFileName());
+                } else {
                     filePath = defaultImagePath;
                 }
                 break;
         }
-        log.info("filePath={}",filePath);
+
+        log.info("filePath={}", filePath);
+        return new UrlResource(filePath);
+    }
+
+    /*=========================
+     *	  게시판 이미지 출력
+     *=========================*/
+    @ResponseBody
+    @GetMapping("/upload/board/{id}")
+    public Resource boardImage(@PathVariable("id") Long boardId) throws MalformedURLException {
+
+        //게시판 첨부사진 불러오기
+        String filePath = "file:";
+
+        Board board = boardService.getBoardById(boardId);
+        UploadFile uploadFile = board.getUploadFile();
+        log.info("uploadFile = {}", uploadFile);
+
+        filePath += fileStore.getFullPath(FileCategory.BOARD, uploadFile.getStoreFileName());
+        log.info("filePath = {}", filePath);
+
         return new UrlResource(filePath);
     }
 
@@ -112,5 +150,51 @@ public class ImageController {
             mapAjax.put("result", "success");
         }
         return mapAjax;
+    }
+
+    @GetMapping("/attach/{category}/{id}")
+    public ResponseEntity<UrlResource> attachFileDownload(@PathVariable("category") String category, @PathVariable("id") Long id,
+                                                          @LoginAccount Member member) throws MalformedURLException {
+
+        String storeFileName = "";
+        String uploadFileName = "";
+        String getFullPath = "";
+
+        switch (category) {
+            case "board":
+                Board board = boardService.getBoardById(id);
+                storeFileName += board.getUploadFile().getStoreFileName();
+                uploadFileName += board.getUploadFile().getUploadFileName();
+                getFullPath += fileStore.getFullPath(FileCategory.BOARD, storeFileName);
+                break;
+            case "advice":
+                //사용자가 해당 첨삭과 관련이 있는지 체크
+                Boolean authCheck = adviceService.getAuthCheck(id, member.getId());
+                if (authCheck == false) {
+                    throw new IllegalStateException("첨삭 발신자 혹은 수신자만 다운로드 가능합니다.");
+                }
+                Advice advice = adviceService.getAdviceById(id);
+                storeFileName += advice.getUploadFile().getStoreFileName();
+                uploadFileName += advice.getUploadFile().getUploadFileName();
+                getFullPath += fileStore.getFullPath(FileCategory.ADVICE, storeFileName);
+                break;
+        }
+
+        if (getFullPath.equals("")) {
+            throw new IllegalStateException("첨부파일이 존재하지 않습니다.");
+        }
+
+        UrlResource resource = new UrlResource("file:" + getFullPath);
+        log.info("uploadFileName={}", uploadFileName);
+
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8); //인코딩 안하면 한글로 된 파일명 같은것들이 깨질 수 있음. //웹브라우저에 따라 조금씩 다를 수 있음.
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+
+        //예시를 같이 봤는데 바디에만 넣으면 내용은 보일 수 있으나(나같은 경우엔 이미지가 깨졌음) 첨부파일 다운로드는 안됨.
+        //첨부파일로 다운받으려면 다음과 같이 헤더에 추가해야함. 이건 규약임.
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
+
     }
 }

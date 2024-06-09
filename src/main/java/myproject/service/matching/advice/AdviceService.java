@@ -1,14 +1,14 @@
-package myproject.domain.matching.advice;
+package myproject.service.matching.advice;
 
-import jakarta.servlet.http.HttpServletRequest;
-import myproject.web.matching.advice.ListAdviceForm;
-import myproject.web.matching.advice.ReadAdviceForm;
-import myproject.web.matching.advice.SendAdviceForm;
+import myproject.web.matching.advice.dto.AdviceSearchCondition;
+import myproject.domain.matching.advice.entity.Advice;
+import myproject.web.matching.advice.dto.ListAdviceForm;
+import myproject.web.matching.advice.dto.ReadAdviceForm;
+import myproject.web.matching.advice.dto.SendAdviceForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface AdviceService {
 
@@ -19,7 +19,12 @@ public interface AdviceService {
 
     ReadAdviceForm getAdvice(Long id);
 
+    Advice getAdviceById(Long id);
+
     SendAdviceForm respondAdvice(Long adviceId, Long loginMember);
 
     Page<ListAdviceForm> getListSentAdvice(AdviceSearchCondition condition, Pageable pageable, Long loginMemberId);
+
+    //첨삭에 첨부된 파일 다운로드 시 해당 첨삭과 관련한 사용자인지 인증 체크
+    Boolean getAuthCheck(Long adviceId, Long memberId);
 }

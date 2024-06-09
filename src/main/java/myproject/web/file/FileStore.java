@@ -35,7 +35,7 @@ public class FileStore {
         return adviceDir + adviceName;
     }
 
-    public String getFullImagePath(FileCategory fileCategory, String fileName) {
+    public String getFullPath(FileCategory fileCategory, String fileName) {
         switch (fileCategory.name()) {
             case "PROFILE_IMAGE" : return profileImageDir + fileName;
             case "ADVICE" : return adviceDir + fileName;

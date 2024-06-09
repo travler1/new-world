@@ -68,11 +68,11 @@
         <div class="align-center">
 
             <!-- 첫번째 페이지로 이동 -->
-            <a th:href="@{/board/test(page=1, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">첫
+            <a th:href="@{/board(page=1, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">첫
                 페이지 </a>
 
             <!-- 이전 링크 활성화 비활성화 -->
-            <a th:href="${list.first} ? '#' : @{/board/test(page=${list.number}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+            <a th:href="${list.first} ? '#' : @{/board(page=${list.number}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
                 이전 </a>
 
             <!-- 페이지 번호 링크(현재 페이지는 숫자만)
@@ -83,16 +83,16 @@
             <span th:if="${page == list.number + 1}" th:text="${page}"></span>
                 <!-- 현재페이지 링크 X, 다른 페이지번호에는 링크를 보여준다 -->
             <span th:unless="${page == list.number + 1}">
-        <a th:href="@{/board/test(page=${page}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}"
+        <a th:href="@{/board(page=${page}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}"
            th:text="${page}"></a>
             </span>
         </span>
 
             <!-- 다음 링크 활성화 비활성화 -->
-            <a th:href="${list.last} ? '#' : @{/board/test(page=${list.number+2}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+            <a th:href="${list.last} ? '#' : @{/board(page=${list.number+2}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
                 다음 </a>
             <!-- 마지막 페이지로 이동 -->
-            <a th:href="@{/board/test(page=${list.totalPages}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
+            <a th:href="@{/board(page=${list.totalPages}, keyfield=${param.keyfield}, keyword=${param.keyword}, order=${param.order})}">
                 마지막 페이지</a>
         </div>
     </div>

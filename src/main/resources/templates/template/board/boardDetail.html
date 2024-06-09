@@ -40,7 +40,7 @@
     </ul>
     <div th:if="${board.uploadFile != null}">
         <ul>
-            <li>첨부파일 : <a href="file?boarId=${board.board_num}"><span th:text="${board.uploadFile.uploadFileName}"></span></a></li>
+            <li>첨부파일 : <a th:href="@{/attach/board/{id}(id=${board.id})}"><span th:text="${board.uploadFile.uploadFileName}"></span></a></li>
         </ul>
     <hr size="1" width="100%">
     <th:block th:if="${#strings.endsWith(board.uploadFile.uploadFileName, '.jpg') ||
@@ -50,9 +50,10 @@
                      #strings.endsWith(board.uploadFile.uploadFileName, '.gif') ||
                      #strings.endsWith(board.uploadFile.uploadFileName, '.GIF') ||
                      #strings.endsWith(board.uploadFile.uploadFileName, '.png') ||
+                     #strings.endsWith(board.uploadFile.uploadFileName, '.jfif') ||
                      #strings.endsWith(board.uploadFile.uploadFileName, '.PNG')}">
         <div class="align-center">
-            <img th:src="@{/upload/{filename}(filename=${board.uploadFile.uploadFileName})}" class="detail-img">
+            <img th:src="@{/upload/board/{id}(id=${board.id})}" class="detail-img">
         </div>
     </th:block>
     </div>

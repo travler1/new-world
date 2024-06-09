@@ -1,10 +1,9 @@
-package myproject.web.matching.advice;
+package myproject.web.matching.advice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import myproject.domain.member.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
