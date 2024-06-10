@@ -40,14 +40,9 @@
 |게시판 글쓰기|![게시판글쓰기](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%93%B0%EA%B8%B0.jpg)|
 |게시판 글상세|![게시판글상세](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%83%81%EC%84%B8.jpg)|
 |JPA ORM|![myproject_jpa_erd](https://github.com/travler1/new-world/assets/153168650/ba2b3a19-edef-46d4-a776-e51e41011ef3)|
-|프로젝트 중 어려웠던 점|**페이징 + 검색기능** <br> 기존 마이바티스(Oracle Dialect)를 이용하던 방식에서 JPA의 QueryDsl을 사용하여  
-페이징처리와 검색기능을 구현하는 것이 어려웠고, 게시판 조회 시 게시판에 딸린 댓글 
-수만큼 같은 게시글이 중복 출력되는 문제 발생. |
-|해결 방안|Distinct()로 해결, 게시판과 댓글을 조인할 때 게시물 하나에 댓글 수만큼 쿼리가<br>
-조회되는 문제를 distinct()로 해결 <br>![페이징 문제 해결](https://github.com/travler1/new-world/assets/153168650/69d11efd-1007-4894-b34b-96edd2dcecf4)|
-|프로젝트 중 어려웠던 점|**중복 사용되는 메서드** <br>- Post method 로 로직 처리시 중복되는 처리를 피하기 위해 PRG(post – redirect – get )<br>
-도입하여 처리가 완료되었다는 공통 폼의 호출 후에 get 메서드 호출하게 되는데<br>
-반복되는 공통 폼 호출로 인해 코드가 간결하지 않고, 유지보수에도 좋지 못함.<br>
+|프로젝트 중 어려웠던 점|**페이징 + 검색기능** <br> 기존 마이바티스(Oracle Dialect)를 이용하던 방식에서 JPA의 QueryDsl을 사용하여 페이징처리와 검색기능을 구현하는 것이 어려웠고, 게시판 조회 시 게시판에 딸린 댓글 수만큼 같은 게시글이 중복 출력되는 문제 발생. |
+|해결 방안|Distinct()로 해결, 게시판과 댓글을 조인할 때 게시물 하나에 댓글 수만큼 쿼리가 조회되는 문제를 distinct()로 해결 <br>![페이징 문제 해결](https://github.com/travler1/new-world/assets/153168650/69d11efd-1007-4894-b34b-96edd2dcecf4)|
+|프로젝트 중 어려웠던 점|**중복 사용되는 메서드** <br>- Post method 로 로직 처리시 중복되는 처리를 피하기 위해 PRG(post – redirect – get )<br>도입하여 처리가 완료되었다는 공통 폼의 호출 후에 get 메서드 호출하게 되는데<br>반복되는 공통 폼 호출로 인해 코드가 간결하지 않고, 유지보수에도 좋지 못함.<br>
 - 회원만 이용할 수 있는 서비스의 경우 회원 엔티티를 조회하는 로직 반복사용 |
 |해결방안|- 반복 사용하는 메서드를 모아놓은 Util 클래스 생성 후 반복 사용 메서드 선언 <br>![중복1](https://github.com/travler1/new-world/assets/153168650/34a3b147-69bc-4c35-8be5-e77cb39d6373)<br>
 -LoginAccount 커스텀인터페이스 생성 후 ArgumentResolver 등록, 이후 컨트롤러의
