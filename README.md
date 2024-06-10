@@ -36,3 +36,9 @@
 |현직자프로필|![현직자프로필](https://github.com/travler1/Hello-World/blob/master/%ED%98%84%EC%A7%81%EC%9E%90%ED%94%84%EB%A1%9C%ED%95%84.jpg)|
 |첨삭기능|![첨삭기능](https://github.com/travler1/Hello-World/blob/master/%EC%B2%A8%EC%82%AD%EA%B8%B0%EB%8A%A5.png)|
 |채팅기능|![채팅기능](https://github.com/travler1/Hello-World/blob/master/%EC%B1%84%ED%8C%85%EA%B8%B0%EB%8A%A5.jpg)|
+|게시판 메인페이지|![게시판 메인](https://github.com/travler1/new-world/assets/153168650/4aa8bba7-eb46-4bcd-adf4-25f2e96e5dda)|
+|게시판 글쓰기|![게시판글쓰기](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%93%B0%EA%B8%B0.jpg)|
+|게시판 글상세|![게시판글상세](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%83%81%EC%84%B8.jpg)|
+|JPA ORM|![myproject_jpa_erd](https://github.com/travler1/new-world/assets/153168650/ba2b3a19-edef-46d4-a776-e51e41011ef3)|
+[서현진_이력서-3-13.pdf](https://github.com/user-attachments/files/15765092/_.-3-13.pdf)
+
