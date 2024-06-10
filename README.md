@@ -40,5 +40,50 @@
 |게시판 글쓰기|![게시판글쓰기](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%93%B0%EA%B8%B0.jpg)|
 |게시판 글상세|![게시판글상세](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%83%81%EC%84%B8.jpg)|
 |JPA ORM|![myproject_jpa_erd](https://github.com/travler1/new-world/assets/153168650/ba2b3a19-edef-46d4-a776-e51e41011ef3)|
-[서현진_이력서-3-13.pdf](https://github.com/user-attachments/files/15765092/_.-3-13.pdf)
+|프로젝트 중 어려웠던 점|**페이징 + 검색기능** <br> 기존 마이바티스(Oracle Dialect)를 이용하던 방식에서 JPA의 QueryDsl을 사용하여<br>  
+페이징처리와 검색기능을 구현하는 것이 어려웠고, 게시판 조회 시 게시판에 딸린 <br>댓글 
+수만큼 같은 게시글이 중복 출력되는 문제 발생. |
+|해결 방안|Distinct()로 해결, 게시판과 댓글을 조인할 때 게시물 하나에 댓글 수만큼 쿼리가<br>
+조회되는 문제를 distinct()로 해결 <br>![페이징 문제 해결](https://github.com/travler1/new-world/assets/153168650/69d11efd-1007-4894-b34b-96edd2dcecf4)|
+|프로젝트 중 어려웠던 점|**중복 사용되는 메서드** <br>- Post method 로 로직 처리시 중복되는 처리를 피하기 위해 PRG(post – redirect – get )<br>
+도입하여 처리가 완료되었다는 공통 폼의 호출 후에 get 메서드 호출하게 되는데<br>
+반복되는 공통 폼 호출로 인해 코드가 간결하지 않고, 유지보수에도 좋지 못함.<br>
+- 회원만 이용할 수 있는 서비스의 경우 회원 엔티티를 조회하는 로직 반복사용 |
+|해결방안|- 반복 사용하는 메서드를 모아놓은 Util 클래스 생성 후 반복 사용 메서드 선언 <br>![중복1](https://github.com/travler1/new-world/assets/153168650/34a3b147-69bc-4c35-8be5-e77cb39d6373)<br>
+-LoginAccount 커스텀인터페이스 생성 후 ArgumentResolver 등록, 이후 컨트롤러의
+매개변수로 호출 <br>![중복2](https://github.com/travler1/new-world/assets/153168650/754201c5-b68a-4c6b-a13f-8de3267e51cb)<br>![loginAccountArgumentResolver](https://github.com/travler1/new-world/assets/153168650/ce190efe-3286-470b-a0a2-92349818e8ad)|
+|프로젝트 중 어려웠던 점|**파일 업로드 시 폴더 하나에 모든 파일이 업로드 되는 문제 **|
+|해결방안|파일 업로드 시 목적에 따른 폴더를 세분화하여 각각의 폴더에 업로드<br>![file경로](https://github.com/travler1/new-world/assets/153168650/4e50ddaf-08bc-4e94-940b-b24d080af0a4)<br><<application.yml 에서 경로 설정>> <<FileStore 파일에서 변수로 설정>>
+<br> ![filedownload](https://github.com/travler1/new-world/assets/153168650/017cef32-aa68-489a-9341-05ae5dccceec)<br>FileCategory enum 타입 설정, 파일 업로드 시 업로드 종류에 따라 각기 다른 폴더에<br>
+파일 저장. 파일 다운로드 시에도 각기 다른 파일 경로로부터 파일 첨부. |
+|기존 프로젝트와<br>
+차별점 |Hello – World 프로젝트는 기존 프로젝트를 기능 확장하여 새로 만든 프로젝트입니다.
+기존 프로젝트와의 차별점 및 개선점은 다음과 같습니다.
+**1. ORM 프레임워크로 JPA 를 사용했습니다.** 기존 데이터엑세스 프레임워크로 MyBatis 를
+이용하면서 일일이 쿼리를 작성해줘야 했던 번거로움이 사라졌습니다.
+**2. 엔티티 노출 최소화**
+기존엔 vo 클래스의 엔티티를 그대로 컨트롤러계층까지 api 에 그대로 사용했습니다.<br>
+이로 인한 데이터 노출과 보안위험, 그리고 엔티티의 변경이 클라이언트에 영향을 미쳐<br>
+유지보수가 어렵고, 검증로직도 섞여 지저분한 엔티티가 되기 때문에 api 에 맞는 DTO 를<br>
+만들고 @Builder 를 사용하여 빌더패턴으로 엔티티<->DTO 를 변환했습니다.<br>
+또한, 통일된 패턴의 이름을 사용하려 노력했습니다. <br>![form통일](https://github.com/travler1/new-world/assets/153168650/40fcfe1e-181f-49d4-9ef3-283c48c0d6d0)<br>
+**3. 컨트롤러의 경량화**
+기존에 컨트롤러의 모든 비즈니스 로직과 프레젠테이션로직을 처리해 유지보수가 굉장히<br>
+어렵고 객체의 역할과 책임의 분리에 어긋났습니다. 컨트롤러에선 어떤 기능을<br>
+담당하는지 최소한의 로직만 가지고 있고, 나머지는 레포지토리와 서비스 계층에서<br>
+처리했고, 메서드 이름을 통해 명확히 어떤 기능을 담당하는지를 알 수 있도록 네이밍에<br>
+신중히 노력했습니다. <br>|
+
+**이후 학업 계획**
+|N|언어|이유|
+|1|스프링 시큐리티|사용자 인증, 권한 부여, 보안 설정, 소셜 로그인 등을 간편하게 처리할 수 있고<br>
+개발 생산성을 높이고 보안 취약점을 방지 가능.|
+|2|Docker|개발된 소프트웨어를 유지보수, 이동, 조립할 수 있게 도와주는 플랫폼 사용 방법<br>
+학습 예정 |
+|3|nginx|웹 서버의 유지 및 업데이트 시 서비스 중단을 최소화하고 배포할 수 있어
+사용자에게 지속적인 서비스를 제공할 수 있음. |
+
+
+
+
 
