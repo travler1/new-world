@@ -40,8 +40,8 @@
 |게시판 글쓰기|![게시판글쓰기](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%93%B0%EA%B8%B0.jpg)|
 |게시판 글상세|![게시판글상세](https://github.com/travler1/Hello-World/blob/master/%EA%B2%8C%EC%8B%9C%ED%8C%90%EA%B8%80%EC%83%81%EC%84%B8.jpg)|
 |JPA ORM|![myproject_jpa_erd](https://github.com/travler1/new-world/assets/153168650/ba2b3a19-edef-46d4-a776-e51e41011ef3)|
-|프로젝트 중 어려웠던 점|**페이징 + 검색기능** <br> 기존 마이바티스(Oracle Dialect)를 이용하던 방식에서 JPA의 QueryDsl을 사용하여<br>  
-페이징처리와 검색기능을 구현하는 것이 어려웠고, 게시판 조회 시 게시판에 딸린 <br>댓글 
+|프로젝트 중 어려웠던 점|**페이징 + 검색기능** <br> 기존 마이바티스(Oracle Dialect)를 이용하던 방식에서 JPA의 QueryDsl을 사용하여  
+페이징처리와 검색기능을 구현하는 것이 어려웠고, 게시판 조회 시 게시판에 딸린 댓글 
 수만큼 같은 게시글이 중복 출력되는 문제 발생. |
 |해결 방안|Distinct()로 해결, 게시판과 댓글을 조인할 때 게시물 하나에 댓글 수만큼 쿼리가<br>
 조회되는 문제를 distinct()로 해결 <br>![페이징 문제 해결](https://github.com/travler1/new-world/assets/153168650/69d11efd-1007-4894-b34b-96edd2dcecf4)|
