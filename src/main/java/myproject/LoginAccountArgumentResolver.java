@@ -3,7 +3,6 @@ package myproject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import myproject.domain.login.SessionConst;
 import myproject.service.member.MemberService;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.core.MethodParameter;
@@ -13,7 +12,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import static myproject.web.webConfig.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
+import static myproject.web.config.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
 
 @Component
 @RequiredArgsConstructor

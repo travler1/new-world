@@ -4,12 +4,24 @@ spring:
     url: jdbc:mysql://localhost:3306/myproject?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
     username: helloproject
     password: ww1234!!
-  #url: jdbc:h2:tcp://localhost/~/test
+    #url: jdbc:h2:tcp://localhost/~/test
     #username: sa
     #password:
     #driver-class-name: org.h2.Driver
   messages:
     basename: messages.messages, messages.errors, messages.validation
+  #스프링 시큐리티 적용
+  security:
+    oauth2:
+      client:
+        registration:
+          google: # /oauth2/authorization/google ? ??? ???? ??.
+            client-id: 91700057149-gbkmtcia2vea23clditi3ld26aor6d1h.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - name
+              - email
+              - profile
 
 
   jpa:
@@ -18,10 +30,10 @@ spring:
     properties:
       hibernate:
         #show_sql: true
-  # show_sql: true
+        # show_sql: true
         format_sql: true
         user_sql_comments: true
-  #지연 로딩 성능 최적화
+        #지연 로딩 성능 최적화
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQLDialect # MySQL 방언 지정
 logging.level:
@@ -47,4 +59,5 @@ file:
     dir: C://study/Hello-World/file/user/board/
   emp:
     dir: C://study/Hello-World/file/user/emp/
+
 

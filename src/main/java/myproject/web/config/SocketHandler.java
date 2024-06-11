@@ -1,4 +1,4 @@
-package myproject.web.webConfig;
+package myproject.web.config;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

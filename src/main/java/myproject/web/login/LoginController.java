@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.login.LoginService;
-import myproject.domain.login.SessionConst;
 import myproject.domain.member.Member;
 import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static myproject.web.webConfig.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
+import static myproject.web.config.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
 
 @Controller
 @RequiredArgsConstructor

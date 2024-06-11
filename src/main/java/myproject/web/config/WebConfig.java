@@ -1,9 +1,9 @@
-package myproject.web.webConfig;
+package myproject.web.config;
 
 import lombok.RequiredArgsConstructor;
 import myproject.LoginAccountArgumentResolver;
-import myproject.web.webConfig.interceptor.LogInterceptor;
-import myproject.web.webConfig.interceptor.LoginCheckInterceptor;
+import myproject.web.config.interceptor.LogInterceptor;
+import myproject.web.config.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

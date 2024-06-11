@@ -23,11 +23,17 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    private String username;
+    private String name;
     private String password;
     private String phone;
     private String au_id;
     private String email;
+
+    //==소셜로그인 내용 추가 시작==//
+    private String provider;
+    private String providerId;
+    private String username;
+    //==소셜로그인 내용 추가 끝==//
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
@@ -78,6 +84,15 @@ public class Member {
         this.empInfo = empInfo;
     }
 
-
+    @Builder //소셜로그인 시 회원가입 처리
+    public Member(String name, String password, String email, String provider, String providerId, String username, Grade grade) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.username = username;
+        this.grade = grade;
+    }
 }
 
