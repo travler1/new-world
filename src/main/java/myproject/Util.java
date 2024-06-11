@@ -45,14 +45,18 @@ public class Util {
     }
 
     //common resultView
-    public static void commonResultView(String accessTitle, String accessMsg, String accessUrl, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public static void commonResultView(String accessTitle, String accessMsg, String accessUrl,
+                                        RedirectAttributes redirectAttributes,
+                                        HttpServletRequest request) {
         redirectAttributes.addFlashAttribute("accessTitle", accessTitle);
         redirectAttributes.addFlashAttribute("accessMsg", accessMsg);
         redirectAttributes.addFlashAttribute("accessUrl", accessUrl);
     }
 
     //common resultAlert
-    public static void commonResultAlert(String message, String url, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public static void commonResultAlert(String message, String url,
+                                         RedirectAttributes redirectAttributes,
+                                         HttpServletRequest request) {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("url", request.getContextPath() + url);
     }

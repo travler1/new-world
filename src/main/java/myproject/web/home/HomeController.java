@@ -25,7 +25,7 @@ public class HomeController {
         Member memberById = memberService.findMemberById(1L);
         SessionMemberForm sessionMemberForm = new SessionMemberForm(memberById.getId(), memberById.getUsername(), memberById.getEmail(), memberById.getProfileImage(), memberById.getGrade());
         HttpSession session = request.getSession();
-        session.setAttribute("loginMember", sessionMemberForm);
+        //session.setAttribute("loginMember", sessionMemberForm);
         return "template/home/home";
     }
 

@@ -106,9 +106,9 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
 
     //차트 출력을 위한 EmpInfo 정보 출력 (등록순으로 100개)
     @Override
-    public List<JsonCharEmpForm> findEmpCharInfoTop1000() {
+    public List<JsonChartEmpForm> findEmpCharInfoTop1000() {
 
-        List<JsonCharEmpForm> jsonCharEmpFormList = jpaQueryFactory.select(new QJsonCharEmpForm(
+        List<JsonChartEmpForm> jsonChartEmpFormList = jpaQueryFactory.select(new QJsonChartEmpForm(
                         empInfo.id,
                         empInfo.comSize,
                         empInfo.comPeople,
@@ -132,6 +132,6 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
                 .limit(1000)
                 .fetch();
 
-        return jsonCharEmpFormList;
+        return jsonChartEmpFormList;
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static myproject.web.webConfig.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -34,7 +36,8 @@ public class LoginController {
     @PostMapping("/login")
     public String loginCheck(@Valid @ModelAttribute LoginForm loginForm,
                              BindingResult bindingResult, Model model,
-                             HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL) {
+                             HttpServletRequest request,
+                             @RequestParam(defaultValue = "/") String redirectURL) {
 
         //로그인 폼 입력오류 시 로그인 폼 재호출
         if (bindingResult.hasErrors()) {
@@ -53,7 +56,7 @@ public class LoginController {
         //세션이 있으면 세션 반환, 없으면 신규 생성
         HttpSession session = request.getSession();
         //세션에 로그인 회원정보 저장
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+        session.setAttribute(LOGIN_MEMBER, loginMember);
         log.info("세션 로그인 회원 정보 {} " , loginMember);
 
         return "redirect:" + redirectURL;

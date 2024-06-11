@@ -32,21 +32,21 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns( "/", "/members/register/**", "/noNeedLogin/resultAlert","members/findPassword",
-                        "/login", "/logout",
+                .excludePathPatterns( "/", "/members/register/**", "/noNeedLogin/resultAlert",
+                        "members/findPassword", "/login", "/logout",
                         "/css/**", "/*.ico", "/error", "/resources/**","/images/**", "/js/**");
+    }
+
+    //LoginAccount  어노테이션 등록
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+        resolvers.add(loginAccountArgumentResolver);
     }
 
     //웹 소켓 핸들러(채팅기능구현)
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
         registry.addHandler(new SocketHandler(), "message-ws").setAllowedOrigins("*");
-    }
-
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
-        resolvers.add(loginAccountArgumentResolver);
     }
 }

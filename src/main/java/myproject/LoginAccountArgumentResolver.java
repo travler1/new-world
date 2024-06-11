@@ -13,6 +13,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import static myproject.web.webConfig.interceptor.LoginCheckInterceptor.LOGIN_MEMBER;
+
 @Component
 @RequiredArgsConstructor
 public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolver {
@@ -25,14 +27,18 @@ public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolv
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory)
+                                throws Exception {
 
+        //세션 조회
         HttpSession session = webRequest.getNativeRequest(HttpServletRequest.class).getSession();
-        Long memberId = ((SessionMemberForm) session.getAttribute(SessionConst.LOGIN_MEMBER)).getId();
-        if(memberId == null) {
+        //세션에 저장된 멤버의 아이디 조회
+        Long memberId = ((SessionMemberForm) session.getAttribute(LOGIN_MEMBER)).getId();
+        if (memberId == null) {
             throw new IllegalStateException("로그인 된 회원이 없습니다.");
         }
-
+        //멤버 조회
         return memberService.findMemberById(memberId);
     }
 }

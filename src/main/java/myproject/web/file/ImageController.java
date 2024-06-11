@@ -153,8 +153,10 @@ public class ImageController {
     }
 
     @GetMapping("/attach/{category}/{id}")
-    public ResponseEntity<UrlResource> attachFileDownload(@PathVariable("category") String category, @PathVariable("id") Long id,
-                                                          @LoginAccount Member member) throws MalformedURLException {
+    public ResponseEntity<UrlResource> attachFileDownload(@PathVariable("category") String category,
+                                                          @PathVariable("id") Long id,
+                                                          @LoginAccount Member member)
+                                                        throws MalformedURLException {
 
         String storeFileName = "";
         String uploadFileName = "";
@@ -190,7 +192,6 @@ public class ImageController {
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8); //인코딩 안하면 한글로 된 파일명 같은것들이 깨질 수 있음. //웹브라우저에 따라 조금씩 다를 수 있음.
         String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
 
-        //예시를 같이 봤는데 바디에만 넣으면 내용은 보일 수 있으나(나같은 경우엔 이미지가 깨졌음) 첨부파일 다운로드는 안됨.
         //첨부파일로 다운받으려면 다음과 같이 헤더에 추가해야함. 이건 규약임.
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)

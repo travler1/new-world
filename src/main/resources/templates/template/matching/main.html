@@ -122,25 +122,20 @@
 </script>
 <script th:inline="javascript" type="text/javascript">
 
-    //empListJson은 JSP에서 가져온 JSON 문자열입니다.
     var jsonEmpList = /*[[${jsonEmpList}]]*/ {};
-
     var empList = JSON.parse(jsonEmpList);
 
     // 필드 값들의 개수를 저장할 객체 생성
     var fieldCounts = {};
-
     // empList를 순회하며 field 값들의 개수를 증가
     empList.forEach(function (emp) {
         var fieldString = emp.field.toString();
-
         if (fieldCounts.hasOwnProperty(fieldString)) {
             fieldCounts[fieldString]++;
         } else {
             fieldCounts[fieldString] = 1;
         }
     });
-
     // data 배열 동적 생성
     var data = [];
     for (var field in fieldCounts) {
@@ -151,16 +146,12 @@
             });
         }
     }
-
-
-
     var dom = document.getElementById('container1');
     var myChart = echarts.init(dom, null, {
         renderer: 'canvas',
         useDirtyRect: false
     });
     var app = {};
-
     var option;
 
     option = {
@@ -443,13 +434,12 @@
         chart.draw(data, options);
     }
 </script>
-<script th:inline="javascript">
+<script th:inline="javascript" type="text/javascript">
 
-    var jsonEmpList = /*[[${jsonEmpList}]]*/ {}; // JSP에서 문자열 그대로 가져옴
-
+    var jsonEmpList = /*[[${jsonEmpList}]]*/ {};
     var empList = JSON.parse(jsonEmpList);
 
-    // compeople 값들의 개수를 저장할 객체 생성
+    // comPeople 값들의 개수를 저장할 객체 생성
     var comPeopleCounts = {};
     var comPeopleCount=0;
     // empList를 순회하며 compeople 값들의 개수를 증가

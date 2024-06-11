@@ -1,15 +1,10 @@
 package myproject.web.matching.emp.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import myproject.domain.member.EmbeddedDate;
-import myproject.domain.member.Member;
-import myproject.web.file.UploadFile;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class JsonCharEmpForm {
+public class JsonChartEmpForm {
 
     //EmpInfo의 PK
     private Long id;
@@ -45,7 +40,7 @@ public class JsonCharEmpForm {
     private String advice;
 
     @QueryProjection
-    public JsonCharEmpForm(Long id, String comSize, String comPeople, String field, String role, String career, String salary_status, String salary, String periodTime, String education, String major, String certification, String location, String location_api, String location_api_lat, String location_api_lng, String workStart, String advice) {
+    public JsonChartEmpForm(Long id, String comSize, String comPeople, String field, String role, String career, String salary_status, String salary, String periodTime, String education, String major, String certification, String location, String location_api, String location_api_lat, String location_api_lng, String workStart, String advice) {
         this.id = id;
         this.comSize = comSize;
         this.comPeople = comPeople;

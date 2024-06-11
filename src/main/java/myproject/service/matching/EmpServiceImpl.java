@@ -8,20 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import myproject.domain.matching.emp.EmpInfo;
 import myproject.web.matching.emp.dto.*;
 import myproject.domain.matching.emp.EmpRepository;
-import myproject.domain.member.EmbeddedDate;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
 import myproject.web.file.FileCategory;
 import myproject.web.file.FileStore;
 import myproject.web.file.UploadFile;
-import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static myproject.Util.getLoginMemberId;
 
 @Service
 @Transactional
@@ -81,10 +76,10 @@ public class EmpServiceImpl implements EmpService {
 
     //카카오맵에 출력할 empInfo의 지도 위치 json으로 반환
     @Override
-    public String jsonEmpMapProfileDtoList() throws JsonProcessingException {
+    public String jsonEmpMapProfileFormTop1000List() throws JsonProcessingException {
         //mapData를 담을 리스트 (JSON 문자열로 변환)
         List<Map<String, Double>> mapDataList = new ArrayList<>();
-        //최근에 등록된 취업 현황 정보 1,000개
+        //최근에 등록된 취업 현황 정보 1,000개  조회
         List<EmpMapProfileForm> empInfoTop1000 = empRepository.findEmpInfoTop1000();
         //취업정보의 좌표(lat, lng)와 memberId를 Map형태로 저장 후 mapDataList에 추가
         for (EmpMapProfileForm mapProfileDto : empInfoTop1000) {
@@ -94,7 +89,7 @@ public class EmpServiceImpl implements EmpService {
             mapData.put("user_num", Double.valueOf(mapProfileDto.getMember().getId()));
             mapDataList.add(mapData);
         }
-        //카카오 지도에서 원하는 형태의 제이슨 문자열 생성
+        //카카오 맵 공식문서 형태의 제이슨 문자열 생성
         ObjectMapper mapper= new ObjectMapper();
         String jsonMapData = "{\"positions\": ";
         jsonMapData += mapper.writeValueAsString(mapDataList);
@@ -109,15 +104,12 @@ public class EmpServiceImpl implements EmpService {
         return empRepository.findEmpMemberIdTop1000();
     }
 
+    //취업현황 통계에 사용할 JsonChartEmpForm리스트
     @Override
-    public String jsonEmpInfoTop100List() throws JsonProcessingException {
+    public String jsonChartEmpFormTop1000List() throws JsonProcessingException {
 
-        List<JsonCharEmpForm> empCharInfoTop1000 = empRepository.findEmpCharInfoTop1000();
-
+        List<JsonChartEmpForm> empCharInfoTop1000 = empRepository.findEmpCharInfoTop1000();
         ObjectMapper mapper= new ObjectMapper();
-        String jsonEmpList = mapper.writeValueAsString(empCharInfoTop1000);
-        return jsonEmpList;
+        return mapper.writeValueAsString(empCharInfoTop1000);
     }
-
-
 }

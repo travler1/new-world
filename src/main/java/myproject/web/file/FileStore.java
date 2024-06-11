@@ -60,14 +60,13 @@ public class FileStore {
 
     //파일 단건 저장
     public UploadFile storeFile(MultipartFile multipartFile, FileCategory fileCategory) throws IOException {
-        log.info("storeFile 메서드 진입1");
+
         if (multipartFile.isEmpty()) {
             return null;
         }
-        log.info("storeFile 메서드 진입2");
-
-        String originalFilename = multipartFile.getOriginalFilename();
-        String storeFileName = createStoreFileName(originalFilename);
+        String originalFileName = multipartFile.getOriginalFilename();
+        String storeFileName = createStoreFileName(originalFileName);
+        log.info("originalFilename, storeFilename: {},", storeFileName);
 
         switch (fileCategory.name()){
             case "PROFILE_IMAGE" :
@@ -83,17 +82,7 @@ public class FileStore {
                 multipartFile.transferTo(new File(adviceDir + storeFileName));
                 break;
         }
-
-        return new UploadFile(originalFilename, storeFileName);
-
-        /*int pos = originalFilename.lastIndexOf(".");
-        String ext = originalFilename.substring(pos + 1); 얘네를 메서드로 만들거임. 두 줄 드래그하고 ctrl+alt + m*/
-
-        //서버에 저장하는 파일명 (but, 확장자명은 살려두고싶음.)
-        /*String uuid = UUID.randomUUID().toString();
-        String ext = extractExt(originalFilename);
-        String storeFileName = uuid + "." + ext; 여기도 별도의 메서드로 뽑아줄거임. originalFileName을 넘기면 storeFileName을 반환하게끔.*/
-
+        return new UploadFile(originalFileName, storeFileName);
     }
 
     private String createStoreFileName(String originalFilename) {

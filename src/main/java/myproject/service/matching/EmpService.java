@@ -25,13 +25,13 @@ public interface EmpService {
     UploadFile findUploadFileById(Long id);
 
     //취업현황 지도에 표시할 맵 데이터
-    String jsonEmpMapProfileDtoList() throws JsonProcessingException;
+    String jsonEmpMapProfileFormTop1000List() throws JsonProcessingException;
 
     //취업현황 프로필에 표시할 멤버id리스트
     List<Long> empMemberIdList();
 
     //취업현황 통계에 사용할 Emp리스트
-    String jsonEmpInfoTop100List() throws JsonProcessingException;
+    String jsonChartEmpFormTop1000List() throws JsonProcessingException;
 
 
 }

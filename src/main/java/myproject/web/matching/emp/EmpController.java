@@ -37,18 +37,19 @@ public class EmpController {
     private final MemberService memberService;
 
     @GetMapping()
-    public String matching(Model model, @LoginAccount Member member) throws JsonProcessingException {
+    public String matching(Model model, @LoginAccount Member member)
+            throws JsonProcessingException {
 
-        log.info("로그인 멤버={}", member.getId());
+        log.info("취업현황 페이지 진입={}");
 
         //지도에 프로필 출력
-        model.addAttribute("jsonMapData", empService.jsonEmpMapProfileDtoList());
+        model.addAttribute("jsonMapData", empService.jsonEmpMapProfileFormTop1000List());
 
         //스와이퍼에 프로필 출력
         model.addAttribute("empMemberIdList", empService.empMemberIdList());
 
         //통계자료에 활용할 자료 출력
-        model.addAttribute("jsonEmpList", empService.jsonEmpInfoTop100List());
+        model.addAttribute("jsonEmpList", empService.jsonChartEmpFormTop1000List());
 
 
         return "template/matching/main";
