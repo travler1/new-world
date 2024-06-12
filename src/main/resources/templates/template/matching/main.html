@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Hello-World 취업현황</title>
@@ -18,6 +18,13 @@
     <header id="main_header" th:replace="~{template/layoutBase/header :: header}"></header>
     <!------------------------------------------내용 시작----------------------------------------->
     <br>
+    <span sec:authorize="isAuthenticated() and hasAuthority('STUDENT')">
+        <button id="emp_register" class="register" onclick="emp_register()">현직자 신청하기</button>
+    </span>
+    <span sec:authorize="isAuthenticated() and hasAuthority('WORKER')">
+         <button id="my_emp_register" class="register" onclick="my_emp_register()">
+            나의 현직자 신청 정보 보기</button>
+    </span>
     <span th:if="${session.loginMember!=null and session.loginMember.grade!=null and session.loginMember.grade.name() == 'STUDENT'}">
         <button id="emp_register" class="register" onclick="emp_register()">현직자 신청하기</button>
     </span>

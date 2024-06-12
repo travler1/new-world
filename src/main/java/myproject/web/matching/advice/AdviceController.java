@@ -40,7 +40,8 @@ public class AdviceController {
 
     //첨삭 폼 호출
     @GetMapping(value = {"/matching/send_advice", "/myPage/send_advice"})
-    public String send_advice(@LoginAccount Member member, @RequestParam("memberId") Long id,
+    public String send_advice(@LoginAccount Member member,
+                              @RequestParam(value = "memberId", required = false) Long id,
                               Model model, @ModelAttribute("form") SendAdviceForm form) {
 
         model.addAttribute("login_user", member);

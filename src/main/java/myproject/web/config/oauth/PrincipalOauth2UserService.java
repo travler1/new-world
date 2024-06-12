@@ -36,10 +36,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.info("getAttribute={}", oAuth2User.getAttributes());
+        log.info("oAuth2User name 찾기={}", oAuth2User.getName());
 
         //구글로그인 버튼 클릭 -> 구글로그인창 -> 로그인을 완료 -> code를 리턴(OAuth-Client 라이브러리) -> AccessToken요청
         //userRequest정보 -> loadUser함수 호출 -> 구글로부터 회원프로필 받아준다.
-        String provider = userRequest.getClientRegistration().getClientId(); //google
+        String provider = userRequest.getClientRegistration().getRegistrationId(); //google
         String providerId = oAuth2User.getAttribute("sub");
         String name = provider + "_" + providerId;
         String username = oAuth2User.getAttribute("name");
@@ -51,7 +52,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         Member member;
 
         if (memberOptional.isPresent()) {
-            log.info("이미 소셜 로그인 가입된 회원입니다. member={}", memberOptional.get());
+            log.info("이미 소셜 로그인 가입된 회원입니다. member={}", memberOptional.get().getName());
             member = memberOptional.get();
         } else {
             member = Member.builder()
@@ -64,16 +65,16 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .grade(grade)
                     .build();
             Member saveMember = memberRepository.save(member);
-            log.info("소셜로그인 가입, 회원정보={}", saveMember);
+            log.info("소셜로그인 가입, 회원정보={}", saveMember.getName());
         }
 
         log.info("소셜로그인 가입, user={}", oAuth2User.getAttributes());
 
+
+        PrincipalDetails principalDetails = new PrincipalDetails(member, oAuth2User.getAttributes());
+        log.info("principalDetails, member={}, OAuth2User={}", member.getName(), oAuth2User.getAttributes());
         //회원가입을 강제로 진행
-        return new PrincipalDetails(member, oAuth2User.getAttributes());
-
+        return principalDetails;
     }
-
-
 }
 

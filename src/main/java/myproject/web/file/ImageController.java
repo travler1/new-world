@@ -45,11 +45,10 @@ public class ImageController {
     //view -> 프로필 이미지 출력
     @ResponseBody
     @GetMapping("/member/photoView")
-    public Resource userProfileImage(HttpSession session) throws MalformedURLException {
+    public Resource userProfileImage(@LoginAccount Member loginMember) throws MalformedURLException {
 
         log.info("ImageController 진입");
         //로그인한 회원 조회
-        SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
 
         String filePath;
         if (loginMember.getProfileImage() == null) {

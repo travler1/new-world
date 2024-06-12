@@ -19,7 +19,6 @@ spring:
             client-id: 91700057149-gbkmtcia2vea23clditi3ld26aor6d1h.apps.googleusercontent.com
             client-secret: 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
             scope:
-              - name
               - email
               - profile
 

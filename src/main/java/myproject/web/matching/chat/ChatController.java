@@ -32,16 +32,15 @@ public class ChatController {
 
     //채팅창 생성 (채팅방 번호 (생성/조회) , 채팅방 번호 넘겨주기, 채팅방이 존재하면 메세지 읽음처리)
     @GetMapping("matching/chat")
-    public String chat(Model model, HttpSession session, HttpServletRequest request,
+    public String chat(Model model,
                        @RequestParam("receiverId") Long receiverId,
-                       @ModelAttribute("chatDto") ChatDto chatDto) {
+                       @ModelAttribute("chatDto") ChatDto chatDto,
+                       @LoginAccount Member member) {
 
-        SessionMemberForm loginMember = (SessionMemberForm)session.getAttribute("loginMember");
-
-        Long chatRoomId = chatService.findChatRoomByMember(loginMember.getId(), receiverId);
+        Long chatRoomId = chatService.findChatRoomByMember(member.getId(), receiverId);
 
         model.addAttribute("chatRoom_num", chatRoomId);
-        model.addAttribute("sender", loginMember.getId());
+        model.addAttribute("sender", member.getId());
         model.addAttribute("receiver", receiverId);
 
         return "template/matching/chat/chatDetail";

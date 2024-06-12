@@ -1,32 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <header th:fragment="header">
-        <a th:href="@{/}"><img th:src="@{/images/pageMain/logo.jpg}" id="logo"></a>
-        <nav>
-            <a class="header-menu" th:href="@{/matching}">취업현황</a>
-            <a class="header-menu" th:href="@{/board}">게시판</a>
-        </nav>
+    <a th:href="@{/}"><img th:src="@{/images/pageMain/logo.jpg}" id="logo"></a>
+    <nav>
+        <a class="header-menu" th:href="@{/matching}">취업현황</a>
+        <a class="header-menu" th:href="@{/board}">게시판</a>
+    </nav>
 
     <div class="align-right">
-        <div th:if="${session.loginMember}">
-            [<span class="user_name" th:text="${session.loginMember.username}"></span>]님
-            <a th:href="@{/members/myPage}">
-                <img th:src="@{/member/photoView}"  class="my-photo image">
-            </a>
+        <div class="session">
+            <div th:if="${session.loginMember}">
+                [<span class="user_name" th:text="${session.loginMember.username}"></span>]님
+                <a th:href="@{/members/myPage}">
+                    <img th:src="@{/member/photoView}" class="my-photo image">
+                </a>
+            </div>
+
+            <div th:if="${session.loginMember}">
+                <a th:href="@{/logout}"><img th:src="@{/images/pageMain/logout.png}" class="image"></a>
+            </div>
+            <div th:if="${session.loginMember!=null and session.loginMember.grade == 'ADMIN'}">
+                <a th:href="@{/admin}">관리자페이지</a>
+            </div>
+        </div>
+        <div class="security">
+            <div sec:authorize="isAuthenticated()">
+                [<span class="user_name" sec:authentication="principal.username"></span>]님
+                <a th:href="@{/members/myPage}">
+                    <img th:src="@{/member/photoView}" class="my-photo image">
+                </a>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}"><img th:src="@{/images/pageMain/logout.png}" class="image"></a>
+            </div>
+            <div sec:authorize="isAuthenticated() && hasRole('ADMIN')">
+                <a th:href="@{/admin}">관리자페이지</a>
+            </div>
         </div>
 
-        <div th:if="${session.loginMember}">
-            <a th:href="@{/logout}"><img th:src="@{/images/pageMain/logout.png}" class="image"></a>
-        </div>
 
-        <div th:if="${session.loginMember!=null and session.loginMember.grade == 'ADMIN'}">
-            <a href="${pageContext.request.contextPath}/main/admin">관리자페이지</a>
-        </div>
+    </div>
+    <div th:if="${session.loginMember!=null and session.loginMember.grade == 'ADMIN'}">
+        <a th:href="@{/admin}">관리자페이지</a>
+    </div>
     </div>
 </header>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -92,26 +92,25 @@
 <div class="animated-title">
     <div class="track">
         <div class="content">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
-            &nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
-            &nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
-            &nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
-            &nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
-            &nbsp;&nbsp;&nbsp;<b><span th:text="${session.loginMember.getUsername()}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
+            &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
         </div>
     </div>
-</div>
-<h2 class="titleMent" style="color:red;"><b>현직자 신청 양식</b></h2>
+</div>h2 class="titleMent" style="color:red;"><b>현직자 신청 양식</b></h2>
 <form action="emp/register" th:action method="post" th:object="${form}"
       enctype="multipart/form-data" id="saveEmpForm">
     <table>
         <tr>
             <td>이메일</td>
-            <td colspan="5"><span th:text="${session.loginMember.getEmail()}">사용자 이메일</span></td>
+            <td colspan="5"><span th:text="${#authentication.principal.email}">사용자 이메일</span></td>
         </tr>
         <tr>
             <td>이름</td>
-            <td colspan="5"><span th:text="${session.loginMember.getUsername()}">사용자 이름</span>
+            <td colspan="5"><span th:text="${#authentication.principal.username}">사용자 이름</span>
             </td>
         </tr>
         <tr>

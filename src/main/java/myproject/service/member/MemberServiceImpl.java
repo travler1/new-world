@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
 import myproject.domain.member.repository.MemberRepository;
+import myproject.web.config.CustomBCryptoPasswordEncoder;
 import myproject.web.file.UploadFile;
 import myproject.web.member.MemberDTO.SaveMemberForm;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,14 @@ import java.util.regex.Pattern;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final CustomBCryptoPasswordEncoder bCryptoPasswordEncoder;
 
     //회원가입
     public void join(SaveMemberForm saveMemberForm) {
+
+        String rawPassword = saveMemberForm.getPassword();
+        String encPassword = bCryptoPasswordEncoder.encode(rawPassword);
+        saveMemberForm.setPassword(encPassword);
 
         //DTO->Entity 변환 후 저장
         Member saveMember = saveMemberForm.toEntity();

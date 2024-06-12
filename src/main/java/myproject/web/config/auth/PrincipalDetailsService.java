@@ -1,6 +1,7 @@
 package myproject.web.config.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
 import myproject.domain.member.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.Optional;
 //다른거로 받으려면 securityConfig에서 설정을 해줘야함. 웬만하면 username으로 쓰기..
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PrincipalDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -24,8 +26,10 @@ public class PrincipalDetailsService implements UserDetailsService {
     //함수 종료시 @AuthenticationPrincipal 어노테이션이 만들어진다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("일반회원 로그인 진입, username={}", username);
         Optional<Member> memberByEmail = memberRepository.findMemberByEmail(username);
         if (memberByEmail.isPresent()) {
+            log.info("memberByEmail: {}", memberByEmail.get().getUsername());
             return new PrincipalDetails(memberByEmail.get());
         }
         return null;

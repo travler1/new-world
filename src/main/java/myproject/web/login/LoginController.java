@@ -26,7 +26,7 @@ public class LoginController {
     private final LoginService loginService;
 
     //로그인 폼 호출
-    @GetMapping("/login")
+    @GetMapping("/loginForm")
     public String login(@ModelAttribute LoginForm loginForm) {
         return "template/home/login";
     }

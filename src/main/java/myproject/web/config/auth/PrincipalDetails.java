@@ -3,6 +3,7 @@ package myproject.web.config.auth;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@Slf4j
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Member member;
@@ -28,6 +30,14 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     public PrincipalDetails(Member member) {
         this.member = member;
+    }
+
+    public String getEmail() {
+        if (member != null) {
+            return member.getEmail();
+        }else{
+            return attributes.get("email").toString();
+        }
     }
 
     //해당 유저의 관심을 리턴하는 곳
@@ -45,12 +55,12 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return "";
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return member.getUsername();
     }
 
     //계정이 만료되었는지
@@ -83,7 +93,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     //==================OAuth2User 상속 후 오버라이딩======================//
     @Override
     public String getName() {
-        return null;
+       return attributes.get("providerId").toString();
     }
 
     @Override

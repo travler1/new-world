@@ -29,6 +29,10 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom {
                 .fetch();
         log.info("senderId={}, receiverId={}", senderId, receiverId);
         log.info("findChatRoomList={}", findChatRoomId);
-        return findChatRoomId.get(0);
+
+        if (!findChatRoomId.isEmpty()) {
+            return findChatRoomId.get(0);
+        }
+        return null;
     }
 }

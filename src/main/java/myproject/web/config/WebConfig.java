@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
                 .order(2)
                 .addPathPatterns("/**")
                 .excludePathPatterns( "/", "/members/register/**", "/noNeedLogin/resultAlert",
-                        "members/findPassword", "/login", "/logout",
+                        "members/findPassword", "/loginForm", "/logout",
                         "/css/**", "/*.ico", "/error", "/resources/**","/images/**", "/js/**");
     }
 

@@ -65,7 +65,7 @@ function send_advice(adviceId) {
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("send_advice?adviceId="+adviceId, "첨삭 답장하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("/matching/send_advice?memberId="+adviceId, "첨삭 답장하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {

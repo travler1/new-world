@@ -35,6 +35,8 @@ dependencies {
 	//스프링 시큐리티 의존관계 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	//스프링 시큐리티 타임리프 의존관계 추가
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'

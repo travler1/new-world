@@ -46,8 +46,8 @@
                                         <div
                                                 style="display: flex; width: 100%; flex-direction: column;">
                                             <div style="flex:1;display: flex; justify-content: space-between;">
-                                                <form action="login" id="member_login" method="post"
-                                                      th:action th:object="${loginForm}">
+                                                <form action="/login" id="member_login" method="post"
+                                                       th:object="${loginForm}">
                                                     <div class="login_choice"
                                                          style="flext:1;display: flex; justify-content: space-between;">
                                                         <div class="student"
@@ -90,9 +90,9 @@
                                                              style="display: flex; align-items: center; width: 100%; font-size: 15px; line-height: 26px; position: relative; border-radius: 4px; box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset; background: rgba(242, 241, 238, 0.6); cursor: text; padding: 4px 10px; margin-top: 4px; margin-bottom: 8px;">
                                                             <input aria-label="이메일을 입력하세요." autocomplete="off"
                                                                    cssClass="form-input" type="text"
-                                                                   id="loginEmail" placeholder="이메일을 입력하세요."
+                                                                   id="loginEmail" th:name="username" placeholder="이메일을 입력하세요."
                                                                    style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"
-                                                                   th:field="*{loginEmail}" />
+                                                                   th:value="*{loginEmail}" />
                                                         </div>
                                                         <div class="field-error" th:errorclass="field-error" th:errors="*{loginEmail}"></div>
                                                         <label for="password"
@@ -100,7 +100,7 @@
                                                         <div class="notion-focusable-within"
                                                              style="display: flex; align-items: center; width: 100%; font-size: 15px; line-height: 26px; position: relative; border-radius: 4px; box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset; background: rgba(242, 241, 238, 0.6); cursor: text; padding: 4px 10px; margin-top: 4px; margin-bottom: 8px;">
                                                             <input aria-label="비밀번호를 입력하세요." cssClass="form-input"
-                                                                   id="password" placeholder="비밀번호를 입력하세요." type="password"
+                                                                   id="password" placeholder="비밀번호를 입력하세요." type="password" th:name="password"
                                                                    th:field="*{password}" th:errorclass="field-error"
                                                                    style="font-size: inherit; line-height: inherit; border: none; background: none; width: 100%; display: block; resize: none; padding: 0px;"/>
                                                         </div>
@@ -130,6 +130,7 @@
                                             </div>
                                             <div
                                                     style="color: rgba(55, 53, 47, 0.65); font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 8px; text-align: center;">
+                                                <a href="/oauth2/authorization/google"><img id="google" th:src="@{images/pageMain/google.png}" style="width: 50px;"/></a>
                                                 소셜로그인으로 3초만에 회원가입!
                                             </div>
                                             <div class="snslogin" style="text-align: center;">

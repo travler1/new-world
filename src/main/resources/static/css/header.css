@@ -66,3 +66,11 @@ nav a:hover {
 	align-items: center;
 	justify-content: flex-end;
 }
+
+.security {
+	display: flex;
+}
+
+.security > div {
+	margin-right: 10px; /* 각각의 요소 사이의 간격 조절 */
+}

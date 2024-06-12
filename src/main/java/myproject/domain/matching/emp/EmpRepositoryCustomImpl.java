@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import myproject.domain.member.Grade;
 import myproject.domain.member.Member;
 import myproject.web.matching.emp.dto.*;
 
@@ -39,6 +40,7 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
         List<EmpMapProfileForm> empMapProfileFormList = jpaQueryFactory.select(Projections.constructor(EmpMapProfileForm.class,
                         empInfo.member, empInfo.location_api_lat, empInfo.location_api_lng))
                 .from(empInfo)
+                .where(empInfo.member.grade.eq(Grade.WORKER))
                 .orderBy(empInfo.date.reg_date.desc())
                 .limit(1000)
                 .fetch();
@@ -52,6 +54,7 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
         List<Long> resultList = jpaQueryFactory.select(member.id)
                 .from(member)
                 .join(member.empInfo)
+                .where(member.grade.eq(Grade.WORKER))
                 .limit(1000)
                 .fetch();
 
@@ -98,13 +101,14 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
 
         List<EmpInfo> empInfoList = jpaQueryFactory.select(empInfo)
                 .from(empInfo)
+                .where(empInfo.member.grade.eq(Grade.WORKER))
                 .limit(1000)
                 .fetch();
 
         return empInfoList;
     }
 
-    //차트 출력을 위한 EmpInfo 정보 출력 (등록순으로 100개)
+    //차트 출력을 위한 EmpInfo 정보 출력 (등록순으로 1000개)
     @Override
     public List<JsonChartEmpForm> findEmpCharInfoTop1000() {
 
@@ -128,6 +132,7 @@ public class EmpRepositoryCustomImpl implements EmpRepositoryCustom {
                         empInfo.workStart,
                         empInfo.advice
                 )).from(empInfo)
+                .where(empInfo.member.grade.eq(Grade.WORKER))
                 .orderBy(empInfo.date.reg_date.desc())
                 .limit(1000)
                 .fetch();
