@@ -22,7 +22,7 @@ jobs:
 
       - name: application.yml 파일 만들기
         run: |
-          mkdir ./src/main/resources/
+          #mkdir ./src/main/resources/
           echo "${{ secrets.APPLICATION_DEV }}" > ./src/main/resources/application_dev.yml
           echo "${{ secrets.APPLICATION_JPA }}" > ./src/main/resources/application_jap.yml
           echo "${{ secrets.APPLICATION_OAUTH }} > ./src/main/resources/applicastion_oauth.yml
