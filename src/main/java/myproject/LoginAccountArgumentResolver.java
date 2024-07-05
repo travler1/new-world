@@ -3,6 +3,7 @@ package myproject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.Member;
 import myproject.service.member.MemberService;
 import myproject.web.config.auth.PrincipalDetails;
@@ -20,6 +21,7 @@ import static myproject.web.config.interceptor.LoginCheckInterceptor.LOGIN_MEMBE
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final MemberService memberService;
@@ -37,7 +39,15 @@ public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolv
 
         // 시큐리티 컨텍스트에서 현재 인증된 사용자 정보 가져오기
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // 인증되지 않은 사용자 처리
+        if (principal instanceof String && "anonymousUser".equals(principal)) {
+            log.info("로그인 하지 않은 사용자로 접근");
+            return null;
+        }
+
         if (principal != null) {
+            log.info("Principal found: {}", principal);
             PrincipalDetails principalDetails = (PrincipalDetails) principal;
             String email = principalDetails.getEmail();
             if (email == null) {
@@ -51,7 +61,8 @@ public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolv
             //세션에 저장된 멤버의 아이디 조회
             Long memberId = ((SessionMemberForm) session.getAttribute(LOGIN_MEMBER)).getId();
             if (memberId == null) {
-                throw new IllegalStateException("로그인 된 회원이 없습니다.");
+                //throw new IllegalStateException("로그인 된 회원이 없습니다.");
+                return null;
             }
             //멤버 조회
             return memberService.findMemberById(memberId);

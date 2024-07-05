@@ -13,9 +13,12 @@ import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static myproject.Util.commonResultAlert;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,10 +35,16 @@ public class ChatController {
 
     //채팅창 생성 (채팅방 번호 (생성/조회) , 채팅방 번호 넘겨주기, 채팅방이 존재하면 메세지 읽음처리)
     @GetMapping("matching/chat")
-    public String chat(Model model,
+    public String chat(Model model, HttpServletRequest request,
+                       RedirectAttributes redirectAttributes,
                        @RequestParam("receiverId") Long receiverId,
                        @ModelAttribute("chatDto") ChatDto chatDto,
                        @LoginAccount Member member) {
+
+        if(member == null) {
+            commonResultAlert("로그인한 회원만 이용 가능합니다.", "/loginForm", redirectAttributes, request);
+            return "redirect:/common/childResultAlert";
+        }
 
         Long chatRoomId = chatService.findChatRoomByMember(member.getId(), receiverId);
 

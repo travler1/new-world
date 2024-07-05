@@ -1,0 +1,39 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      - classpath:/application-jpa.yml
+      - classpath:/application-oauth.yml
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myproject?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+    username: helloproject
+    password: ww1234!!
+    #url: jdbc:h2:tcp://localhost/~/test
+    #username: sa
+    #password:
+    #driver-class-name: org.h2.Driver
+  messages:
+    basename: messages.messages, messages.errors, messages.validation
+
+#쿠키 URL 전달방식 기능 off, 세션타임아웃 설정
+server:
+  port: 9090
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 1800
+
+file:
+  profileImage:
+    dir: C://study/Hello-World/file/user/profileImage/
+  advice:
+    dir: C://study/Hello-World/file/user/advice/
+  board:
+    dir: C://study/Hello-World/file/user/board/
+  emp:
+    dir: C://study/Hello-World/file/user/emp/
+
+

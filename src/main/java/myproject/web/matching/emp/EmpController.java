@@ -88,7 +88,7 @@ public class EmpController {
 
         commonResultAlert("취업정보 등록이 완료되었습니다.", request.getContextPath() + "/matching", redirectAttributes, request);
 
-        return "redirect:/common/resultAlert";
+        return "redirect:/common/childResultAlert";
     }
 
     //내 취업정보 확인

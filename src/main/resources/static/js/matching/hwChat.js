@@ -7,7 +7,13 @@ $(function(){
 	 * 웹소켓 연결
      *-----------------------*/
 	function connectWebSocket(){
-		message_socket = new WebSocket("ws://localhost:9090/message-ws");
+		let socketUrl;
+		if (window.location.hostname === 'localhost') {
+			socketUrl = "ws://localhost:9090/message-ws"
+		}else{
+			socketUrl = "wss://www.hello-world.world/message-ws";
+		}
+		message_socket = new WebSocket(socketUrl);
 		//채팅페이지가 열렸을 때 호출되는 함수 지정
 		message_socket.onopen=function(evt){
 			console.log("채팅페이지 접속 : " + $('#talkDetail').length);

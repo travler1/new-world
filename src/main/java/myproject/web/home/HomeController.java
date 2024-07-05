@@ -50,6 +50,12 @@ public class HomeController {
         return "template/common/resultAlert";
     }
 
+    //공통 페이지 호출 (PRG) - 새 창의 경우 기존 창을 닫고, 부모창으로 이동
+    @GetMapping("common/childResultAlert")
+    public String childResultAlert(HttpServletRequest request) {
+        return "template/common/childResultAlert";
+    }
+
     @GetMapping("/common/resultView")
     public String resultView(HttpServletRequest request) {
         return "template/common/resultView";

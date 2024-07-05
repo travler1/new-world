@@ -100,7 +100,7 @@
             &nbsp;&nbsp;&nbsp;<b><span sec:authorize="isAuthenticated()" th:text="${#authentication.principal.username}"></span></b>님의 취업을 진심으로 축하드립니다!
         </div>
     </div>
-</div>h2 class="titleMent" style="color:red;"><b>현직자 신청 양식</b></h2>
+</div><h2 class="titleMent" style="color:red;"><b>현직자 신청 양식</b></h2>
 <form action="emp/register" th:action method="post" th:object="${form}"
       enctype="multipart/form-data" id="saveEmpForm">
     <table>

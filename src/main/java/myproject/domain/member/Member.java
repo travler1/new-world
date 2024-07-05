@@ -94,5 +94,9 @@ public class Member {
         this.username = username;
         this.grade = grade;
     }
+
+    public void setProfileImage(UploadFile profileImage) {
+        this.profileImage = profileImage;
+    }
 }
 

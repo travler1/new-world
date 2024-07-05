@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### MYSQL ###
+mysql_data/

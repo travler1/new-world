@@ -1,0 +1,41 @@
+spring:
+  config:
+    import:
+      - classpath:/application-jpa.yml
+      - classpath:/application-oauth.yml
+    activate:
+      on-profile: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://my-db:3306/mydb
+    username: root
+    password: pwd1234
+
+  messages:
+    basename: messages.messages, messages.errors, messages.validation
+
+#쿠키 URL 전달방식 기능 off, 세션타임아웃 설정
+server:
+  port: 443
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 1800
+  ssl:
+    key-store: "classpath:keystore.p12"
+    key-store-type: PKCS12
+    key-store-password: ww1234!!
+
+
+file:
+  profileImage:
+    dir: /file/user/profileImage/
+  advice:
+    dir: /file/user/advice/
+  board:
+    dir: /file/user/board/
+  emp:
+    dir: /file/user/emp/
+
+

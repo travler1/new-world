@@ -36,9 +36,7 @@
                 <option value="4" th:selected="${param.order == 4}">댓글순</option>
             </select>
         </div>
-        <div sec:authorize="isAuthenticated()">
             <input type="button" value="글쓰기" th:onclick="|location.href='/board/write'|">
-        </div>
     </form>
     <div th:if="${list == null}">
         <div class="result-display">표시할 게시물이 없습니다.</div>

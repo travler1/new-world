@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Result Alert</title>
+</head>
+<body>
+<script th:inline="javascript">
+    var message = [[${message}]];
+    var url = [[${url}]];
+    alert(message);
+    window.opener.location.href = url;
+    window.close();
+</script>
+</body>
+</html>

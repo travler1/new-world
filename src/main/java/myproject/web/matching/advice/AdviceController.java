@@ -42,7 +42,14 @@ public class AdviceController {
     @GetMapping(value = {"/matching/send_advice", "/myPage/send_advice"})
     public String send_advice(@LoginAccount Member member,
                               @RequestParam(value = "memberId", required = false) Long id,
+                              RedirectAttributes redirectAttributes,
+                              HttpServletRequest request,
                               Model model, @ModelAttribute("form") SendAdviceForm form) {
+
+        if(member == null) {
+            commonResultAlert("로그인한 회원만 이용 가능합니다.", "/loginForm", redirectAttributes, request);
+            return "redirect:/common/childResultAlert";
+        }
 
         model.addAttribute("login_user", member);
         model.addAttribute("receive_user", memberService.findMemberById(id));

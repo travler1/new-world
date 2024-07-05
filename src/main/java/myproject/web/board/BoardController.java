@@ -23,8 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
-import static myproject.Util.commonResultView;
-import static myproject.Util.templatePagingInfo;
+import static myproject.Util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,7 +63,13 @@ public class BoardController {
      *=================================*/
     @GetMapping("/write")
     public String boardWrite(@ModelAttribute("saveBoardForm") SaveBoardForm saveBoardForm,
-                             Model model) {
+                             @LoginAccount Member member, RedirectAttributes redirectAttributes,
+                             HttpServletRequest request, Model model) {
+
+        if(member == null) {
+            commonResultAlert("로그인한 회원만 이용 가능합니다.", "/loginForm", redirectAttributes, request);
+            return "redirect:/common/resultAlert";
+        }
 
         return "template/board/write";
     }
