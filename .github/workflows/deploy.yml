@@ -52,3 +52,4 @@ jobs:
       - name: ECR에 Docker 이미지 Push하기
         run: docker push ${{ steps.login-ecr.outputs.registry }}/instagram-server:latest
 
+
