@@ -65,7 +65,7 @@ $(function(){
 					let login_user = param.login_user;
 					let chat_date = '';
 					const days = ['일', '월', '화', '수', '목', '금', '토'];
-					$(param.list).each(function(index,item){
+					$(paramww.list).each(function(index,item){
 						let output = '';
 						let category = 'PROFILE_IMAGE';
 						// 날짜 추출

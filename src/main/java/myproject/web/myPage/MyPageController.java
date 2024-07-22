@@ -24,7 +24,6 @@ import static myproject.Util.templatePagingInfo;
 @RequiredArgsConstructor
 public class MyPageController {
 
-    private final MemberService memberService;
     private final BoardService boardService;
 
     /*=========================
@@ -45,7 +44,7 @@ public class MyPageController {
     /*==================================
      * 	  마이페이지 - 내가 작성한 글
      *=================================*/
-    @GetMapping(path={"/myPage/board"})
+    @GetMapping("/myPage/board")
     public String myBoard(Model model, @LoginAccount Member member, @PageableDefault(page=1) Pageable pageable) {
 
         //내가 쓴 글 조회

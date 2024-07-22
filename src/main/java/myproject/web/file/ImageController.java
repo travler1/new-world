@@ -1,6 +1,5 @@
 package myproject.web.file;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import myproject.service.board.BoardService;
 import myproject.service.matching.EmpService;
 import myproject.domain.member.repository.MemberRepository;
 import myproject.service.member.MemberService;
-import myproject.web.member.MemberDTO.SessionMemberForm;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;

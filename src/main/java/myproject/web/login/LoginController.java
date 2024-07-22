@@ -27,9 +27,22 @@ public class LoginController {
 
     //로그인 폼 호출
     @GetMapping("/loginForm")
-    public String login(@ModelAttribute LoginForm loginForm) {
+    public String login(@ModelAttribute LoginForm loginForm, BindingResult bindingResult,
+                        @RequestParam(required = false) String error,
+                        @RequestParam(required = false) String errorMessage) {
+
+        if("username".equals(error)){
+            bindingResult.rejectValue("username", "Illegal", errorMessage);
+        }else if("password".equals(error)){
+            bindingResult.rejectValue("password", "Illegal", errorMessage);
+        }else if("object".equals(error)){
+            //전역 오류로 처리
+            bindingResult.reject("objectError", errorMessage);
+        }
+
         return "template/home/login";
     }
+
 
     //로그인 처리
     @PostMapping("/login")
@@ -43,7 +56,7 @@ public class LoginController {
             return "template/home/login";
         }
         //로그인 폼 정보로 멤버 조회 후 최소정보만 세션에 저장(id, username, email, profileImage, grade)
-        Member member = loginService.login(loginForm.getLoginEmail(), loginForm.getPassword());
+        Member member = loginService.login(loginForm.getUsername(), loginForm.getPassword());
 
         if (member == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

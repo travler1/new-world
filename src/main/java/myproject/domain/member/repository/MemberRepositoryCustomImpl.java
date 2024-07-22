@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import myproject.domain.member.QMember;
 import myproject.web.file.UploadFile;
 
+import static myproject.domain.member.QMember.*;
+
 @Slf4j
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
 
@@ -20,18 +22,18 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
 
         log.info("MemberRepositoryCustomImpl 진입");
 
-        jpaQueryFactory.update(QMember.member)
-                .set(QMember.member.profileImage, uploadFile)
-                .where(QMember.member.id.eq(id))
+        jpaQueryFactory.update(member)
+                .set(member.profileImage, uploadFile)
+                .where(member.id.eq(id))
                 .execute();
     }
 
     @Override
     public void deleteProfileById(Long id, UploadFile profileImage) {
 
-        jpaQueryFactory.update(QMember.member)
-                .set(QMember.member.profileImage, new UploadFile(null, null))
-                .where(QMember.member.id.eq(id))
+        jpaQueryFactory.update(member)
+                .set(member.profileImage, new UploadFile(null, null))
+                .where(member.id.eq(id))
                 .execute();
     }
 }

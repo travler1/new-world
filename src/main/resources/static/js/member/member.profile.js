@@ -18,14 +18,15 @@ $(function(){
 			return;
 		}
 		
-		if(my_photo.size > 2048*1024){
-			alert(Math.round(my_photo.size/1024)+'kbytes(2048kbytes까지만 업로드 가능)');
+		if(my_photo.size > 8192*1024){
+			alert(Math.round(my_photo.size/1024)+'kbytes입니다. (8MB까지만 업로드 가능)');
 			$('.my-photo').attr('src',photo_path);
 			$(this).val('');
 			return;
 		}
 		
 		//이미지 미리보기 처리
+		//DataURL : 파일이나 데이터를 텍스트형식으로 인코딩하여 URL로 표현한 것
 		let reader = new FileReader();
 		reader.readAsDataURL(my_photo);
 		
