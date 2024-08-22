@@ -20,8 +20,7 @@ public class SocketHandler extends TextWebSocketHandler {
 	 * 채팅 메시지를 연결된 전체 클라이언트에 전달할 때 사용
 	 */
 	@Override
-	public void afterConnectionEstablished(
-			WebSocketSession session) throws Exception {
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.debug(session.getId() + " 연결 됨");
 		users.put(session.getId(), session);
 	}

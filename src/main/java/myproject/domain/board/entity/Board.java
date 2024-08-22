@@ -39,7 +39,7 @@ public class Board {
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardFav> boardFavList = new ArrayList<BoardFav>();
+    private List<BoardFav> boardFavList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardReply> boardReplyList = new ArrayList<>();

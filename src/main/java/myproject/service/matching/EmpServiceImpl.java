@@ -83,7 +83,7 @@ public class EmpServiceImpl implements EmpService {
         List<EmpMapProfileForm> empInfoTop1000 = empRepository.findEmpInfoTop1000();
         //취업정보의 좌표(lat, lng)와 memberId를 Map형태로 저장 후 mapDataList에 추가
         for (EmpMapProfileForm mapProfileDto : empInfoTop1000) {
-            Map<String, Double> mapData = new LinkedHashMap<String, Double>();
+            Map<String, Double> mapData = new LinkedHashMap<>();
             mapData.put("lat", Double.valueOf(mapProfileDto.getLocation_api_lat()));
             mapData.put("lng", Double.valueOf(mapProfileDto.getLocation_api_lng()));
             mapData.put("user_num", Double.valueOf(mapProfileDto.getMember().getId()));

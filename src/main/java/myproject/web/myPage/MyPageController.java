@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import myproject.LoginAccount;
 import myproject.service.board.BoardService;
 import myproject.domain.member.Member;
-import myproject.service.member.MemberService;
 import myproject.web.board.dto.boardDto.ListBoardForm;
 import myproject.web.member.MemberDTO.ReadMemberForm;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import static myproject.Util.getLoginMemberId;
 import static myproject.Util.templatePagingInfo;
 
 @Controller

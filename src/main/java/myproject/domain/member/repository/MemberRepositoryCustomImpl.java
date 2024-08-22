@@ -28,7 +28,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
                 .execute();
     }
 
-    @Override
+    @Override //회원 프로필 이미지 삭제
     public void deleteProfileById(Long id, UploadFile profileImage) {
 
         jpaQueryFactory.update(member)

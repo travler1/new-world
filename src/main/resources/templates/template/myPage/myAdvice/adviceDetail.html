@@ -10,18 +10,18 @@
 <div class="page-main">
     <ul class="content">
         <li class="main-text">보낸 사람
-            <div th:if="${session.loginMember.id == advice.sender.id}">
+            <div th:if="${loginMemberId == advice.sender.id}">
                 <span th:text="나"></span>
             </div>
-            <div th:if="${session.loginMember.id != advice.sender.id}">
+            <div th:if="${loginMemberId != advice.sender.id}">
                 <span th:text="|${advice.sender.username}님|"></span>
             </div>
         </li>
         <li class="main-text">받은 사람
-            <div th:if="${session.loginMember.id == advice.receiver.id}">
+            <div th:if="${loginMemberId == advice.receiver.id}">
                 <span th:text="나"></span>
             </div>
-            <div th:if="${session.loginMember.id != advice.receiver.id}">
+            <div th:if="${#loginMemberId != advice.receiver.id}">
                 <span th:text="|${advice.receiver.username}님|"></span>
             </div>
         </li>
@@ -43,7 +43,7 @@
         </li>
     </ul>
     <div class="align-center">
-        <input type="button" class="adviceButton" value="첨삭 답장하기" th:onclick="'send_advice(' + ${advice.id} + ')'">
+        <input type="button" class="adviceButton" value="첨삭 답장하기" th:onclick="'answer_advice(' + ${advice.id} + ')'">
         <input type="button" class="adviceButton" value="삭제" th:onclick="send_advice(' + ${advice.id} + ')">
         <input type="button" class="adviceButton" value="목록" th:onclick="|location.href='myPage'|">
     </div>

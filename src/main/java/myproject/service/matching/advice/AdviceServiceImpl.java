@@ -101,14 +101,12 @@ public class AdviceServiceImpl implements AdviceService{
 
     //첨삭 답장 폼 호출
     @Override
-    public SendAdviceForm respondAdvice(Long adviceId, Long loginMember) {
+    public SendAdviceForm respondAdviceById(Long adviceId) {
 
-        Advice adviceById = adviceRepository.findAdviceById(adviceId);
-        Long senderId = adviceById.getSender().getId();
+        Advice advice = adviceRepository.findAdviceById(adviceId);
+        SendAdviceForm sendAdviceForm = new SendAdviceForm(advice.getSender().getId(), advice.getReceiver().getId());
 
-        SendAdviceForm form = new SendAdviceForm(loginMember, senderId);
-
-        return form;
+        return sendAdviceForm;
     }
 
     //첨삭 단건 조회

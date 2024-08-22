@@ -19,13 +19,18 @@ public class Util {
 
 
     //세션에 로그인된 회원 인덱스 조회 메서드
-    public static Long getLoginMemberId(HttpSession session) {
+    /*public static Long getLoginMemberId(HttpSession session) {
         SessionMemberForm loginMember = (SessionMemberForm) session.getAttribute("loginMember");
         if (loginMember == null) {
             throw new IllegalStateException("로그인 정보가 없습니다.");
         }
         return loginMember.getId();
     }
+    //세션에 로그인된 회원 Member 객체 조회 메서드
+    public static Member getLoginMember(HttpSession session, MemberService memberService) {
+        Member member = memberService.findMemberById(getLoginMemberId(session));
+        return member;
+    }*/
 
      //템플릿으로 페이징 정보 전달
     public static<T> void templatePagingInfo(Model model, Pageable pageable, Page<T> list, int blockLimit) {
@@ -48,7 +53,8 @@ public class Util {
     public static void commonResultView(String accessTitle, String accessMsg, String accessUrl,
                                         RedirectAttributes redirectAttributes,
                                         HttpServletRequest request) {
-        redirectAttributes.addFlashAttribute("accessTitle", accessTitle);
+        //addFlashAttribute는 리다이렉트 요청 후 한 번만 사용할 수 있는 데이터를 세션에 저장.
+        redirectAttributes.addFlashAttribute("accessTitle", "Hello-world 요청 처리 완료");
         redirectAttributes.addFlashAttribute("accessMsg", accessMsg);
         redirectAttributes.addFlashAttribute("accessUrl", accessUrl);
     }
@@ -60,14 +66,4 @@ public class Util {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("url", request.getContextPath() + url);
     }
-
-    //세션에 로그인된 회원 Member 객체 조회 메서드
-    public static Member getLoginMember(HttpSession session, MemberService memberService) {
-        Member member = memberService.findMemberById(getLoginMemberId(session));
-        return member;
-    }
-
-
-
-
 }

@@ -119,6 +119,7 @@ public class BoardServiceImpl implements BoardService {
                 .build();
 
         Long updateBoardId = boardRepository.update(form.getId(), editBoard);
+        log.info("updateBoardId={}", updateBoardId);
         return updateBoardId;
     }
 

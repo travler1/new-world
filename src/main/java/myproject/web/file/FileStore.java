@@ -59,7 +59,8 @@ public class FileStore {
     }
 
     //파일 단건 저장
-    public UploadFile storeFile(MultipartFile multipartFile, FileCategory fileCategory) throws IOException {
+    public UploadFile storeFile(MultipartFile multipartFile, FileCategory fileCategory)
+            throws IOException {
 
         if (multipartFile.isEmpty()) {
             return null;

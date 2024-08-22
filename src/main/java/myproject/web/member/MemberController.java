@@ -39,7 +39,7 @@ public class MemberController {
     @PostMapping("/members/register")
     public String submit(@Valid SaveMemberForm saveMemberForm,
                          BindingResult bindingResult,
-                         Model model, HttpServletRequest request,
+                         HttpServletRequest request,
                          RedirectAttributes redirectAttributes) {
 
         //유효성 체크 결과 오류가 있으면 폼 호출

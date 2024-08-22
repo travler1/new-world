@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 
 import static myproject.Util.commonResultAlert;
-import static myproject.Util.getLoginMember;
 
 @Controller
 @Slf4j

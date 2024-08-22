@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static myproject.Util.commonResultAlert;
 import static myproject.Util.templatePagingInfo;
@@ -42,9 +43,10 @@ public class AdviceController {
     @GetMapping(value = {"/matching/send_advice", "/myPage/send_advice"})
     public String send_advice(@LoginAccount Member member,
                               @RequestParam(value = "memberId", required = false) Long id,
+                              @ModelAttribute("form") SendAdviceForm form,
                               RedirectAttributes redirectAttributes,
                               HttpServletRequest request,
-                              Model model, @ModelAttribute("form") SendAdviceForm form) {
+                              Model model) {
 
         if(member == null) {
             commonResultAlert("로그인한 회원만 이용 가능합니다.", "/loginForm", redirectAttributes, request);
@@ -76,7 +78,7 @@ public class AdviceController {
         //PGR
         commonResultAlert("첨삭 요청이 성공적으로 완료되었습니다.", request.getContextPath() + "/matching", redirectAttributes,request);
 
-        return "redirect:/common/resultAlert";
+        return "redirect:/common/childResultAlert";
     }
 
     //내가 받은 첨삭 조회
@@ -88,6 +90,7 @@ public class AdviceController {
 
         AdviceSearchCondition condition = new AdviceSearchCondition(keyfield, keyword);
         Page<ListAdviceForm> list = adviceService.getListReceivedAdvice(condition, pageable, member.getId());
+        model.addAttribute("loginMemberId", member.getId());
         //내가 받은 첨삭 페이징 + 검색 처리
         templatePagingInfo(model, pageable, list, 5);
 
@@ -105,6 +108,7 @@ public class AdviceController {
 
         AdviceSearchCondition condition = new AdviceSearchCondition(keyfield, keyword);
         Page<ListAdviceForm> list = adviceService.getListSentAdvice(condition, pageable, member.getId());
+        model.addAttribute("loginMemberId", member.getId());
 
         //내가 보낸 첨삭 페이징 + 검색 처리
         templatePagingInfo(model, pageable, list, 5);
@@ -130,12 +134,19 @@ public class AdviceController {
     public String adviceSend_advice(@LoginAccount Member member, Model model,
                                     @RequestParam("adviceId") Long adviceId,
                                     @ModelAttribute("form") SendAdviceForm form) {
-
+        log.info("첨삭답장 폼 호출 컨트롤러 진입");
         //답장 폼 셋팅 후 출력(받는사람, 보내는사람)
-        SendAdviceForm sendAdviceForm = adviceService.respondAdvice(adviceId, member.getId());
+        SendAdviceForm sendAdviceForm = adviceService.respondAdviceById(adviceId);
+        log.info("sendAdviceForm={}", sendAdviceForm);
+
+        Long receiver_id = sendAdviceForm.getReceiver();
+        if(member.getId().equals(sendAdviceForm.getReceiver())){
+            receiver_id = sendAdviceForm.getSender();
+        }
+        Member receiver = memberService.findMemberById(receiver_id);
 
         model.addAttribute("login_user", member);
-        model.addAttribute("receive_user", memberService.findMemberById(sendAdviceForm.getReceiver()));
+        model.addAttribute("receive_user", receiver);
 
         log.info("login_user ={}, receiver_user={}, form={}", member, memberService.findMemberById(sendAdviceForm.getReceiver()), sendAdviceForm);
 

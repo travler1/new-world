@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import myproject.domain.board.entity.Board;
 import myproject.domain.board.entity.BoardReply;
 
@@ -19,6 +20,7 @@ import static myproject.domain.board.entity.QBoardFav.boardFav;
 import static myproject.domain.board.entity.QBoardReply.boardReply;
 import static myproject.domain.member.QMember.member;
 
+@Slf4j
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private JPAQueryFactory jpaQueryFactory;
@@ -111,6 +113,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .execute();
     }
 
+    //글 상세 조회
     @Override
     public ReadBoardForm findReadBoardFormById(Long id) {
 
@@ -155,7 +158,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .where(board.id.eq(id))
                 .execute();
 
-        return updateBoardId;
+        return id;
     }
 
     //마이페이지 내가 쓴 글 조회

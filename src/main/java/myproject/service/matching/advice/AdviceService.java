@@ -21,7 +21,7 @@ public interface AdviceService {
 
     Advice getAdviceById(Long id);
 
-    SendAdviceForm respondAdvice(Long adviceId, Long loginMember);
+    SendAdviceForm respondAdviceById(Long adviceId);
 
     Page<ListAdviceForm> getListSentAdvice(AdviceSearchCondition condition, Pageable pageable, Long loginMemberId);
 

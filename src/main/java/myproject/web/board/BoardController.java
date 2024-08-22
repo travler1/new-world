@@ -43,8 +43,7 @@ public class BoardController {
     public String test(@RequestParam(required = false, defaultValue = "1") Integer keyfield,
                        @RequestParam(required = false) String keyword,
                        @RequestParam(required = false, defaultValue = "1") Integer order,
-                       @PageableDefault(page = 1) Pageable pageable, Model model,
-                       @LoginAccount Member member) {
+                       @PageableDefault(page = 1) Pageable pageable, Model model) {
 
 
         BoardSearchCondition condition = new BoardSearchCondition(keyfield, keyword, order);
@@ -78,8 +77,11 @@ public class BoardController {
      * 			게시판 글 등록
      *=================================*/
     @PostMapping("/write")
-    public String boardSave(@Valid @ModelAttribute("saveBoardForm") SaveBoardForm saveBoardForm, BindingResult bindingResult,
-                            @LoginAccount Member member, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) throws IOException {
+    public String boardSave(@Valid @ModelAttribute("saveBoardForm") SaveBoardForm saveBoardForm,
+                            BindingResult bindingResult,
+                            @LoginAccount Member member,
+                            HttpServletRequest request,
+                            RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "template/board/write";
@@ -138,7 +140,9 @@ public class BoardController {
 
         String ip = request.getRemoteAddr();
 
+        log.info("글 수정 폼 정보={}", editBoardForm);
         Long updateBoardId = boardService.edit(editBoardForm, ip, member.getId());
+        log.info("글 수정 폼 id={}",updateBoardId);
 
         commonResultView("Hello World 글 수정", "글 수정이 완료되었습니다.", request.getContextPath() + "/board/" + updateBoardId, redirectAttributes, request);
 

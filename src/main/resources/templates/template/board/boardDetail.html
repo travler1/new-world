@@ -28,13 +28,13 @@
         <li>
             <span th:text="${board.username}"></span>
             <br>
-            <div th:if="${board.date!=null and board.date.modify_date != null}">
-                <div th:if="${board.date.modify_date != null}" >
-                    <span th:text="|최근 수정일 : ${board.date.modify_date}|"></span>
+            <div th:if="${board.date != null}">
+                <div th:if="${board.date.modify_date != null}">
+                    <span th:text="|최근 수정일 : ${#dates.format(board.date.modify_date, 'yyyy-MM-dd HH:mm:ss')}|"></span>
                 </div>
-            </div>
-            <div th:if="${board.date!=null and board.date.reg_date != null}">
-                <span th:text="|작성일 : ${board.date.reg_date}|"></span>
+                <div th:if="${board.date.modify_date == null and board.date.reg_date != null}">
+                    <span th:text="|등록일 : ${#dates.format(board.date.reg_date, 'yyyy-MM-dd HH:mm:ss')}|"></span>
+                </div>
             </div>
             <span th:text="|조회 : ${board.hit}|"></span>
         </li>
@@ -69,7 +69,7 @@
     </div>
     <hr size="1" width="100%">
     <div class="align-right">
-        <div th:if="${session.loginMember != null and session.loginMember.id == board.memberId}">
+        <div th:if="${#authentication.name == board.username}">
             <input type="button" value="수정" th:onclick="|location.href='${board.id}/edit'|">
             <input type="button" value="삭제" id="delete_btn">
             <script type="text/javascript">
@@ -83,7 +83,7 @@
                 }
             </script>
         </div>
-        <input type="button" value="목록" th:onclick="|location.href='/board'|">
+            <input type="button" id="list" value="목록" th:onclick="|location.href='/board'|">
     </div>
     <hr size="1" width="100%">
     <!-- 댓글 시작 -->
@@ -118,4 +118,11 @@
 </div>
 <!-- 내용 끝 -->
 </body>
+<script th:inline="javascript">
+    function confirmDelete(boardId) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            location.href = '/board/' + boardId + '/delete';
+        }
+    }
+</script>
 </html>

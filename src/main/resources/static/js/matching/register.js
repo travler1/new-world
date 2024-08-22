@@ -56,7 +56,7 @@ function see_emp_register(user_num) {
     }
 }
 
-function send_advice(adviceId) {
+function send_advice(memberId) {
     var width = '700';
     var height = '430';
 
@@ -65,7 +65,7 @@ function send_advice(adviceId) {
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("/matching/send_advice?memberId="+adviceId, "첨삭 답장하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("/matching/send_advice?memberId="+memberId, "첨삭 답장하기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {
@@ -75,7 +75,7 @@ function send_advice(adviceId) {
         };
     }
 }
-function answer_advice(user_num) {
+function answer_advice(adviceId) {
     var width = '600';
     var height = '430';
 
@@ -84,7 +84,7 @@ function answer_advice(user_num) {
 	
     
     // 팝업 창 열기
-    var popupWindow = window.open("matching/answer_advice?memberId="+user_num, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
+    var popupWindow = window.open("/myPage/myAdvice/send_advice?adviceId="+adviceId, "쪽지 보내기", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",scrollbars=yes");
 	
     if (popupWindow) {
         popupWindow.onload = function () {

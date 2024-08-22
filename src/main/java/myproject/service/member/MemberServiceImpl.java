@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
         if(memberByEmail.isPresent()) {
             result.put("result", "idDuplicated");
         }else{
-            if (!Pattern.matches("\\w+@\\w.\\w+(\\.\\w+)?", email)) {
+            if (!Pattern.matches("\\w+@\\w+\\.\\w+(\\.\\w+)?", email)) {
                 result.put("result", "notMatchPattern");
             }else{
                 result.put("result","idNotFound");
